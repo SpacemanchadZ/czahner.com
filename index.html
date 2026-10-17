@@ -3,136 +3,215 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Résumé · Chad Zahner</title>
-  <meta name="description" content="Résumé of Chad Zahner — Maintenance Planner & Scheduler, RMIC, CMRP candidate, U.S. Navy veteran.">
-  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <title>Chad Zahner · Maintenance Planning & Reliability</title>
+  <meta name="description" content="Chad Zahner — Maintenance Planner & Scheduler, RMIC, CMRP candidate, and U.S. Navy veteran building practical tools for maintenance and reliability.">
+  <meta property="og:title" content="Chad Zahner · Maintenance Planning & Reliability">
+  <meta property="og:description" content="Maintenance planning, reliability, and practical tools for the shop floor.">
+  <meta property="og:url" content="https://czahner.com/">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a1628">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 
 <header class="site-header">
   <nav class="wrap nav" aria-label="Main">
-    <a class="brand" href="../"><span class="brand-mark">CZ</span><span class="brand-name">Chad Zahner</span></a>
+    <a class="brand" href="/"><span class="brand-mark">CZ</span><span class="brand-name">Chad Zahner</span></a>
     <ul class="nav-links">
-      <li><a href="../">Home</a></li>
-      <li><a href="./" aria-current="page">Résumé</a></li>
-      <li><a href="../lab/">Lab</a></li>
-      <li><a href="../#contact">Contact</a></li>
+      <li><a href="/" aria-current="page">Home</a></li>
+      <li><a href="/resume/">Résumé</a></li>
+      <li><a href="/lab/">Lab</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
 
-<main class="resume">
-  <div class="wrap">
-    <div class="resume-toolbar">
-      <p>Tip: use the button to save a clean PDF copy.</p>
-      <button class="btn btn-primary" onclick="window.print()" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-        Save as PDF
-      </button>
+<main>
+  <!-- HERO -->
+  <div class="band">
+    <div class="wrap hero">
+      <div>
+        <span class="pill"><span class="dot"></span>Open to reliability &amp; maintenance leadership roles</span>
+        <h1>I keep plants <em>running.</em></h1>
+        <p class="intro">I'm Chad Zahner — a maintenance planner, Navy veteran, and builder of practical tools. I turn reactive maintenance into planned work, and I build the systems that make it stick.</p>
+        <div class="actions">
+          <a class="btn btn-amber" href="/resume/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg>
+            View résumé
+          </a>
+          <a class="btn btn-ghost" href="/lab/">See what I'm building →</a>
+        </div>
+        <div class="creds">
+          <span>RMIC · University of Tennessee</span>
+          <span>CMRP in progress</span>
+          <span>U.S. Navy · USS Mahan</span>
+        </div>
+      </div>
+
+      <div class="panel" aria-label="Results at a glance">
+        <div class="panel-head"><span>Results at a glance</span><span class="live">● Plant floor</span></div>
+        <div class="kpis">
+          <div class="kpi"><div class="v">53<small>%</small></div><div class="l">Less downtime on the top 5 breakdown assets</div><div class="meter"><i style="width:53%"></i></div></div>
+          <div class="kpi"><div class="v">95<small>%</small></div><div class="l">Weekly schedule compliance</div><div class="meter"><i style="width:95%"></i></div></div>
+          <div class="kpi"><div class="v">182</div><div class="l">PMs in a library built from scratch</div><div class="meter"><i style="width:82%"></i></div></div>
+          <div class="kpi"><div class="v">90<small>%</small></div><div class="l">PM compliance across four crews</div><div class="meter"><i style="width:90%"></i></div></div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <article class="paper">
-      <header class="r-head">
-        <h1>Chad Zahner</h1>
-        <div class="r-title">Maintenance Planner &amp; Scheduler · RMIC · CMRP Candidate</div>
-        <div class="r-contact">
-          <span>Rocky Mount, VA</span>
-          <a href="mailto:cpzahner@gmail.com">cpzahner@gmail.com</a>
-          <a href="https://www.linkedin.com/in/czahner">linkedin.com/in/czahner</a>
-          <a href="https://czahner.com">czahner.com</a>
+  <!-- WHAT I DO -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">What I do</span>
+          <h2 class="h2">Planning, reliability,<br>and better tools.</h2>
         </div>
-      </header>
-
-      <div class="r-section">
-        <h2>Summary</h2>
-        <p>Maintenance planner and U.S. Navy veteran with hands-on technician experience and a track record of building
-        planning and reliability programs from scratch. Built a 182-PM library and KPI system, led an A3 project that
-        cut downtime on the top five breakdown assets by 53%, and develops practical software and AI tools that make
-        planning faster and maintenance data more trustworthy. Working toward Reliability Engineer and Maintenance Manager roles.</p>
+        <p class="lede">From a destroyer's engine room to the plant floor — now on the planning side that keeps it all running.</p>
       </div>
+      <div class="grid-3">
+        <article class="card">
+          <span class="num">01</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15l2 2 4-4"/></svg></div>
+          <h3>Planning &amp; scheduling</h3>
+          <p>PM programs built from the ground up, job plans and SOPs crews can follow, a backlog prioritized by criticality, and a weekly schedule production can count on.</p>
+        </article>
+        <article class="card">
+          <span class="num">02</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/><path d="M20 8V4h-4"/></svg></div>
+          <h3>Reliability &amp; root cause</h3>
+          <p>Chasing chronic bad actors with A3, 5-Why, FMEA, and Pareto. Tracking the KPIs that matter and turning emergency work into planned work.</p>
+        </article>
+        <article class="card">
+          <span class="num">03</span>
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+          <h3>Tools that help</h3>
+          <p>Dashboards, planner toolkits, study apps, and AI prototypes — built to save planners and technicians real time on the floor.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-      <div class="r-section">
-        <h2>Experience</h2>
-
-        <div class="job">
-          <div class="job-top"><h3>Maintenance Planner &amp; Scheduler</h3><span class="job-when">Nov 2024 – Present</span></div>
-          <div class="job-org">Cardinal IG · Roanoke Facility, Vinton, VA</div>
-          <ul>
-            <li>Built the plant's maintenance planning infrastructure from the ground up: a 182-PM library and 13-week PM rotation calendar covering ~1,862 work order line items across four rotating crews and all departments.</li>
-            <li>Led an A3 capstone project that reduced downtime on the top five breakdown assets by 53% (537 → 250 hours) and lowered the emergency work rate from 68% to 54%.</li>
-            <li>Sustain 95% schedule compliance and 90% PM compliance; built weekly KPI scorecards for schedule compliance, PM compliance, backlog, emergency work, and planned work.</li>
-            <li>Audited and resolved a plant-wide CMMS scheduling defect that generated duplicate PM work orders, reviewing 156 duplicate completions and moving the PM program to floating schedules.</li>
-            <li>Authored the site Maintenance &amp; Reliability Standard plus SOPs, one-point lessons, and PM job plans; built the equipment registry with QR codes, LOTO asset list, and PM gap analysis.</li>
-            <li>Ran root cause analysis (A3, 5-Why, FMEA, Pareto) on chronic bad-actor equipment and benchmarked PM content against sister facilities.</li>
-            <li>Developed in-house tools including a KPI dashboard, a planner toolkit, and a CMMS AI agent prototype.</li>
+  <!-- CASE STUDY -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="case">
+        <div class="case-text">
+          <span class="eyebrow">Featured project · RMIC A3 capstone</span>
+          <h3>Cutting downtime on the five worst breakdown assets in half.</h3>
+          <p>A structured A3 project for my RMIC certification, aimed at the plant's top five breakdown assets — the machines driving the most unplanned downtime.</p>
+          <ul class="case-list">
+            <li>Targeted the worst offenders with Pareto analysis</li>
+            <li>Dug into root causes of the chronic failures</li>
+            <li>Shifted the work from emergency to planned</li>
+            <li>Tracked the results week over week</li>
           </ul>
         </div>
-
-        <div class="job">
-          <div class="job-top"><h3>Maintenance Technician Lead</h3><span class="job-when">2021 – 2024</span></div>
-          <div class="job-org">Cardinal Glass</div>
-          <ul>
-            <li>Led maintenance technicians on troubleshooting and repair across glass processing lines, including Billco cutting tables and washers and a Glasstech tempering furnace.</li>
-            <li>Repaired bearings, gearboxes, chains and belts, conveyors and drive systems, and hydraulic and pneumatic systems.</li>
-            <li>Diagnosed Allen-Bradley drive and PLC faults to restore production quickly.</li>
-          </ul>
-        </div>
-
-        <div class="job">
-          <div class="job-top"><h3>Customer Service Representative, Federal Employee Program</h3><span class="job-when">2017 – 2020</span></div>
-          <div class="job-org">Anthem Blue Cross Blue Shield</div>
-          <ul>
-            <li>Resolved member benefit and claims questions for federal employees in a high-volume, metrics-driven environment.</li>
-          </ul>
-        </div>
-
-        <div class="job">
-          <div class="job-top"><h3>Quality Auditor</h3><span class="job-when">2011 – 2017</span></div>
-          <div class="job-org">Altec</div>
-          <ul>
-            <li>Audited manufactured equipment against quality standards and documented nonconformances for correction.</li>
-          </ul>
-        </div>
-
-        <div class="job">
-          <div class="job-top"><h3>Gas Turbine Systems Technician (Mechanical) · Lead Oil King</h3><span class="job-when">2003 – 2011</span></div>
-          <div class="job-org">U.S. Navy · USS Mahan (DDG-72)</div>
-          <ul>
-            <li>Operated and maintained gas turbine propulsion and engineering systems as an engine room operator aboard an Arleigh Burke-class destroyer.</li>
-            <li>Served as Lead Oil King for the engineering department.</li>
-          </ul>
+        <div class="case-viz">
+          <div class="bar-row">
+            <div class="bar-top"><span>Downtime — before</span><b>537 hrs</b></div>
+            <div class="bar"><i class="before" style="width:100%"></i></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>Downtime — after</span><b>250 hrs</b></div>
+            <div class="bar"><i class="after" style="width:46.5%"></i></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-top"><span>Emergency work rate</span><b>68% → 54%</b></div>
+            <div class="bar"><i class="after" style="width:54%"></i></div>
+          </div>
+          <div class="big-stat"><span class="n">−53%</span><span class="t">downtime on the<br>top 5 breakdown assets</span></div>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="r-section">
-        <h2>Skills</h2>
-        <dl class="skills-grid">
-          <dt>Planning</dt><dd>PM program design, weekly scheduling, backlog management, job plans, SOPs and OPLs, work order standards</dd>
-          <dt>Reliability</dt><dd>A3, 5-Why, FMEA, Pareto analysis, criticality-based prioritization, KPI scorecards</dd>
-          <dt>Mechanical</dt><dd>Bearings, gearboxes, chains and belts, hydraulics, pneumatics, conveyors and drives; Allen-Bradley drive and PLC fault diagnostics</dd>
-          <dt>Systems &amp; tools</dt><dd>PMware CMMS, Excel, HTML/CSS/JavaScript, React, Node.js, PostgreSQL, AI and LLM tools</dd>
-        </dl>
+  <!-- CAREER -->
+  <section class="section alt">
+    <div class="wrap">
+      <span class="eyebrow">Background</span>
+      <h2 class="h2" style="margin-bottom:36px">How I got here.</h2>
+      <div class="career">
+        <div class="timeline">
+          <div class="tl now"><span class="tl-when">2024 — Now</span><div><h3>Maintenance Planner &amp; Scheduler</h3><div class="org">Cardinal IG · Roanoke, VA</div></div></div>
+          <div class="tl"><span class="tl-when">2021 — 2024</span><div><h3>Maintenance Technician Lead</h3><div class="org">Cardinal Glass</div></div></div>
+          <div class="tl"><span class="tl-when">2017 — 2020</span><div><h3>Customer Service Representative</h3><div class="org">Anthem Blue Cross Blue Shield · Federal Employee Program</div></div></div>
+          <div class="tl"><span class="tl-when">2011 — 2017</span><div><h3>Quality Auditor</h3><div class="org">Altec</div></div></div>
+          <div class="tl"><span class="tl-when">2003 — 2011</span><div><h3>Gas Turbine Systems Technician · Lead Oil King</h3><div class="org">U.S. Navy · USS Mahan (DDG-72)</div></div></div>
+        </div>
+        <aside>
+          <div class="side-card">
+            <h4>Certifications</h4>
+            <div class="cert"><span class="cert-badge">RMIC</span><div><b>Reliability &amp; Maintainability</b><span>University of Tennessee RMC</span></div></div>
+            <div class="cert"><span class="cert-badge pending">CMRP</span><div><b>Certified Maintenance &amp; Reliability Professional</b><span>SMRP · in progress</span></div></div>
+          </div>
+          <div class="side-card">
+            <h4>Focus areas</h4>
+            <div class="tags">
+              <span class="tag">PM optimization</span><span class="tag">CMMS data quality</span><span class="tag">Backlog management</span><span class="tag">KPI scorecards</span><span class="tag">Root cause analysis</span><span class="tag">Job plans &amp; SOPs</span><span class="tag">AI for maintenance</span>
+            </div>
+          </div>
+        </aside>
       </div>
+    </div>
+  </section>
 
-      <div class="r-section">
-        <h2>Certifications</h2>
-        <dl class="skills-grid">
-          <dt>RMIC</dt><dd>Reliability &amp; Maintainability Center, University of Tennessee</dd>
-          <dt>CMRP</dt><dd>Certified Maintenance &amp; Reliability Professional (SMRP) — in progress</dd>
-        </dl>
+  <!-- LAB TEASER -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">From the lab</span>
+          <h2 class="h2">Things I'm building.</h2>
+        </div>
+        <a class="btn btn-line" href="/lab/">All projects →</a>
       </div>
-    </article>
+      <div class="grid-3">
+        <a class="card project" href="https://cmrpstudy.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">
+          <div class="thumb"><span class="badge live">Live</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="body"><h3>CMRPstudy</h3><p>Free CMRP exam prep — flashcards, a practice exam, and a Ramsey Multicraft prep app.</p><span class="go">cmrpstudy.com →</span></div>
+        </a>
+        <a class="card project" href="/lab/" style="color:inherit;text-decoration:none">
+          <div class="thumb t2"><span class="badge proto">Prototype</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div>
+          <div class="body"><h3>CMMS AI Agent</h3><p>An LLM agent that reads CMMS work order exports, answers planning questions, and flags bad data.</p><span class="go">Learn more →</span></div>
+        </a>
+        <a class="card project" href="/lab/" style="color:inherit;text-decoration:none">
+          <div class="thumb t3"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="11" cy="14" r="3"/><path d="m16 19-2.5-2.5"/></svg></div>
+          <div class="body"><h3>Offline Maintenance Assistant</h3><p>A private, no-internet AI for drawings, SOPs, and manuals — ask about procedures and part numbers.</p><span class="go">Learn more →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="band" id="contact">
+    <div class="wrap cta">
+      <span class="eyebrow" style="color:var(--amber)">Get in touch</span>
+      <h2>Let's talk maintenance.</h2>
+      <p>Open to conversations about planning, reliability, and maintenance leadership — or just comparing notes on PM programs.</p>
+      <div class="actions">
+        <a class="btn btn-amber" href="mailto:cpzahner@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          Email me
+        </a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/czahner" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.850 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
     <span>© 2026 Chad Zahner · Rocky Mount, Virginia</span>
-    <span><a href="../">Home</a> · <a href="../lab/">Lab</a> · <a href="https://www.linkedin.com/in/czahner" target="_blank" rel="noopener">LinkedIn</a></span>
+    <span><a href="/resume/">Résumé</a> · <a href="/lab/">Lab</a> · <a href="https://www.linkedin.com/in/czahner" target="_blank" rel="noopener">LinkedIn</a></span>
   </div>
 </footer>
 
