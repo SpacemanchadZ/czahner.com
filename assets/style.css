@@ -46,7 +46,8 @@ p { margin: 0 0 1em; }
 .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 700; font-size: 18px; color: #fff; }
 .solid .brand { color: var(--ink); }
 .brand:hover { text-decoration: none; }
-.brand-mark { width: 36px; height: 36px; border-radius: 10px; background: var(--amber); color: var(--navy-900); display: grid; place-items: center; font: 700 14px/1 var(--mono); }
+.brand-mark { width: 40px; height: 40px; border-radius: 11px; background: #fff; display: grid; place-items: center; padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .nav-links { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { color: rgba(255,255,255,.75); font-size: 15px; font-weight: 500; padding: 8px 14px; border-radius: 999px; }
 .nav-links a:hover { color: #fff; background: rgba(255,255,255,.08); text-decoration: none; }
@@ -188,6 +189,9 @@ p { margin: 0 0 1em; }
 .project-head h3 { margin: 0; font-size: 19px; }
 .project .tags { margin-top: auto; padding-top: 18px; }
 .project .go { margin-top: 14px; font-weight: 600; font-size: 15px; color: var(--navy-500); }
+.project .links { display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap; }
+.project .links .code { font-size: 14px; color: var(--ink-3); font-weight: 500; }
+.project .links .code:hover { color: var(--ink); }
 .badge { display: inline-flex; align-items: center; gap: 6px; flex: none; font: 600 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .07em; padding: 6px 9px; border-radius: 999px; }
 .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .badge.live { color: var(--ok); background: var(--ok-soft); }
