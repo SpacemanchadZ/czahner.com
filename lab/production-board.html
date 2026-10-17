@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Board — Demo · Chad Zahner</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c12;
+    --surface: #0f1219;
+    --surface2: #131720;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --red: #c8102e;
+    --green: #22c55e;
+    --yellow: #f59e0b;
+    --blue: #38bdf8;
+    --text: #ffffff;
+    --muted: rgba(255,255,255,0.4);
+    --mono: 'Space Mono', monospace;
+    --display: 'Barlow Condensed', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; }
+
+  /* ── TICKER ── */
+  .ticker {
+    background: #0c0e16;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: stretch; height: 34px; overflow: hidden;
+  }
+  .ticker-label {
+    flex-shrink: 0; display: flex; flex-direction: column; justify-content: center;
+    padding: 0 16px; border-right: 1px solid var(--border); background: #0a0c12;
+    min-width: 90px; gap: 1px;
+  }
+  .ticker-label span:first-child { font-family: var(--display); font-size: 13px; letter-spacing: 2px; color: var(--yellow); font-weight: 700; line-height: 1; }
+  .ticker-label span:last-child  { font-size: 7px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+  .ticker-track-wrap { flex: 1; overflow: hidden; display: flex; align-items: center; }
+  .ticker-track { display: inline-flex; align-items: center; white-space: nowrap; animation: tickerScroll 120s linear infinite; }
+  .ticker-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 36px; font-size: 11px; color: rgba(255,255,255,0.55); }
+  .ticker-cat { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
+  .ticker-sep { color: rgba(255,255,255,0.12); font-size: 14px; padding: 0 2px; }
+  @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(180deg, rgba(15,18,28,1) 0%, rgba(10,12,18,1) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+  }
+  .header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 0 12px;
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .hex-logo {
+    width: 44px; height: 44px; cursor: default; flex-shrink: 0;
+    filter: drop-shadow(0 0 0px var(--red)); transition: filter 0.2s;
+  }
+  .brand-title { font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: 1px; line-height: 1; }
+  .brand-title .w { color: #fff; }
+  .brand-title .r { color: var(--red); }
+  .brand-sub { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-top: 3px; }
+
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  #clock { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--red); letter-spacing: 2px; }
+  .shift-badge {
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    padding: 5px 14px; border: 1px solid rgba(255,255,255,0.15); color: #fff;
+    text-transform: uppercase;
+  }
+  .kpi-link {
+    color: var(--muted); font-size: 10px; letter-spacing: 1px; text-decoration: none;
+    text-transform: uppercase; border-bottom: 2px solid transparent; transition: color 0.15s;
+    padding-bottom: 2px;
+  }
+  .kpi-link:hover { color: var(--red); }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 28px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .stat-chip { display: flex; align-items: baseline; gap: 6px; }
+  .stat-num { font-family: var(--display); font-size: 22px; font-weight: 800; line-height: 1; }
+  .stat-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .stat-div { width: 1px; height: 20px; background: var(--border2); }
+  .shift-notes-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+  .shift-notes-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  #shift-notes {
+    flex: 1; background: transparent; border: none; border-bottom: 1px solid var(--border2);
+    color: rgba(255,255,255,0.7); font-family: var(--mono); font-size: 11px; outline: none;
+    padding: 3px 0;
+  }
+  #shift-notes::placeholder { color: rgba(255,255,255,0.2); }
+  .legend { display: flex; gap: 14px; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .leg-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* ── BOARD ── */
+  .board { padding: 20px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+  .section-label {
+    font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--muted); padding: 0 0 8px;
+    border-bottom: 1px solid var(--border); margin-bottom: 6px;
+  }
+
+  .eq-row {
+    display: grid;
+    grid-template-columns: 10px 200px 1fr auto auto;
+    align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border-left: 3px solid transparent;
+    background: var(--surface);
+    transition: background 0.15s;
+    cursor: pointer;
+    min-height: 44px;
+  }
+  .eq-row:hover { background: var(--surface2); }
+  .eq-row + .eq-row { border-top: 1px solid var(--border); }
+
+  .eq-row.running { border-left-color: var(--green); background: linear-gradient(90deg, rgba(34,197,94,0.07) 0%, var(--surface) 30%); }
+  .eq-row.pm      { border-left-color: var(--yellow); background: linear-gradient(90deg, rgba(245,158,11,0.07) 0%, var(--surface) 30%); }
+  .eq-row.down    { border-left-color: var(--red);   background: linear-gradient(90deg, rgba(200,16,46,0.1) 0%, var(--surface) 30%); }
+  .eq-row.idle    { border-left-color: rgba(255,255,255,0.12); }
+
+  .row-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .running .row-dot { background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse-green 2s infinite; }
+  .pm      .row-dot { background: var(--yellow); }
+  .down    .row-dot { background: var(--red); animation: pulse-red 1s infinite; }
+  .idle    .row-dot { background: rgba(255,255,255,0.15); }
+
+  @keyframes pulse-green { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.6)} }
+  @keyframes pulse-red   { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+  .row-name { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 0.5px; color: #fff; }
+
+  /* inline ticker */
+  .row-ticker-wrap { overflow: hidden; min-width: 0; display: flex; align-items: center; height: 100%; }
+  .row-ticker-track { display: inline-flex; align-items: center; white-space: nowrap; animation: tickerScroll 24s linear infinite; }
+  .row-ticker-item { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding-right: 40px; gap: 6px; }
+  .ti-type { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; padding: 1px 5px; font-weight: 400; }
+
+  .row-sched { display: flex; gap: 4px; justify-content: flex-end; }
+  .sc { font-size: 8px; font-family: var(--mono); padding: 2px 6px; border: 1px solid rgba(255,255,255,0.12); color: var(--muted); }
+  .sc.on { border-color: rgba(34,197,94,0.4); color: var(--green); background: rgba(34,197,94,0.08); }
+  .sc.current { border-color: var(--green); color: #fff; background: rgba(34,197,94,0.2); box-shadow: 0 0 5px rgba(34,197,94,0.4); }
+  .sc.standby { color: var(--muted); border-color: rgba(255,255,255,0.12); }
+
+  .row-status {
+    font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 4px 12px; text-align: center; min-width: 90px;
+    border-radius: 2px;
+  }
+  .running .row-status { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .pm      .row-status { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .down    .row-status { background: rgba(200,16,46,0.15); color: #ff4d6d; border: 1px solid rgba(200,16,46,0.4); }
+  .idle    .row-status { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+  /* ── MODAL ── */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; }
+  .overlay.open { display: flex; }
+  .modal {
+    background: #111520; border: 1px solid var(--border2);
+    border-top: 3px solid var(--red); width: 420px; max-width: 95vw; padding: 28px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  }
+  .modal-name { font-family: var(--display); font-size: 24px; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; }
+  .modal-sub { font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .form-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: block; }
+  .status-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 16px; }
+  .status-btn {
+    padding: 10px 8px; border: 1px solid var(--border2); background: var(--bg);
+    color: rgba(255,255,255,0.5); cursor: pointer; font-family: var(--mono); font-size: 10px;
+    font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: all 0.1s;
+  }
+  .status-btn:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+  .status-btn.sel-running { border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green); }
+  .status-btn.sel-pm      { border-color: var(--yellow); background: rgba(245,158,11,0.1); color: var(--yellow); }
+  .status-btn.sel-down    { border-color: var(--red); background: rgba(200,16,46,0.1); color: #ff4d6d; }
+  .status-btn.sel-idle    { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); color: #fff; }
+  .form-input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border2);
+    color: #fff; padding: 10px 12px; font-family: var(--mono); font-size: 12px;
+    outline: none; margin-bottom: 16px;
+  }
+  .form-input:focus { border-color: var(--red); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-cancel { background: none; border: 1px solid var(--border2); color: var(--muted); padding: 9px 20px; cursor: pointer; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .btn-save { background: var(--red); border: none; color: #fff; padding: 9px 24px; cursor: pointer; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .btn-cancel:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+  .btn-save:hover { opacity: 0.85; }
+
+  .row-issue-btn {
+    flex-shrink: 0; background: none; border: 1px solid #3d0a12; color: #7a2030;
+    font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; padding: 3px 8px; transition: all 0.15s; white-space: nowrap;
+  }
+  .row-issue-btn:hover { color: var(--red); border-color: var(--red); background: rgba(200,16,46,0.08); }
+  .row-issue-btn.has-issues { color: var(--red); border-color: rgba(200,16,46,0.5); }
+
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1f2e; border: 1px solid var(--border2); border-left: 3px solid var(--green); padding: 10px 18px; font-size: 11px; letter-spacing: 0.5px; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; z-index: 300; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">
+    <span>ALERTS</span>
+    <span>Live Feed</span>
+  </div>
+  <div class="ticker-track-wrap">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div class="header-brand">
+      <svg class="hex-logo" viewBox="0 0 100 100">
+        <polygon points="50,2 98,26 98,74 50,98 2,74 2,26" fill="#c8102e"/>
+        <text x="50" y="57" font-family="Arial Black,sans-serif" font-size="24" font-weight="900" fill="white" text-anchor="middle" letter-spacing="1">DEMO</text>
+      </svg>
+      <div>
+        <div class="brand-title">
+          <span class="w">SAMPLE </span><span class="r">PLANT </span><span class="w">· DEMO</span>
+        </div>
+        <div class="brand-sub">Production Status Board</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="kpi-dashboard.html" class="kpi-link">KPI Dashboard ↗</a>
+      <div class="legend">
+        <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Running</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>PM/Sched</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>Down</div>
+        <div class="leg"><div class="leg-dot" style="background:rgba(255,255,255,0.2)"></div>Idle</div>
+      </div>
+      <div class="shift-badge" id="shift-label">— SHIFT</div>
+      <div id="clock">--:--:--</div>
+    </div>
+  </div>
+</header>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="stat-chip">
+    <div class="stat-num" id="cnt-running" style="color:var(--green)">0</div>
+    <div class="stat-lbl">Running</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-chip">
+    <div class="stat-num" id="cnt-pm" style="color:var(--yellow)">0</div>
+    <div class="stat-lbl">PM/Sched</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-chip">
+    <div class="stat-num" id="cnt-down" style="color:var(--red)">0</div>
+    <div class="stat-lbl">Down</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="stat-chip">
+    <div class="stat-num" id="cnt-idle" style="color:rgba(255,255,255,0.4)">0</div>
+    <div class="stat-lbl">Idle</div>
+  </div>
+  <div class="stat-div"></div>
+  <div class="shift-notes-wrap">
+    <span class="shift-notes-lbl">Shift Notes</span>
+    <input id="shift-notes" type="text" placeholder="Enter handoff notes for next shift...">
+  </div>
+</div>
+
+<!-- BOARD -->
+<div class="board" id="board"></div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-name" id="modal-name">—</div>
+    <div class="modal-sub" id="modal-sub">—</div>
+    <label class="form-label">Status</label>
+    <div class="status-btns">
+      <button class="status-btn" id="btn-running" onclick="selectStatus('running')">🟢 Running</button>
+      <button class="status-btn" id="btn-pm"      onclick="selectStatus('pm')">🟡 PM / Sched</button>
+      <button class="status-btn" id="btn-down"    onclick="selectStatus('down')">🔴 Down</button>
+      <button class="status-btn" id="btn-idle"    onclick="selectStatus('idle')">⚫ Idle</button>
+    </div>
+    <label class="form-label" for="modal-note">Note / WO# (optional)</label>
+    <input class="form-input" id="modal-note" type="text" placeholder="e.g. WO-2026-1234 · bearing replacement">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save"   onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ISSUE MODAL -->
+<div class="overlay" id="issue-overlay" onclick="if(event.target===this)closeIssueModal()">
+  <div class="modal">
+    <div class="modal-name" id="issue-modal-name">—</div>
+    <div class="modal-sub" id="issue-modal-sub">Add / remove issues that scroll on this row</div>
+    <div id="issue-list" style="margin-bottom:14px;display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;"></div>
+    <label class="form-label">Add Issue</label>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <select id="issue-type" style="background:#0a0c12;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:8px 10px;font-family:var(--mono);font-size:10px;outline:none;cursor:pointer;">
+        <option value="issue">ISSUE</option>
+        <option value="corrective">CORRECTIVE</option>
+      </select>
+      <input id="issue-text" class="form-input" style="margin:0;flex:1;" type="text" placeholder="Describe the issue...">
+      <button class="btn-save" onclick="addIssue()" style="white-space:nowrap;">+ Add</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeIssueModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+var sections = [
+  { label: 'Assembly Lines', rows: [
+    { id:'L1', name:'Line 1',       area:'Assembly',        schedule:[1,2,3], weekdayOnly:true  },
+    { id:'L2', name:'Line 2',       area:'Assembly',        schedule:[],      weekdayOnly:false },
+    { id:'L3', name:'Line 3',       area:'Assembly',        schedule:[1,3],   weekdayOnly:true  },
+    { id:'L4', name:'Line 4',       area:'Assembly',        schedule:[2],     weekdayOnly:true  },
+  ]},
+  { label: 'Cutting', rows: [
+    { id:'CT1',  name:'Cutting Table 1', area:'Cutting',           schedule:[1,2,3], weekdayOnly:true  },
+    { id:'CT2',  name:'Cutting Table 2', area:'Cutting',           schedule:[1,2,3], weekdayOnly:true  },
+    { id:'LAMI', name:'Lami Table',      area:'Cutting',           schedule:[1,2,3], weekdayOnly:true  },
+  ]},
+  { label: 'Tempering', rows: [
+    { id:'FURN', name:'Furnace',         area:'Tempering',         schedule:[1,2,3], weekdayOnly:true  },
+    { id:'CT3',  name:'Cutting Table 3', area:'Tempering',         schedule:[1,2,3], weekdayOnly:true  },
+  ]},
+  { label: 'Mezzanine', rows: [
+    { id:'MBEND', name:'Mezz Bender',    area:'Spacer Fabrication',schedule:[1,2,3], weekdayOnly:true  },
+    { id:'MMUT',  name:'Mezz Muntin',    area:'Muntin Fabrication',schedule:[1,2,3], weekdayOnly:true  },
+    { id:'MEXT',  name:'Mezz Extruder',  area:'Extrusion',         schedule:[1,2,3], weekdayOnly:true  },
+    { id:'MFILL', name:'Mezz Fill Room', area:'Sieve Fill',        schedule:[1,2,3], weekdayOnly:true  },
+  ]},
+];
+
+var equipment = {};
+sections.forEach(function(s){ s.rows.forEach(function(e){ equipment[e.id] = e; }); });
+
+var SHIFT_SHORT = {1:'1ST',2:'2ND',3:'3RD'};
+var SHIFT_ACCENT = {1:'#22c55e',2:'#38bdf8',3:'#f59e0b'};
+
+function getShiftInfo() {
+  var now = new Date(), h = now.getHours();
+  var shiftNum, shiftDay;
+  if (h >= 7 && h < 15)       { shiftNum=1; shiftDay=new Date(now.getFullYear(),now.getMonth(),now.getDate()); }
+  else if (h >= 15 && h < 23) { shiftNum=2; shiftDay=new Date(now.getFullYear(),now.getMonth(),now.getDate()); }
+  else {
+    shiftNum=3;
+    shiftDay = (h < 7)
+      ? new Date(now.getFullYear(),now.getMonth(),now.getDate()-1)
+      : new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  }
+  var dow = shiftDay.getDay();
+  return { shiftNum:shiftNum, shiftDay:shiftDay, isWeekday:(dow>=1&&dow<=5) };
+}
+
+function scheduledStatus(id) {
+  if (id==='L2') return 'idle';
+  var eq=equipment[id], info=getShiftInfo();
+  if (eq.weekdayOnly && !info.isWeekday) return 'idle';
+  return eq.schedule.includes(info.shiftNum) ? 'running' : 'idle';
+}
+
+var state = {};
+Object.keys(equipment).forEach(function(id){
+  state[id] = { status: scheduledStatus(id), note: '', manual: false };
+});
+
+// load saved state
+try {
+  var saved = JSON.parse(localStorage.getItem('demo_pb_state_v1')||'{}');
+  Object.keys(saved).forEach(function(id){ if(state[id]) state[id]=saved[id]; });
+} catch(e){}
+
+function saveState() {
+  try { localStorage.setItem('demo_pb_state_v1', JSON.stringify(state)); } catch(e){}
+}
+
+// ── CLOCK + SHIFT ──
+function tick() {
+  var now = new Date();
+  var p = function(n){ return String(n).padStart(2,'0'); };
+  document.getElementById('clock').textContent = p(now.getHours())+':'+p(now.getMinutes())+':'+p(now.getSeconds());
+  var info = getShiftInfo();
+  var col = SHIFT_ACCENT[info.shiftNum]||'#fff';
+  var el = document.getElementById('shift-label');
+  el.textContent = SHIFT_SHORT[info.shiftNum]+' SHIFT'+(info.isWeekday?'':'  ·  WEEKEND');
+  el.style.color = col;
+  el.style.borderColor = col+'44';
+}
+setInterval(tick,1000); tick();
+
+// ── BOARD RENDER ──
+// ── DOWN ISSUES per row ──
+var downItems = {};
+try {
+  var di = JSON.parse(localStorage.getItem('demo_pb_down_v1')||'{}');
+  if (di && typeof di==='object') downItems = di;
+} catch(e){}
+function saveDownItems(){ try{ localStorage.setItem('demo_pb_down_v1',JSON.stringify(downItems)); }catch(e){} }
+
+var PILL = { running:'Running', pm:'PM / Sched', down:'DOWN', idle:'Idle' };
+
+function buildRow(eq, s, info) {
+  var row = document.createElement('div');
+  row.className = 'eq-row ' + s.status;
+  row.id = 'row-' + eq.id;
+  row.onclick = function(e){ if(!e.target.closest('.row-issue-btn')) openModal(eq.id); };
+
+  // dot
+  var dot = document.createElement('div'); dot.className='row-dot'; row.appendChild(dot);
+
+  // name
+  var name = document.createElement('div'); name.className='row-name'; name.textContent=eq.name; row.appendChild(name);
+
+  // ticker area — issues scroll here, or note, or empty spacer
+  var issues = downItems[eq.id] || [];
+  var tickerWrap = document.createElement('div'); tickerWrap.className='row-ticker-wrap';
+  var lines = [];
+  if (issues.length) {
+    issues.forEach(function(it){ lines.push({ text: it.text, type: it.type||'issue' }); });
+  } else if (s.note) {
+    lines.push({ text: s.note, type: 'note' });
+  }
+  if (lines.length) {
+    var speed = Math.max(10, Math.min(40, lines.reduce(function(a,l){return a+l.text.length;},0)*0.4 + lines.length*4));
+    var inner = [...lines,...lines].map(function(l){
+      var isCorr = l.type==='corrective'||l.type==='wo';
+      var col = l.type==='note' ? 'rgba(255,255,255,0.45)' : isCorr ? '#fbbf24' : '#ef4444';
+      var tag = l.type==='note' ? '' : '<span class="ti-type" style="color:'+col+';border-color:'+(isCorr?'#92400e':'#7f1d1d')+';background:'+(isCorr?'rgba(251,191,36,0.1)':'rgba(239,68,68,0.1)')+'">'+( isCorr?'CORRECTIVE':'ISSUE')+'</span>';
+      return '<span class="row-ticker-item" style="color:'+col+'">⚠ '+tag+l.text+'<span class="ti-sep">◆</span></span>';
+    }).join('');
+    var track = document.createElement('div');
+    track.className='row-ticker-track';
+    track.style.animationDuration = speed+'s';
+    track.innerHTML = inner;
+    tickerWrap.appendChild(track);
+  }
+  row.appendChild(tickerWrap);
+
+  // issue button (admin)
+  var issueBtn = document.createElement('button');
+  issueBtn.className = 'row-issue-btn' + (issues.length ? ' has-issues' : '');
+  issueBtn.textContent = issues.length ? '⚠ '+issues.length+' ISSUE'+(issues.length>1?'S':'') : '+ ISSUE';
+  issueBtn.onclick = function(e){ e.stopPropagation(); openIssueModal(eq.id); };
+  row.appendChild(issueBtn);
+
+  // sched chips
+  var sched = document.createElement('div'); sched.className='row-sched';
+  if (eq.id==='L2') {
+    var sc=document.createElement('span'); sc.className='sc standby'; sc.textContent='STANDBY'; sched.appendChild(sc);
+  } else {
+    [1,2,3].forEach(function(n){
+      var isOn=eq.schedule.includes(n), isCur=(n===info.shiftNum&&info.isWeekday&&isOn);
+      var sc=document.createElement('span');
+      sc.className='sc'+(isOn?' on':'')+(isCur?' current':'');
+      sc.textContent=SHIFT_SHORT[n]; sched.appendChild(sc);
+    });
+    if(!info.isWeekday){var wk=document.createElement('span');wk.className='sc standby';wk.textContent='WKND';sched.appendChild(wk);}
+  }
+  row.appendChild(sched);
+
+  // status pill
+  var pill=document.createElement('div'); pill.className='row-status'; pill.textContent=PILL[s.status];
+  row.appendChild(pill);
+  return row;
+}
+
+function renderBoard() {
+  var board = document.getElementById('board');
+  board.innerHTML = '';
+  var info = getShiftInfo();
+  sections.forEach(function(sec){
+    var wrap = document.createElement('div');
+    var lbl = document.createElement('div'); lbl.className='section-label'; lbl.textContent=sec.label;
+    wrap.appendChild(lbl);
+    sec.rows.forEach(function(eq){ wrap.appendChild(buildRow(eq, state[eq.id]||{status:'idle',note:''}, info)); });
+    board.appendChild(wrap);
+  });
+  updateCounts();
+}
+
+function refreshRow(id) {
+  var old = document.getElementById('row-'+id); if(!old) return;
+  old.replaceWith(buildRow(equipment[id], state[id], getShiftInfo()));
+}
+
+function updateCounts() {
+  ['running','pm','down','idle'].forEach(function(st){
+    var el=document.getElementById('cnt-'+st);
+    if(el) el.textContent=Object.values(state).filter(function(s){ return s.status===st; }).length;
+  });
+}
+
+// ── MODAL ──
+var activeId = null, activeStatus = null;
+
+function openModal(id) {
+  activeId = id; activeStatus = state[id].status;
+  var eq = equipment[id];
+  document.getElementById('modal-name').textContent = eq.name;
+  document.getElementById('modal-sub').textContent  = eq.area + ' · ' + (eq.schedNote||'');
+  document.getElementById('modal-note').value = state[id].note||'';
+  ['running','pm','down','idle'].forEach(function(s){
+    var btn=document.getElementById('btn-'+s);
+    btn.className='status-btn'+(state[id].status===s?' sel-'+s:'');
+  });
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('modal-note').focus(); },60);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  activeId=null; activeStatus=null;
+}
+
+function selectStatus(s) {
+  activeStatus = s;
+  ['running','pm','down','idle'].forEach(function(st){
+    document.getElementById('btn-'+st).className='status-btn'+(st===s?' sel-'+st:'');
+  });
+}
+
+function saveModal() {
+  if (!activeId) return;
+  state[activeId].status = activeStatus;
+  state[activeId].note   = document.getElementById('modal-note').value.trim();
+  state[activeId].manual = true;
+  saveState();
+  refreshRow(activeId);
+  updateCounts();
+  closeModal();
+  showToast('Status updated');
+}
+
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+
+// ── TOAST ──
+var toastT;
+function showToast(msg) {
+  var t=document.getElementById('toast'); t.textContent=msg; t.className='toast show';
+  clearTimeout(toastT); toastT=setTimeout(function(){ t.className='toast'; },2500);
+}
+
+// ── TICKER ──
+var TICKER_ITEMS = [
+  { cat:'🔴 CRITICAL', color:'#ef4444', text:'L3 Robot Cell — Repeat axis brake failures · RCA required' },
+  { cat:'🔴 CRITICAL', color:'#ef4444', text:'L4 Robot Cell — Same sensor replaced 4× · Root cause still open' },
+  { cat:'🔴 CRITICAL', color:'#ef4444', text:'L3 Washer — Bearing and brush failure · ~30h labor' },
+  { cat:'🟡 WATCH',    color:'#f59e0b', text:'Tempering furnace — 4 separate events · Chain and shutoff issues' },
+  { cat:'📈 IMPROVING',color:'#22c55e', text:'Plant-wide breakdown rate down 21.3% → 16.9% · Four of five shifts improved' },
+  { cat:'📈 IMPROVING',color:'#22c55e', text:'L4 MTBF up 55h → 96h · Strong improvement' },
+  { cat:'✓ STRENGTH',  color:'#22c55e', text:'C Shift best performer · 16.3% breakdown rate' },
+  { cat:'ℹ INFO',      color:'#a78bfa', text:'DEMO — click any row to change its status, or add an issue' },
+];
+
+var track = document.getElementById('ticker-track');
+[...TICKER_ITEMS, ...TICKER_ITEMS].forEach(function(item){
+  var span = document.createElement('span'); span.className='ticker-item';
+  var cat = document.createElement('span'); cat.className='ticker-cat';
+  cat.style.background = item.color+'22'; cat.style.color = item.color;
+  cat.textContent = item.cat; span.appendChild(cat);
+  span.appendChild(document.createTextNode(item.text));
+  var sep = document.createElement('span'); sep.className='ticker-sep'; sep.textContent='◆';
+  span.appendChild(sep); track.appendChild(span);
+});
+
+// ── ISSUE MODAL ──
+var activeIssueId = null;
+
+function openIssueModal(id) {
+  activeIssueId = id;
+  var eq = equipment[id];
+  document.getElementById('issue-modal-name').textContent = eq.name;
+  document.getElementById('issue-text').value = '';
+  renderIssueList();
+  document.getElementById('issue-overlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('issue-text').focus(); }, 60);
+}
+
+function closeIssueModal() {
+  document.getElementById('issue-overlay').classList.remove('open');
+  activeIssueId = null;
+}
+
+function renderIssueList() {
+  var list = document.getElementById('issue-list');
+  var items = downItems[activeIssueId] || [];
+  if (!items.length) { list.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.25);padding:4px 0;">No issues listed</div>'; return; }
+  list.innerHTML = items.map(function(it, idx) {
+    var col = (it.type==='corrective'||it.type==='wo') ? '#fbbf24' : '#ef4444';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);">'
+      +'<span style="font-size:8px;letter-spacing:1px;padding:2px 6px;background:'+col+'22;color:'+col+';font-weight:700;">'+(it.type||'ISSUE').toUpperCase()+'</span>'
+      +'<span style="flex:1;font-size:11px;color:rgba(255,255,255,0.7);">'+it.text+'</span>'
+      +'<button onclick="removeIssue('+idx+')" style="background:none;border:1px solid rgba(239,68,68,0.3);color:#ef4444;cursor:pointer;font-size:10px;padding:2px 8px;font-family:var(--mono);">✕</button>'
+      +'</div>';
+  }).join('');
+}
+
+function addIssue() {
+  var text = document.getElementById('issue-text').value.trim();
+  var type = document.getElementById('issue-type').value;
+  if (!text || !activeIssueId) return;
+  if (!downItems[activeIssueId]) downItems[activeIssueId] = [];
+  downItems[activeIssueId].push({ type: type, text: text });
+  saveDownItems();
+  document.getElementById('issue-text').value = '';
+  renderIssueList();
+  refreshRow(activeIssueId);
+  showToast('Issue added');
+}
+
+function removeIssue(idx) {
+  if (!activeIssueId) return;
+  downItems[activeIssueId].splice(idx, 1);
+  saveDownItems();
+  renderIssueList();
+  refreshRow(activeIssueId);
+}
+
+document.getElementById('issue-text').addEventListener('keydown', function(e){ if(e.key==='Enter') addIssue(); });
+
+// ── INIT ──
+renderBoard();
+</script>
+</body>
+</html>

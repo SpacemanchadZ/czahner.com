@@ -6,7 +6,8 @@
   <title>Lab · Chad Zahner</title>
   <meta name="description" content="Projects and experiments by Chad Zahner — tools and AI for maintenance planning and reliability.">
   <meta name="theme-color" content="#0a1628">
-  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/assets/logo-mark.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -16,7 +17,7 @@
 
 <header class="site-header">
   <nav class="wrap nav" aria-label="Main">
-    <a class="brand" href="/"><span class="brand-mark">CZ</span><span class="brand-name">Chad Zahner</span></a>
+    <a class="brand" href="/"><span class="brand-mark"><img src="/assets/logo-mark.png" alt="czahner.com logo"></span><span class="brand-name">Chad Zahner</span></a>
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/resume/">Résumé</a></li>
@@ -50,11 +51,32 @@
         </a>
 
         <article class="card project">
-          <div class="thumb t2"><span class="badge live">In use</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg></div>
+          <div class="thumb t3"><span class="badge live">Live demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></div>
+          <div class="body">
+            <h3>Job Plan Builder</h3>
+            <p>Drop in drawings or photos, describe the job, and get a step-by-step job plan with LOTO, parts, and cycle checks — editable, then downloaded as a Word document.</p>
+            <div class="tags"><span class="tag">Job plans</span><span class="tag">Word export</span><span class="tag">JavaScript</span></div>
+            <div class="links"><a class="go" href="/lab/job-plan-builder.html" target="_blank" rel="noopener">Open demo →</a><a class="code" href="https://github.com/SpacemanchadZ/czahner.com/blob/main/lab/job-plan-builder.html" target="_blank" rel="noopener">View code</a></div>
+          </div>
+        </article>
+
+        <article class="card project">
+          <div class="thumb t2"><span class="badge live">Live demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg></div>
           <div class="body">
             <h3>Maintenance KPI Dashboard</h3>
-            <p>Weekly schedule compliance, PM compliance, backlog, rework, and reactive vs. proactive work — one set of numbers for the whole team.</p>
+            <p>Planned work rate, PM compliance, breakdown mix, MTBF/MTTR by line, shift performance, and an alerts ticker — built for a shop-floor TV. Shown with sample data.</p>
             <div class="tags"><span class="tag">Dashboards</span><span class="tag">KPIs</span><span class="tag">JavaScript</span></div>
+            <div class="links"><a class="go" href="/lab/kpi-dashboard.html" target="_blank" rel="noopener">Open demo →</a><a class="code" href="https://github.com/SpacemanchadZ/czahner.com/blob/main/lab/kpi-dashboard.html" target="_blank" rel="noopener">View code</a></div>
+          </div>
+        </article>
+
+        <article class="card project">
+          <div class="thumb"><span class="badge live">Live demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h2M7 13h2M7 17h2M12 9h5M12 13h5M12 17h5"/></svg></div>
+          <div class="body">
+            <h3>Production Status Board</h3>
+            <p>Live equipment status by area — running, PM, down, idle — with shift schedules, issue tickers, and handoff notes. Click any row to try it.</p>
+            <div class="tags"><span class="tag">Shop floor</span><span class="tag">Status board</span><span class="tag">JavaScript</span></div>
+            <div class="links"><a class="go" href="/lab/production-board.html" target="_blank" rel="noopener">Open demo →</a><a class="code" href="https://github.com/SpacemanchadZ/czahner.com/blob/main/lab/production-board.html" target="_blank" rel="noopener">View code</a></div>
           </div>
         </article>
 
@@ -77,20 +99,11 @@
         </article>
 
         <article class="card project">
-          <div class="thumb t2"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.770a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <div class="thumb t2"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
           <div class="body">
             <h3>Planner Toolkit</h3>
             <p>One hub for daily planning: job staging kits, parts requests, storeroom and PM quality audits, a job plan builder, spares criticality, and RCA. Adapted from the free Planner HQ tools.</p>
             <div class="tags"><span class="tag">Planning</span><span class="tag">RCA</span><span class="tag">HTML/JS</span></div>
-          </div>
-        </article>
-
-        <article class="card project">
-          <div class="thumb t3"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg></div>
-          <div class="body">
-            <h3>Job Plan Generator</h3>
-            <p>Upload drawing screenshots and a short description, get a formatted job plan ready to review — no AI required, so anyone on the team can run it.</p>
-            <div class="tags"><span class="tag">Job plans</span><span class="tag">Web app</span></div>
           </div>
         </article>
 
@@ -104,7 +117,7 @@
         </article>
 
       </div>
-      <p class="note">Projects built for my day job are shown without plant data. Happy to walk through any of them in conversation.</p>
+      <p class="note">Live demos use sample data — no plant names, people, or real numbers. Happy to walk through any of them in conversation.</p>
     </div>
   </section>
 </main>
