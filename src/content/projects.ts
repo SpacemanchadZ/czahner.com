@@ -66,6 +66,16 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    title: 'CompactLogix Lessons',
+    blurb:
+      'Eleven short, interactive lessons on PLCs, Studio 5000, VFDs and servo motion, written in plain language. Each one has an on-screen simulator, two quick questions, and a practice task to try in Studio 5000.',
+    icon: 'chip',
+    status: 'live',
+    tags: ['HTML/JS', 'Allen-Bradley', 'Training'],
+    href: '/lab/compactlogix/',
+    tint: 2,
+  },
+  {
     title: 'CMMS AI Agent',
     blurb: 'An agent that imports CMMS work order exports and uses an LLM with tool calling to answer planning questions and flag data problems.',
     icon: 'chip',
