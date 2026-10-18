@@ -173,6 +173,7 @@ p { margin: 0 0 1em; }
 .side-card { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
 .side-card h4 { font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 16px; }
 .cert { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.cert-logo { display: block; width: 100%; max-width: 220px; height: auto; margin: 4px 0 2px; }
 .cert:last-child { margin-bottom: 0; }
 .cert-badge { flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--navy-900); color: var(--amber); display: grid; place-items: center; font: 700 10px/1 var(--mono); letter-spacing:-.02em; }
 .cert-badge.pending { background: var(--amber-soft); color: var(--amber-600); }
