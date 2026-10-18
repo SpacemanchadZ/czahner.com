@@ -4,19 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found · Chad Zahner</title>
+  <meta name="description" content="That page doesn't exist.">
+  <meta property="og:title" content="Page not found · Chad Zahner">
+  <meta property="og:description" content="That page doesn't exist.">
+  <meta property="og:url" content="https://czahner.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://czahner.com/assets/og-image.jpg">
+  <meta name="theme-color" content="#0a1628">
   <link rel="icon" href="/assets/favicon.png" type="image/png">
-  <link rel="apple-touch-icon" href="/assets/logo-mark.png?v=7">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=7">
+  <link rel="apple-touch-icon" href="/assets/logo-mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<main class="band" style="min-height:100vh;display:grid;place-items:center">
-  <div class="wrap cta">
-    <span class="eyebrow" style="color:var(--amber)">Error 404</span>
-    <h2>Unplanned downtime.</h2>
-    <p>That page doesn't exist. Let's get you back on schedule.</p>
-    <div class="actions"><a class="btn btn-amber" href="/">Back to home</a></div>
-  </div>
-</main>
+  <div id="root"><!--prerender--></div>
+  <noscript></noscript>
+  <script type="module" src="/src/entries/not-found.tsx"></script>
 </body>
 </html>
