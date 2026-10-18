@@ -5,120 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lab · Chad Zahner</title>
   <meta name="description" content="Projects and experiments by Chad Zahner — tools and AI for maintenance planning and reliability.">
+  <meta property="og:title" content="Lab · Chad Zahner">
+  <meta property="og:description" content="Projects and experiments by Chad Zahner — tools and AI for maintenance planning and reliability.">
+  <meta property="og:url" content="https://czahner.com/lab/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://czahner.com/assets/og-image.jpg">
   <meta name="theme-color" content="#0a1628">
   <link rel="icon" href="/assets/favicon.png" type="image/png">
-  <link rel="apple-touch-icon" href="/assets/logo-mark.png?v=7">
+  <link rel="apple-touch-icon" href="/assets/logo-mark.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=7">
 </head>
 <body>
-
-<header class="site-header">
-  <nav class="wrap nav" aria-label="Main">
-    <a class="brand" href="/"><span class="brand-mark"><img src="/assets/logo-mark.png?v=7" alt="czahner.com logo"></span><span class="brand-name">Chad Zahner</span></a>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/resume/">Résumé</a></li>
-      <li><a href="/lab/" aria-current="page">Lab</a></li>
-      <li><a href="/#contact">Contact</a></li>
-    </ul>
-  </nav>
-</header>
-
-<main>
-  <div class="band">
-    <div class="wrap page-hero">
-      <span class="eyebrow">The Lab</span>
-      <h1>Things I'm <em>building.</em></h1>
-      <p>Tools, experiments, and AI projects aimed at one question: how do we make maintenance planning faster, smarter, and more reliable?</p>
-    </div>
-  </div>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="grid-3">
-
-        <a class="card project" href="https://cmrpstudy.com" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">
-          <div class="thumb"><span class="badge live">Live</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-          <div class="body">
-            <h3>CMRPstudy</h3>
-            <p>A free study site for the CMRP exam — flashcards, a full practice exam, and a Ramsey Multicraft prep app.</p>
-            <div class="tags"><span class="tag">HTML/JS</span><span class="tag">GitHub Pages</span></div>
-            <span class="go">Visit cmrpstudy.com →</span>
-          </div>
-        </a>
-
-        <article class="card project">
-          <div class="thumb t3"><span class="badge live">Live demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></div>
-          <div class="body">
-            <h3>Job Plan Builder</h3>
-            <p>Drop in drawings or photos, describe the job, and get a step-by-step job plan with LOTO, parts, and cycle checks — editable, then downloaded as a Word document.</p>
-            <div class="tags"><span class="tag">Job plans</span><span class="tag">Word export</span><span class="tag">JavaScript</span></div>
-            <div class="links"><a class="go" href="/lab/job-plan-builder.html" target="_blank" rel="noopener">Open demo →</a><a class="code" href="https://github.com/SpacemanchadZ/czahner.com/blob/main/lab/job-plan-builder.html" target="_blank" rel="noopener">View code</a></div>
-          </div>
-        </article>
-
-        <article class="card project">
-          <div class="thumb t2"><span class="badge live">Live demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5"/><rect x="12" y="8" width="3" height="9"/><rect x="17" y="5" width="3" height="12"/></svg></div>
-          <div class="body">
-            <h3>Maintenance KPI Dashboard</h3>
-            <p>Planned work rate, PM compliance, breakdown mix, MTBF/MTTR by line, shift performance, and an alerts ticker — built for a shop-floor TV. Shown with sample data.</p>
-            <div class="tags"><span class="tag">Dashboards</span><span class="tag">KPIs</span><span class="tag">JavaScript</span></div>
-            <div class="links"><a class="go" href="/lab/kpi-dashboard.html" target="_blank" rel="noopener">Open demo →</a><a class="code" href="https://github.com/SpacemanchadZ/czahner.com/blob/main/lab/kpi-dashboard.html" target="_blank" rel="noopener">View code</a></div>
-          </div>
-        </article>
-
-
-        <article class="card project">
-          <div class="thumb t3"><span class="badge proto">Prototype</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></svg></div>
-          <div class="body">
-            <h3>CMMS AI Agent</h3>
-            <p>An agent that imports CMMS work order exports and uses an LLM with tool calling to answer planning questions and flag data problems.</p>
-            <div class="tags"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">Claude</span></div>
-          </div>
-        </article>
-
-        <article class="card project">
-          <div class="thumb"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="11" cy="14" r="3"/><path d="m16 19-2.5-2.5"/></svg></div>
-          <div class="body">
-            <h3>Offline Maintenance Assistant</h3>
-            <p>A local AI with no internet connection. Load drawings, SOPs, and manuals, then ask about procedures, part numbers, and images — documents stay private.</p>
-            <div class="tags"><span class="tag">Local LLM</span><span class="tag">NVIDIA GPU</span><span class="tag">Doc search</span></div>
-          </div>
-        </article>
-
-        <article class="card project">
-          <div class="thumb t2"><span class="badge build">In progress</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-          <div class="body">
-            <h3>Planner Toolkit</h3>
-            <p>One hub for daily planning: job staging kits, parts requests, storeroom and PM quality audits, a job plan builder, spares criticality, and RCA. Adapted from the free Planner HQ tools.</p>
-            <div class="tags"><span class="tag">Planning</span><span class="tag">RCA</span><span class="tag">HTML/JS</span></div>
-          </div>
-        </article>
-
-        <article class="card project">
-          <div class="thumb"><span class="badge plan">Planned</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
-          <div class="body">
-            <h3>Drawing Search</h3>
-            <p>Find any mechanical drawing by drawing number, equipment tag, part number, or text inside the drawing — from a phone on the shop floor.</p>
-            <div class="tags"><span class="tag">Search</span><span class="tag">OCR</span><span class="tag">Mobile</span></div>
-          </div>
-        </article>
-
-      </div>
-      <p class="note">Live demos use sample data — no plant names, people, or real numbers. Happy to walk through any of them in conversation.</p>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <div class="wrap">
-    <span>© 2026 Chad Zahner</span>
-    <span><a href="/">Home</a> · <a href="/resume/">Résumé</a> · <a href="https://www.linkedin.com/in/czahner" target="_blank" rel="noopener">LinkedIn</a></span>
-  </div>
-</footer>
-
+  <div id="root"><!--prerender--></div>
+  <noscript></noscript>
+  <script type="module" src="/src/entries/lab.tsx"></script>
 </body>
 </html>
