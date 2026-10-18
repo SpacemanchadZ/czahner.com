@@ -1,0 +1,39 @@
+/* Shared frame for Lab tools (Job Plan Builder, KPI Dashboard). Uses the site's tokens. */
+.tool { min-height: 100vh; background: var(--bg); }
+.tool-bar { position: sticky; top: 0; z-index: 30; background: var(--navy-900); color: #fff; box-shadow: 0 1px 0 rgba(255,255,255,.06); }
+.tool-bar-inner { max-width: 1480px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tool-home { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.75); font-weight: 600; font-size: 14px; }
+.tool-home:hover { color: #fff; text-decoration: none; }
+.brand-mark.sm { width: 34px; height: 34px; border-radius: 9px; padding: 1px; box-shadow: none; }
+.tool-bar .sep { color: rgba(255,255,255,.3); }
+.tool-title { font-family: var(--display); font-size: 18px; letter-spacing: -0.01em; margin: 0; color: #fff; }
+.tool-tag { font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--amber); border: 1px solid rgba(245,158,11,.4); border-radius: 999px; padding: 5px 9px; }
+.tool-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+.tbtn { font: 600 13.5px/1 var(--sans); display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; border-radius: 9px; border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
+.tbtn svg { width: 16px; height: 16px; }
+.tbtn:hover { text-decoration: none; }
+.tbtn.primary { background: var(--amber); color: var(--navy-900); }
+.tbtn.primary:hover { background: #fbbf24; }
+.tbtn.ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.14); }
+.tbtn.ghost:hover { background: rgba(255,255,255,.14); }
+.tbtn.line { background: #fff; color: var(--ink); border-color: var(--line); }
+.tbtn.line:hover { border-color: var(--ink-3); }
+.tbtn.sm { padding: 6px 9px; font-size: 12.5px; border-radius: 7px; }
+.tbtn:disabled { opacity: .5; cursor: default; }
+.tbtn.danger { color: #b42318; }
+
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 50; background: var(--navy-900); color: #fff; padding: 11px 16px; border-radius: 10px; font-size: 14px; box-shadow: var(--shadow); max-width: calc(100vw - 32px); }
+.toast.err { background: #7a1d12; }
+
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 700px) {
+  .tool-bar-inner { padding: 8px 14px; gap: 8px; }
+  .tool-actions { margin-left: 0; width: 100%; }
+  .tool-tag { display: none; }
+}
+@media print {
+  .tool-bar, .no-print { display: none !important; }
+  .tool { background: #fff; }
+}
