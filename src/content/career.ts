@@ -22,7 +22,7 @@ export const jobs: Job[] = [
       'Traced unreliable maintenance data to incorrect PMs, missed work order entry, and a lack of training, then built a PMware cleanup plan and am developing PMware and iPad training for technicians.',
       'Authored the site Maintenance & Reliability Standard plus SOPs for each work order type, one-point lessons, and PM job plans; built the equipment registry with QR codes, LOTO asset list, and PM gap analysis.',
       'Ran root cause analysis (A3, 5-Why, FMEA, Pareto) on chronic bad-actor equipment and benchmarked PM content against sister facilities.',
-      'Developed in-house tools including a KPI dashboard, a planner toolkit, and a CMMS AI agent prototype.',
+      'Developed in-house tools including a KPI dashboard and a planner toolkit.',
     ],
   },
   {
@@ -30,7 +30,7 @@ export const jobs: Job[] = [
     org: 'Cardinal Glass',
     when: 'Jun 2021 – Nov 2024',
     bullets: [
-      'Led maintenance technicians on troubleshooting and repair across glass processing lines, including Billco cutting tables and washers and a Glasstech tempering furnace.',
+      'Led a crew of three maintenance technicians: assigned daily work, trained new hires, and directed troubleshooting and repair across glass processing lines, including Billco cutting tables and washers and a Glasstech tempering furnace.',
       'Repaired bearings, gearboxes, chains and belts, conveyors and drive systems, and hydraulic and pneumatic systems.',
       'Diagnosed Allen-Bradley drive and PLC faults to restore production quickly.',
     ],
