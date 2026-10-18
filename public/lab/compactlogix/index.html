@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Learn CompactLogix, Step by Step | Chad Zahner</title>
+<meta name="description" content="Eleven short, interactive lessons on PLCs, Studio 5000, VFDs and servo motion, written in plain language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#f0ece3; --ink2:#a89f8c; --ink3:#6b6356;
+  --bg:#0e0d0b; --bg2:#151310; --bg3:#1c1a16; --bg4:#242018; --bg5:#2c2820;
+  --amber:#d4820a; --amber2:#f5a623; --amber-bg:rgba(212,130,10,0.08); --amber-bdr:rgba(212,130,10,0.25);
+  --rust:#b84a1c; --rust2:#e05c25; --rust-bg:rgba(184,74,28,0.10); --rust-bdr:rgba(184,74,28,0.28);
+  --steel:#4a7fa5; --steel2:#6ba3c9; --steel-bg:rgba(74,127,165,0.08); --steel-bdr:rgba(74,127,165,0.25);
+  --green:#3d7a4f; --green2:#5aaa70; --green-bg:rgba(61,122,79,0.10); --green-bdr:rgba(61,122,79,0.28);
+  --border:rgba(240,236,227,0.07); --border2:rgba(240,236,227,0.14); --border3:rgba(240,236,227,0.22);
+  --ff-display:'Playfair Display', Georgia, serif;
+  --ff-body:'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ff-mono:'DM Mono', 'Fira Mono', Consolas, monospace;
+  --radius:6px; --radius-lg:12px;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+body{margin:0;font-family:var(--ff-body);background:var(--bg);color:var(--ink);line-height:1.65;font-size:17px;padding-bottom:env(safe-area-inset-bottom,0px)}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+body > *{position:relative;z-index:1}
+a{color:var(--amber2)}
+:focus-visible{outline:2px solid var(--amber2);outline-offset:2px;border-radius:3px}
+svg,canvas{max-width:100%}
+p{margin:.7em 0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.label{font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber2)}
+
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;padding-top:env(safe-area-inset-top,0px);background:rgba(14,13,11,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+#nav .wrap{height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-family:var(--ff-display);font-weight:700;font-size:1.1rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.navprog{display:flex;align-items:center;gap:12px;font-family:var(--ff-mono);font-size:.75rem;color:var(--ink2)}
+.navprog .meter{width:160px}
+.meter{height:6px;background:var(--bg5);border-radius:3px;overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--amber2));transition:width .3s}
+
+.intro{padding:116px 0 36px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);border-bottom:1px solid var(--border)}
+.intro h1{font-family:var(--ff-display);font-weight:900;font-size:clamp(2.1rem,4.6vw,3.3rem);line-height:1.1;margin:12px 0 0;max-width:20ch}
+.intro p{color:var(--ink2);font-weight:300;font-size:1.1rem;max-width:60ch}
+.how{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;padding:0;list-style:none}
+.how li{font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid var(--border2);color:var(--ink2);background:var(--bg3)}
+.how b{color:var(--amber2);font-weight:600;margin-right:4px}
+
+.layout{display:grid;grid-template-columns:270px 1fr;gap:36px;padding:36px 0 80px}
+.side{position:sticky;top:84px;align-self:start}
+.side h2{font-family:var(--ff-mono);font-weight:400;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+.lessons{list-style:none;margin:0;padding:0;border-left:1px solid var(--border2)}
+.lessons button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;margin-left:-1px;padding:8px 12px;color:var(--ink2);font:400 .9rem var(--ff-body);cursor:pointer;border-radius:0}
+.lessons button:hover{color:var(--ink);background:rgba(255,255,255,.025)}
+.lessons button[aria-current="true"]{color:var(--amber2);border-left-color:var(--amber);background:var(--amber-bg);font-weight:600}
+.lessons .n{font-family:var(--ff-mono);font-size:.7rem;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border3);flex:none;color:var(--ink3)}
+.lessons .done .n{background:var(--green2);border-color:var(--green2);color:var(--bg)}
+.part{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:14px 12px 4px}
+.mobile-pick{display:none}
+
+.lesson{min-width:0}
+.lesson-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lesson h2.title{font-family:var(--ff-display);font-size:clamp(1.8rem,3.4vw,2.4rem);font-weight:700;line-height:1.15;margin:10px 0 0}
+.badge{font-family:var(--ff-mono);font-size:.68rem;padding:4px 10px;border-radius:3px;border:1px solid var(--green-bdr);color:var(--green2);background:var(--green-bg)}
+.short{font-size:1.25rem;line-height:1.55;margin-top:18px;padding:18px 22px;border-radius:var(--radius-lg);background:var(--bg3);border:1px solid var(--border2)}
+.short::before{content:'The short version';display:block;font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.body{max-width:66ch;margin-top:18px}
+.body p{color:var(--ink)}
+.body strong{color:var(--amber2);font-weight:600}
+.like{margin-top:20px;padding:16px 20px;border-radius:var(--radius);background:var(--amber-bg);border:1px solid var(--amber-bdr);max-width:70ch}
+.like::before{content:'Think of it like this';display:block;font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber2);margin-bottom:6px}
+.block{margin-top:30px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden}
+.block-head{padding:13px 20px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.block-head h3{margin:0;font-size:1rem;font-weight:600}
+.block-head span{font-family:var(--ff-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.block-body{padding:20px}
+.steps{margin:0 0 14px;padding-left:20px;color:var(--ink2);font-size:.95rem}
+.steps li{margin:3px 0}
+.studio{margin-top:30px;padding:18px 22px;border-radius:var(--radius-lg);background:var(--steel-bg);border:1px solid var(--steel-bdr)}
+.studio h3{margin:0 0 6px;font-size:1rem;color:var(--steel2)}
+.studio ol{margin:6px 0 0;padding-left:20px}
+.studio li{margin:4px 0}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+
+button{font:500 .92rem var(--ff-body);border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg4);color:var(--ink);padding:9px 15px;cursor:pointer;touch-action:manipulation;transition:border-color .14s,background .14s}
+button:hover{border-color:var(--border3);background:var(--bg5)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:var(--amber);border-color:var(--amber);color:#1a1205;font-weight:600}
+button.primary:hover{background:var(--amber2)}
+button.go{background:var(--green-bg);border-color:var(--green-bdr);color:var(--green2)}
+button.stop{background:var(--rust-bg);border-color:var(--rust-bdr);color:var(--rust2)}
+button.pressed{filter:brightness(1.35);transform:translateY(1px)}
+button[aria-pressed="true"]{background:var(--amber-bg);border-color:var(--amber-bdr);color:var(--amber2)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.row > .txt{font-size:.88rem;color:var(--ink2)}
+.seg{display:inline-flex;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--border2);background:transparent}
+.seg button:last-child{border-right:0}
+.lamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);font-size:.82rem;color:var(--ink2)}
+.lamp::before{content:"";width:13px;height:13px;border-radius:50%;background:var(--bg5);border:1px solid var(--border3);flex:none}
+.lamp.on{color:var(--green2)} .lamp.on::before{background:var(--green2);border-color:var(--green2);box-shadow:0 0 10px var(--green2)}
+.lamp.warn{color:var(--amber2)} .lamp.warn::before{background:var(--amber2);border-color:var(--amber2);box-shadow:0 0 10px var(--amber2)}
+.lamp.bad{color:var(--rust2)} .lamp.bad::before{background:var(--rust2);border-color:var(--rust2);box-shadow:0 0 10px var(--rust2)}
+.say{margin-top:16px;padding:12px 16px;border-radius:var(--radius);background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--steel2);font-size:.95rem}
+.say.good{border-left-color:var(--green2)} .say.bad{border-left-color:var(--rust2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:.9rem;margin-top:10px}
+.field label{font-weight:500}
+.field output{font-family:var(--ff-mono);font-size:.78rem;color:var(--ink2)}
+input[type=range]{width:100%;accent-color:var(--amber2)}
+input[type=number]{font:inherit;font-size:.95rem;padding:7px 10px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--ink);width:110px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0 0;padding:0}
+.readout div{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px}
+.readout dt{font-family:var(--ff-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.readout dd{margin:2px 0 0;font-family:var(--ff-mono);font-size:1.05rem;font-weight:500}
+.svgbox{width:100%;height:auto;display:block;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius)}
+.svgbox text{font-family:var(--ff-body);font-size:13px;fill:var(--ink)}
+.svgbox .m{font-family:var(--ff-mono);font-size:11px;fill:var(--ink3)}
+.w{fill:none;stroke:var(--ink3);stroke-width:3;stroke-linecap:round}
+.w.on{stroke:var(--green2);stroke-width:4}
+.w.amb.on{stroke:var(--amber2)}
+.coil{fill:none;stroke:var(--ink3);stroke-width:3}
+.coil.on{stroke:var(--amber2);fill:var(--amber2);fill-opacity:.15}
+
+/* scan */
+.scan{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.stage{padding:14px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg2);transition:border-color .2s,background .2s}
+.stage b{display:block;font-size:.95rem}
+.stage small{color:var(--ink2);font-size:.82rem}
+.stage.active{border-color:var(--amber2);background:var(--amber-bg)}
+.stage .n{font-family:var(--ff-mono);font-size:.7rem;color:var(--amber2)}
+.field-dev{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.dev{padding:12px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);font-size:.9rem}
+.dev .k{font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+
+/* quiz */
+.q{padding:16px 0;border-bottom:1px solid var(--border)}
+.q:last-child{border-bottom:0;padding-bottom:0}
+.q:first-child{padding-top:0}
+.q p.qt{margin:0 0 10px;font-weight:500}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--bg2);font-weight:400}
+.opt.right{border-color:var(--green-bdr);background:var(--green-bg);color:var(--green2)}
+.opt.wrong{border-color:var(--rust-bdr);background:var(--rust-bg);color:var(--rust2)}
+.why{font-size:.9rem;color:var(--ink2);margin-top:8px}
+
+/* studio mock */
+.mock{display:grid;grid-template-columns:200px 1fr;grid-template-rows:auto auto 1fr auto;border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;font-size:.82rem;background:var(--bg2)}
+.mock > button{all:unset;cursor:pointer;position:relative;padding:10px 12px;border:1px solid var(--border);color:var(--ink2);box-sizing:border-box}
+.mock > button:hover,.mock > button[aria-pressed="true"]{background:var(--amber-bg);color:var(--ink);outline:1px solid var(--amber-bdr)}
+.mock > button:focus-visible{outline:2px solid var(--amber2)}
+.mock .pin{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:var(--amber);color:#1a1205;font:600 .7rem var(--ff-mono);display:flex;align-items:center;justify-content:center}
+.mk-menu{grid-column:1 / 3}
+.mk-tool{grid-column:1 / 3;font-family:var(--ff-mono)}
+.mk-tree{grid-row:3 / 5;font-family:var(--ff-mono);line-height:1.8}
+.mk-ladder{min-height:150px;font-family:var(--ff-mono)}
+.mk-err{font-family:var(--ff-mono)}
+.mono{font-family:var(--ff-mono)}
+
+/* tracks */
+.track{position:relative;height:44px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-top:8px}
+.track .car{position:absolute;top:7px;width:30px;height:28px;margin-left:-15px;border-radius:4px;background:var(--steel2)}
+.track .mark{position:absolute;top:0;bottom:0;width:1px;background:var(--border3)}
+.ticks{display:flex;justify-content:space-between;font-family:var(--ff-mono);font-size:.68rem;color:var(--ink3);margin-top:4px;padding:0 8px}
+.chart{position:relative;width:100%;height:190px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-top:14px}
+.chart canvas{position:absolute;inset:0;width:100%;height:100%}
+.legend{display:flex;gap:16px;font-family:var(--ff-mono);font-size:.7rem;color:var(--ink2);margin-top:8px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle;background:currentColor}
+.card{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--amber2);border-radius:var(--radius);padding:18px;margin-top:14px}
+.card h4{font-family:var(--ff-display);font-size:1.2rem;margin:0}
+.tagtable{width:100%;border-collapse:collapse;font-family:var(--ff-mono);font-size:.82rem;margin-top:10px}
+.tagtable td,.tagtable th{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+.tagtable th{font-weight:400;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.dir{font-size:.75rem;color:var(--ink3)}
+footer{padding:30px 0 50px;border-top:1px solid var(--border);color:var(--ink3);font-size:.85rem}
+
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:20px;padding-top:24px}
+  .side{display:none}
+  .mobile-pick{display:block;margin-bottom:24px}
+  .mobile-pick select{font:inherit;width:100%;padding:10px 12px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg3);color:var(--ink)}
+  .grid2,.field-dev{grid-template-columns:1fr}
+  .navprog .meter{width:90px}
+  .mock{grid-template-columns:1fr}
+  .mk-menu,.mk-tool{grid-column:auto}
+  .mk-tree{grid-row:auto}
+}
+@media (max-width:560px){
+  .wrap{padding:0 18px}
+  .scan{grid-template-columns:1fr}
+  .navprog span.t{display:none}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<nav id="nav" aria-label="Site">
+  <div class="wrap">
+    <a class="brand" href="#top">Chad Zahner</a>
+    <div class="navprog"><span class="t" id="nav-count">0 of 11 lessons done</span><div class="meter" aria-hidden="true"><span id="nav-bar"></span></div></div>
+  </div>
+</nav>
+
+<header class="intro" id="top">
+  <div class="wrap">
+    <div class="label">CompactLogix, one step at a time</div>
+    <h1>PLCs, drives and motion, explained like a person would</h1>
+    <p>Eleven short lessons. Each one gives you the idea in a sentence, explains it in plain words, lets you try it on screen, and ends with two quick questions. Do one lesson per sitting.</p>
+    <ul class="how">
+      <li><b>1</b>Read the short version</li>
+      <li><b>2</b>Play with the simulator</li>
+      <li><b>3</b>Answer two questions</li>
+      <li><b>4</b>Try it in Studio 5000</li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <aside class="side" aria-label="Lessons">
+    <h2>Lessons</h2>
+    <ul class="lessons" id="lesson-list"></ul>
+    <p style="font-size:.78rem;color:var(--ink3);margin-top:16px">Progress is saved in this browser.<br><button type="button" id="reset" style="margin-top:8px;font-size:.78rem;padding:5px 10px">Start over</button></p>
+  </aside>
+  <main class="lesson" id="lesson" tabindex="-1">
+    <div class="mobile-pick"><label class="label" for="pick">Jump to a lesson</label><select id="pick"></select></div>
+    <div id="lesson-body"></div>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">Chad Zahner. The simulators are simplified teaching models. Use Studio 5000 at work only with approval, on training files, and never go online with production equipment for practice.</div>
+</footer>
+<script>
+(function(){
+'use strict';
+var store = {
+  get: function(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set: function(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+var done = store.get('clx-lessons-done', {});
+var $ = function(id){ return document.getElementById(id); };
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function on(id, ev, fn){ var el = $(id); if (el) el.addEventListener(ev, fn); return el; }
+function segBind(id, cb){
+  var g = $(id);
+  g.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    g.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+    cb(b.dataset.v);
+  });
+}
+function lamp(id, state, text){ var el = $(id); if (!el) return; el.className = 'lamp' + (state ? ' ' + state : ''); if (text !== undefined) el.textContent = text; }
+function say(id, text, kind){ var el = $(id); if (!el) return; if (el.textContent !== text) el.textContent = text; el.className = 'say' + (kind ? ' ' + kind : ''); }
+function momentary(btn, set){
+  var down = function(e){ if (e.type === 'keydown'){ if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return; e.preventDefault(); } set(true); btn.classList.add('pressed'); };
+  var up = function(e){ if (e.type === 'keyup' && e.key !== ' ' && e.key !== 'Enter') return; set(false); btn.classList.remove('pressed'); };
+  ['pointerdown','keydown'].forEach(function(t){ btn.addEventListener(t, down); });
+  ['pointerup','pointerleave','pointercancel','keyup','blur'].forEach(function(t){ btn.addEventListener(t, up); });
+}
+
+/* =================== LESSONS =================== */
+var L = [];
+
+/* 1. What a PLC does */
+L.push({part:'The basics', title:'What a PLC actually does', mins:8,
+ short:'A PLC is a tough little computer that runs a machine by repeating three steps, over and over: read the inputs, run the program, set the outputs.',
+ body:'<p>Every PLC, from a tiny one on a conveyor to the big ones on the furnace, does the same loop. Rockwell calls it the <strong>scan</strong>.</p><p><strong>Step 1, read:</strong> it takes a snapshot of every input. Is the button pressed? Does the sensor see a part?</p><p><strong>Step 2, think:</strong> it runs your program from top to bottom using that snapshot.</p><p><strong>Step 3, act:</strong> it turns outputs on or off. Lights, valves, motor starters.</p><p>Then it starts over. A real scan takes a few milliseconds, so it looks instant. The simulator below slows it way down so you can watch.</p>',
+ like:'Doing rounds on watch. You check every gauge first, then decide what needs doing, then go turn the valves. A PLC does a full round hundreds of times a second.',
+ tryTitle:'Watch one scan, step by step',
+ tryHTML:'<ol class="steps"><li>Flip the photo eye on.</li><li>Press the step button three times. The box that lights up is the step the PLC just did. Watch the light: it only changes at step 3.</li><li>Then press <b>Run on its own</b>.</li></ol>' +
+  '<div class="scan"><div class="stage" id="sc0"><span class="n">Step 1</span><b>Read inputs</b><small>Take a snapshot of the photo eye</small></div><div class="stage" id="sc1"><span class="n">Step 2</span><b>Run the program</b><small>Rule: if the eye sees a part, turn on the light</small></div><div class="stage" id="sc2"><span class="n">Step 3</span><b>Set outputs</b><small>Send the answer to the real light</small></div></div>' +
+  '<div class="field-dev"><div class="dev"><div class="k">Out on the machine</div><div class="row" style="margin-top:6px"><button type="button" id="sc-eye" aria-pressed="false">Photo eye: no part</button><span class="lamp" id="sc-light">Light off</span></div></div>' +
+  '<div class="dev"><div class="k">Inside the PLC</div><div class="mono" style="margin-top:8px;font-size:.85rem">Snapshot of eye: <span id="sc-in">0</span><br>Program answer: <span id="sc-out">0</span><br>Scans done: <span id="sc-count">0</span></div></div></div>' +
+  '<div class="row"><button type="button" class="primary" id="sc-step">Do step 1</button><button type="button" id="sc-run" aria-pressed="false">Run on its own</button></div><div class="say" id="sc-say" aria-live="polite">The PLC is ready to start a scan. Press Do step 1.</div>',
+ init:function(){
+  var s = {eye:false, inImg:0, outImg:0, light:false, stage:0, last:-1, count:0, t:null};
+  function draw(){
+   for (var i=0;i<3;i++) $('sc'+i).classList.toggle('active', s.last === i);
+   $('sc-step').textContent = 'Do step ' + (s.stage + 1);
+   $('sc-in').textContent = s.inImg; $('sc-out').textContent = s.outImg; $('sc-count').textContent = s.count;
+   lamp('sc-light', s.light ? 'warn' : '', s.light ? 'Light on' : 'Light off');
+  }
+  function step(){
+   var msg;
+   if (s.stage === 0){ s.inImg = s.eye ? 1 : 0; msg = 'Step 1: the PLC read the photo eye and saved a ' + s.inImg + ' in its snapshot. Changing the eye now won’t matter until the next scan.'; }
+   else if (s.stage === 1){ s.outImg = s.inImg; msg = 'Step 2: the program checked the snapshot and decided the light should be ' + (s.outImg ? 'on.' : 'off.') + ' The real light hasn’t changed yet.'; }
+   else { s.light = !!s.outImg; s.count++; msg = 'Step 3: the PLC sent its answer out. The light is now ' + (s.light ? 'on.' : 'off.') + ' That was one full scan. Back to step 1.'; }
+   s.last = s.stage; s.stage = (s.stage + 1) % 3; draw(); say('sc-say', msg);
+  }
+  on('sc-eye','click',function(){ s.eye = !s.eye; this.setAttribute('aria-pressed', s.eye); this.textContent = s.eye ? 'Photo eye: sees a part' : 'Photo eye: no part'; });
+  on('sc-step','click',step);
+  on('sc-run','click',function(){
+   var b = this;
+   if (s.t){ clearInterval(s.t); s.t = null; b.setAttribute('aria-pressed','false'); b.textContent = 'Run on its own'; say('sc-say','Paused. Use Next step to go one step at a time.'); }
+   else { s.t = setInterval(step, 500); b.setAttribute('aria-pressed','true'); b.textContent = 'Pause'; say('sc-say','Running slowly, about one step every half second. Flip the eye and watch how the light lags behind by up to one scan.'); }
+  });
+  draw();
+  return function(){ if (s.t) clearInterval(s.t); };
+ },
+ quiz:[
+  {q:'What order does a PLC do things in?', o:['Set outputs, read inputs, run program','Read inputs, run program, set outputs','Run program, read inputs, set outputs'], a:1, why:'Read, think, act. Every scan, every time.'},
+  {q:'You flip a switch while the PLC is in the middle of running the program. When does the PLC notice?', o:['Instantly','At step 1 of the next scan','Only after a restart'], a:1, why:'The program only looks at the snapshot from step 1. The new switch position gets picked up on the next read.'}
+ ],
+ studio:['Open Studio 5000 on the plant laptop and create a new, offline project for a 1769-L18ERM.','On the left, open Tasks, then MainTask, then MainProgram. MainRoutine is where your program lives. This is what the PLC runs every scan.']
+});
+
+/* 2. Studio 5000 tour */
+var tour = [
+ {k:'menu', t:'Menu bar', d:'File, Edit, Communications and the rest. Communications is where you go online with a real controller later. For now everything you do is offline.'},
+ {k:'tool', t:'Instruction toolbar', d:'The ladder instructions you drag onto rungs: XIC, XIO, OTE, timers, counters and more. You’ll use the first three constantly.'},
+ {k:'tree', t:'Controller Organizer', d:'The table of contents for your whole project. Controller Tags, Tasks, Programs, Routines and the I/O Configuration all live here. If you’re lost, start here.'},
+ {k:'ladder', t:'Ladder editor', d:'Where you build rungs. Each rung reads left to right, like a line on an electrical print.'},
+ {k:'err', t:'Errors window', d:'After you verify a routine, any mistakes show up here. Double-click an error and Studio 5000 jumps to the rung with the problem.'}
+];
+L.push({part:'The basics', title:'A tour of Studio 5000', mins:6,
+ short:'Studio 5000 Logix Designer is the program you use to write and change the logic in a CompactLogix or ControlLogix PLC.',
+ body:'<p>The screen looks busy the first time, but you only need five areas to get started. Click each numbered area in the simplified screen below to learn what it’s for.</p><p>Everything in this course is done <strong>offline</strong>, meaning on the laptop only, not connected to any real machine. Offline, you can’t break anything.</p>',
+ like:'A ship’s tech manual. The Controller Organizer is the table of contents, the routines are the chapters, and the tags are the parts list.',
+ tryTitle:'Click each area',
+ tryHTML:'<div class="mock" id="mock">' +
+  '<button type="button" class="mk-menu" data-k="menu">File &nbsp; Edit &nbsp; View &nbsp; Search &nbsp; Logic &nbsp; Communications &nbsp; Tools &nbsp; Help<span class="pin">1</span></button>' +
+  '<button type="button" class="mk-tool" data-k="tool">] [ &nbsp; ]/[ &nbsp; ( ) &nbsp; TON &nbsp; CTU &nbsp; MOV<span class="pin">2</span></button>' +
+  '<button type="button" class="mk-tree" data-k="tree">Controller Tags<br>Tasks<br>&nbsp; MainTask<br>&nbsp;&nbsp; MainProgram<br>&nbsp;&nbsp;&nbsp; MainRoutine<br>I/O Configuration<span class="pin">3</span></button>' +
+  '<button type="button" class="mk-ladder" data-k="ladder">0 &nbsp;|--] [-----]/[-------( )--|<br>&nbsp;&nbsp;&nbsp; Start_PB &nbsp; Guard_Open &nbsp; Run_Light<br><br>1 &nbsp;|--(END)--|<span class="pin">4</span></button>' +
+  '<button type="button" class="mk-err" data-k="err">Errors: Verify complete, 0 errors, 0 warnings<span class="pin">5</span></button>' +
+  '</div><div class="say" id="tour-say" aria-live="polite">Pick a numbered area. This is a simplified drawing, not the real screen, so the layout is close but not exact.</div><p style="font-size:.85rem;color:var(--ink3)">Areas visited: <span id="tour-n">0</span> of 5</p>',
+ init:function(){
+  var seen = {};
+  $('mock').addEventListener('click', function(e){
+   var b = e.target.closest('button'); if (!b) return;
+   this.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+   var item = tour.filter(function(t){ return t.k === b.dataset.k; })[0];
+   seen[item.k] = 1; $('tour-n').textContent = Object.keys(seen).length;
+   say('tour-say', item.t + ': ' + item.d);
+  });
+ },
+ quiz:[
+  {q:'Where do you look to find every routine, tag and I/O module in a project?', o:['The Errors window','The Controller Organizer','The menu bar'], a:1, why:'The Controller Organizer is the map of the whole project.'},
+  {q:'Can working offline change a running machine?', o:['Yes','No'], a:1, why:'Offline means the project is only on the laptop. Nothing reaches a controller until someone goes online and downloads, which you won’t do for training.'}
+ ],
+ studio:['Open your offline project and find all five areas on the real screen.','Right-click MainRoutine and open it. You should see an empty rung with END at the bottom.']
+});
+
+/* 3. Inputs and outputs */
+L.push({part:'The basics', title:'Inputs and outputs', mins:10,
+ short:'Inputs are the PLC’s eyes and ears. Outputs are its hands. Each one is simply on or off, a 1 or a 0.',
+ body:'<p><strong>Inputs</strong> are things that tell the PLC what’s happening: pushbuttons, limit switches, prox sensors, photo eyes.</p><p><strong>Outputs</strong> are things the PLC controls: pilot lights, solenoid valves, horns, motor contactors.</p><p>In most plants they run on <strong>24 volts DC</strong>. When an input sees about 24 volts, the PLC reads a 1. When it sees about 0 volts, it reads a 0. That’s the whole conversation.</p><p>One catch trips everyone up: the sensor and the input card have to be wired the same way around. A <strong>PNP</strong> sensor pushes 24 volts out, so it needs a <strong>sinking</strong> card that drains it to 0 volts. An <strong>NPN</strong> sensor pulls to 0 volts, so it needs a <strong>sourcing</strong> card. Mix them up and nothing happens.</p>',
+ like:'Hydraulics. Voltage is pressure and current is flow. Flow only happens when there’s a pressure difference across the line. Wire a PNP sensor to a sourcing card and you have pressure on both ends, so nothing flows.',
+ tryTitle:'Wire a sensor to an input card',
+ tryHTML:'<ol class="steps"><li>Leave it on PNP and Sinking, then press <b>Place a part</b>. The input LED lights.</li><li>Switch the card to Sourcing and try again.</li></ol>' +
+  '<div class="row"><span class="txt">Sensor</span><span class="seg" id="io-s"><button type="button" data-v="PNP" aria-pressed="true">PNP</button><button type="button" data-v="NPN" aria-pressed="false">NPN</button></span><span class="txt">Input card</span><span class="seg" id="io-c"><button type="button" data-v="sinking" aria-pressed="true">Sinking</button><button type="button" data-v="sourcing" aria-pressed="false">Sourcing</button></span><button type="button" id="io-t" aria-pressed="false">Place a part</button></div>' +
+  '<svg class="svgbox" id="io-svg" viewBox="0 0 520 230" role="img" aria-label="Sensor wired to input card" style="margin-top:14px"></svg><div class="say" id="io-say" aria-live="polite"></div>',
+ init:function(){
+  var io = {s:'PNP', c:'sinking', t:false};
+  function draw(){
+   var works = (io.s === 'PNP' && io.c === 'sinking') || (io.s === 'NPN' && io.c === 'sourcing');
+   var f = works && io.t, on = 'var(--amber2)', off = 'var(--ink3)', ink = 'var(--ink2)';
+   var c = function(x){ return x ? on : off; };
+   var sw = io.t ? 'M0 0L0 30' : 'M0 0L-14 26';
+   var s = '<line x1="30" y1="30" x2="490" y2="30" stroke="'+ink+'" stroke-width="3"/><text x="30" y="20">+24 volts</text>' +
+    '<line x1="30" y1="200" x2="490" y2="200" stroke="'+ink+'" stroke-width="3"/><text x="30" y="222">0 volts</text>' +
+    '<rect x="60" y="70" width="130" height="90" rx="6" fill="none" stroke="'+ink+'" stroke-width="1.5"/><text x="125" y="180" text-anchor="middle">' + io.s + ' sensor</text>' +
+    '<rect x="330" y="70" width="140" height="90" rx="6" fill="none" stroke="'+ink+'" stroke-width="1.5"/><text x="400" y="180" text-anchor="middle">' + (io.c === 'sinking' ? 'Sinking' : 'Sourcing') + ' card</text>';
+   if (io.s === 'PNP') s += '<path d="M150 30V75" stroke="'+c(f)+'" stroke-width="3" fill="none"/><g transform="translate(150 75)"><path d="'+sw+'" stroke="'+c(f)+'" stroke-width="3" fill="none"/></g><path d="M150 105V115H190" stroke="'+c(f)+'" stroke-width="3" fill="none"/>';
+   else s += '<path d="M150 115H190M150 115V125" stroke="'+c(f)+'" stroke-width="3" fill="none"/><g transform="translate(150 125)"><path d="'+sw+'" stroke="'+c(f)+'" stroke-width="3" fill="none"/></g><path d="M150 155V200" stroke="'+c(f)+'" stroke-width="3" fill="none"/>';
+   s += '<path d="M190 115H385M415 115H440" stroke="'+c(f)+'" stroke-width="3" fill="none"/><text x="260" y="105" text-anchor="middle" class="m">signal wire</text>' +
+    '<circle cx="400" cy="115" r="12" fill="'+(f?on:'none')+'" stroke="'+c(f)+'" stroke-width="2.5"/><text x="400" y="95" text-anchor="middle" class="m">input LED</text>';
+   s += io.c === 'sinking' ? '<path d="M440 115V200" stroke="'+c(f)+'" stroke-width="3" fill="none"/>' : '<path d="M440 30V115" stroke="'+c(f)+'" stroke-width="3" fill="none"/>';
+   $('io-svg').innerHTML = s;
+   if (works) say('io-say', f ? 'It works. Current flows from +24 volts, through the sensor and the input, to 0 volts. The PLC reads a 1.' : 'This pair is wired correctly. Place a part in front of the sensor to close it.', f ? 'good' : '');
+   else say('io-say', 'Nothing will ever happen with this pair. Both ends of the input sit at ' + (io.s === 'PNP' ? '+24' : '0') + ' volts, so there’s no difference for current to flow across. The PLC reads a 0, part or no part.', 'bad');
+  }
+  segBind('io-s', function(v){ io.s = v; draw(); });
+  segBind('io-c', function(v){ io.c = v; draw(); });
+  on('io-t','click',function(){ io.t = !io.t; this.setAttribute('aria-pressed', io.t); this.textContent = io.t ? 'Remove the part' : 'Place a part'; draw(); });
+  draw();
+ },
+ quiz:[
+  {q:'Which of these is an output?', o:['A prox sensor','A solenoid valve','A limit switch'], a:1, why:'The PLC controls the valve. Sensors and switches report to the PLC, so they’re inputs.'},
+  {q:'A PNP sensor won’t turn on a sourcing input card. Why?', o:['The sensor is broken','Both ends are at +24 volts, so no current flows','The PLC is offline'], a:1, why:'No voltage difference, no flow. Use a sinking card with a PNP sensor.'}
+ ],
+ studio:['In your offline project, right-click I/O Configuration and look at the embedded I/O of the 1769-L18ERM.','Open Controller Tags. Tags with :I in the name are inputs and tags with :O are outputs.']
+});
+
+/* 4. Ladder logic */
+L.push({part:'Writing logic', title:'Reading ladder logic', mins:12,
+ short:'Ladder logic is drawn like an electrical print. If there is a path of “true” from the left rail to the right, the output turns on.',
+ body:'<p>Three instructions do most of the work, and their names are less scary than they sound:</p><p><strong>XIC</strong>, drawn ] [, asks “is this bit on?” It’s true when the bit is 1.</p><p><strong>XIO</strong>, drawn ]/[, asks “is this bit off?” It’s true when the bit is 0.</p><p><strong>OTE</strong>, drawn ( ), turns its bit on when everything to its left is true.</p><p>Instructions in a straight line all have to be true. That’s an <strong>AND</strong>. Instructions on parallel branches only need one path true. That’s an <strong>OR</strong>.</p>',
+ like:'Valves in a pipe. Valves in series must all be open for flow to reach the end. Valves in parallel give the flow a second way around, so either one open is enough.',
+ tryTitle:'Make the outputs turn on',
+ tryHTML:'<ol class="steps"><li>Rung 0: get Run_Light on. Notice Guard_Open has to be <b>off</b>.</li><li>Rung 1: get the Horn on using either button.</li></ol>' +
+  '<div class="row"><button type="button" id="b-start" aria-pressed="false">Start_PB = 0</button><button type="button" id="b-guard" aria-pressed="false">Guard_Open = 0</button><button type="button" id="b-a" aria-pressed="false">Button_A = 0</button><button type="button" id="b-b" aria-pressed="false">Button_B = 0</button></div>' +
+  '<svg class="svgbox" viewBox="0 0 640 280" role="img" aria-label="Two ladder rungs" style="margin-top:14px">' +
+  '<line x1="20" y1="20" x2="20" y2="260" stroke="var(--ink2)" stroke-width="4"/><line x1="620" y1="20" x2="620" y2="260" stroke="var(--ink2)" stroke-width="4"/>' +
+  '<text x="34" y="44" class="m">Rung 0</text>' +
+  '<path id="g-a" class="w" d="M20 70H110"/><path id="g-xic" class="w" d="M110 56V84M150 56V84"/><path id="g-b" class="w" d="M150 70H260"/><path id="g-xio" class="w" d="M260 56V84M300 56V84M256 84L304 56"/><path id="g-c" class="w" d="M300 70H500"/><path id="g-ote" class="w" d="M508 54Q496 70 508 86M532 54Q544 70 532 86"/><path id="g-d" class="w" d="M540 70H620"/>' +
+  '<text x="130" y="46" text-anchor="middle">Start_PB</text><text x="130" y="104" text-anchor="middle" class="m">XIC</text><text x="280" y="46" text-anchor="middle">Guard_Open</text><text x="280" y="104" text-anchor="middle" class="m">XIO</text><text x="520" y="46" text-anchor="middle">Run_Light</text><text x="520" y="104" text-anchor="middle" class="m">OTE</text>' +
+  '<text x="34" y="154" class="m">Rung 1</text>' +
+  '<path id="h-a" class="w" d="M20 180H80"/><path id="h-a1" class="w" d="M80 180H110"/><path id="h-b1" class="w" d="M80 180V240H110"/><path id="h-xa" class="w" d="M110 166V194M150 166V194"/><path id="h-xb" class="w" d="M110 226V254M150 226V254"/><path id="h-a2" class="w" d="M150 180H200"/><path id="h-b2" class="w" d="M150 240H200V180"/><path id="h-c" class="w" d="M200 180H500"/><path id="h-ote" class="w" d="M508 164Q496 180 508 196M532 164Q544 180 532 196"/><path id="h-d" class="w" d="M540 180H620"/>' +
+  '<text x="130" y="158" text-anchor="middle">Button_A</text><text x="175" y="272" text-anchor="middle">Button_B</text><text x="520" y="158" text-anchor="middle">Horn</text><text x="520" y="214" text-anchor="middle" class="m">OTE</text>' +
+  '</svg><div class="say" id="lad-say" aria-live="polite"></div>',
+ init:function(){
+  var b = {start:0, guard:0, a:0, bb:0};
+  function set(id, v){ var el = $(id); if (el) el.classList.toggle('on', !!v); }
+  function draw(){
+   var r0 = b.start && !b.guard, r1 = b.a || b.bb;
+   set('g-a',1); set('g-xic',b.start); set('g-b',b.start); set('g-xio',!b.guard); set('g-c',r0); set('g-ote',r0); set('g-d',r0);
+   set('h-a',1); set('h-a1',1); set('h-b1',1); set('h-xa',b.a); set('h-xb',b.bb); set('h-a2',b.a); set('h-b2',b.bb); set('h-c',r1); set('h-ote',r1); set('h-d',r1);
+   var m = 'Green shows instructions that are true and the path power can take. ';
+   if (r0 && r1) m = 'Both outputs are on. You’ve got it: series means AND, branches mean OR.';
+   else if (r0) m = 'Run_Light is on. Start_PB is 1, so the XIC is true. Guard_Open is 0, so the XIO is true too. Both in a row means the rung is true.';
+   else if (b.start && b.guard) m += 'Start_PB is on, but Guard_Open is also on, so the XIO is false and blocks the rung. The guard has to be closed.';
+   else if (r1) m = 'The Horn is on through one branch. Either button alone is enough, because the branches are an OR.';
+   $('b-start').textContent = 'Start_PB = ' + b.start; $('b-guard').textContent = 'Guard_Open = ' + b.guard; $('b-a').textContent = 'Button_A = ' + b.a; $('b-b').textContent = 'Button_B = ' + b.bb;
+   say('lad-say', m, (r0 && r1) ? 'good' : '');
+  }
+  [['b-start','start'],['b-guard','guard'],['b-a','a'],['b-b','bb']].forEach(function(p){
+   on(p[0],'click',function(){ b[p[1]] = b[p[1]] ? 0 : 1; this.setAttribute('aria-pressed', !!b[p[1]]); draw(); });
+  });
+  draw();
+ },
+ quiz:[
+  {q:'An XIO instruction is true when its bit is…', o:['On (1)','Off (0)'], a:1, why:'XIO means “examine if open.” It passes power when the bit is 0.'},
+  {q:'Two XIC instructions sit in a straight line before an output. What turns the output on?', o:['Either bit on','Both bits on','Neither bit on'], a:1, why:'Instructions in series are an AND. Every one of them has to be true.'}
+ ],
+ studio:['In MainRoutine, drag an XIC, an XIO and an OTE onto the first rung.','Double-click the question mark above each one and type a new tag name: Start_PB, Guard_Open, Run_Light. Create each as a BOOL.','Pick Logic, then Verify Routine. Fix anything that shows up in the Errors window.']
+});
+
+/* 5. Seal-in */
+L.push({part:'Writing logic', title:'The seal-in circuit', mins:10,
+ short:'A seal-in lets a motor keep running after you let go of Start, by using the motor’s own run signal to hold the rung on.',
+ body:'<p>A Start button only stays pressed while your finger is on it. So how does a motor keep running?</p><p>A <strong>seal-in</strong> branch puts a contact from the motor itself in parallel with Start. Once the motor is on, that contact holds the rung true. Stop, an overload or a power loss breaks the rung and the motor drops out. It then stays off until someone presses Start again, which is exactly what you want after a power blip.</p><p><strong>The trap everyone hits once:</strong> a stop button is wired normally closed, so its input reads 1 when nobody touches it. In Logix you use an XIC on the stop input, not an XIO.</p>',
+ like:'A self-holding relay on a pump starter panel. Push to start, and the auxiliary contact keeps the coil fed until the circuit opens.',
+ tryTitle:'Run the motor',
+ tryHTML:'<ol class="steps"><li>Hold <b>Start</b>, then let go. The motor keeps running.</li><li>Press <b>Stop</b>. Then try the overload and power buttons.</li></ol>' +
+  '<svg class="svgbox" viewBox="0 0 640 190" role="img" aria-label="Seal-in ladder rung">' +
+  '<line x1="20" y1="30" x2="20" y2="170" stroke="var(--ink2)" stroke-width="4"/><line x1="620" y1="30" x2="620" y2="170" stroke="var(--ink2)" stroke-width="4"/>' +
+  '<path id="r-s0" class="w amb" d="M20 70H80"/><path id="r-c-stop" class="w amb" d="M80 56V84M120 56V84M76 84L124 56"/><path id="r-s1" class="w amb" d="M120 70H180"/><path id="r-st-in" class="w amb" d="M180 70H220"/><path id="r-c-start" class="w amb" d="M220 56V84M260 56V84"/><path id="r-st-out" class="w amb" d="M260 70H300"/><path id="r-se-in" class="w amb" d="M180 70V130H220"/><path id="r-c-seal" class="w amb" d="M220 116V144M260 116V144"/><path id="r-se-out" class="w amb" d="M260 130H300V70"/><path id="r-s2" class="w amb" d="M300 70H380"/><path id="r-c-ol" class="w amb" d="M380 56V84M420 56V84M376 84L424 56"/><path id="r-s3" class="w amb" d="M420 70H520"/><circle id="r-coil" class="coil" cx="540" cy="70" r="20"/><path id="r-s4" class="w amb" d="M560 70H620"/>' +
+  '<text x="100" y="44" text-anchor="middle">Stop</text><text x="100" y="104" text-anchor="middle" class="m">normally closed</text><text x="240" y="44" text-anchor="middle">Start</text><text x="240" y="104" text-anchor="middle" class="m">normally open</text><text x="240" y="164" text-anchor="middle" class="m">motor seal-in</text><text x="400" y="44" text-anchor="middle">Overload</text><text x="400" y="104" text-anchor="middle" class="m">normally closed</text><text x="540" y="75" text-anchor="middle">M</text><text x="540" y="110" text-anchor="middle" class="m">motor</text></svg>' +
+  '<div class="row"><button type="button" class="go" id="pb-start">Start (hold)</button><button type="button" class="stop" id="pb-stop">Stop (hold)</button><button type="button" id="tg-ol" aria-pressed="false">Trip overload</button><button type="button" id="tg-pw" aria-pressed="false">Cut power</button><span class="lamp" id="run-lamp">Motor stopped</span></div><div class="say" id="rung-say" aria-live="polite"></div>',
+ init:function(){
+  var rs = {power:true, start:false, stop:false, ol:false, m:false};
+  function set(id, v){ $(id).classList.toggle('on', !!v); }
+  function ev(){
+   var A = rs.power && !rs.stop;
+   rs.m = A && (rs.start || rs.m) && !rs.ol;
+   var B = A && (rs.start || rs.m);
+   set('r-s0', rs.power); set('r-c-stop', A); set('r-s1', A); set('r-st-in', A); set('r-c-start', A && rs.start); set('r-st-out', A && rs.start);
+   set('r-se-in', A); set('r-c-seal', A && rs.m); set('r-se-out', A && rs.m); set('r-s2', B); set('r-c-ol', B && !rs.ol); set('r-s3', B && !rs.ol); set('r-coil', rs.m); set('r-s4', rs.m);
+   lamp('run-lamp', rs.m ? 'on' : (rs.ol ? 'bad' : ''), rs.m ? 'Motor running' : (rs.ol ? 'Overload tripped' : 'Motor stopped'));
+   var m;
+   if (!rs.power) m = 'No power, so everything drops out. When power comes back, the motor stays off until someone presses Start. That’s the safety value of a seal-in.';
+   else if (rs.ol) m = 'The overload is open, so the motor can’t run. Reset it, and you still need to press Start again.';
+   else if (rs.stop) m = 'Stop breaks the whole rung, including the seal-in branch.';
+   else if (rs.start && rs.m) m = 'The motor is on, and its seal-in contact just closed. Now let go of Start.';
+   else if (rs.m) m = 'You let go of Start, but power now flows through the seal-in contact. The motor keeps running.';
+   else m = 'Power is on. The motor is waiting for Start.';
+   say('rung-say', m, rs.m && !rs.start ? 'good' : '');
+  }
+  momentary($('pb-start'), function(v){ rs.start = v; ev(); });
+  momentary($('pb-stop'), function(v){ rs.stop = v; ev(); });
+  on('tg-ol','click',function(){ rs.ol = !rs.ol; this.setAttribute('aria-pressed', rs.ol); this.textContent = rs.ol ? 'Reset overload' : 'Trip overload'; ev(); });
+  on('tg-pw','click',function(){ rs.power = !rs.power; this.setAttribute('aria-pressed', !rs.power); this.textContent = rs.power ? 'Cut power' : 'Restore power'; ev(); });
+  ev();
+ },
+ quiz:[
+  {q:'Why does the motor keep running after you let go of Start?', o:['The PLC remembers the button','The motor’s own contact holds the rung true','Start is a toggle switch'], a:1, why:'The seal-in contact is in parallel with Start, so it takes over once the motor is on.'},
+  {q:'Power blinks off and comes back. What does the motor do?', o:['Restarts on its own','Stays off until someone presses Start'], a:1, why:'The seal-in drops out with the power, so nothing restarts by surprise.'}
+ ],
+ studio:['Build the same rung in Logix: XIC Start_PB with a branch around it holding XIC Motor_Run, then XIC Stop_PB, then OTE Motor_Run.','Use XIC for Stop_PB, because the real button is normally closed and reads 1 when not pressed.','Verify the routine.']
+});
+
+/* 6. Timers */
+L.push({part:'Writing logic', title:'Timers', mins:10,
+ short:'A timer waits a set amount of time before it turns its done bit on. In Logix, time is counted in milliseconds.',
+ body:'<p>The most common timer is the <strong>TON</strong>, or timer on delay. While its rung is true, it counts up. When the count reaches the <strong>preset</strong>, its <strong>DN</strong> (done) bit turns on. If the rung goes false, it resets to zero.</p><p>A preset of 5000 means 5000 milliseconds, which is 5 seconds.</p><p>Three bits tell you what the timer is doing: <strong>EN</strong> is on while the rung is true, <strong>TT</strong> is on while it’s timing, and <strong>DN</strong> is on when it’s finished. There are also TOF (delay after the rung goes off) and RTO (keeps its count) timers, which you can try below.</p>',
+ like:'The low lube oil pressure alarm on a startup. You don’t alarm the instant the pump starts; you give pressure a few seconds to build first.',
+ tryTitle:'Run a timer',
+ tryHTML:'<ol class="steps"><li>Turn the rung on and wait for DN.</li><li>Turn it off halfway through and watch the count reset.</li></ol>' +
+  '<div class="grid2"><div><div class="row"><span class="txt">Timer type</span><span class="seg" id="t-type"><button type="button" data-v="TON" aria-pressed="true">TON</button><button type="button" data-v="TOF" aria-pressed="false">TOF</button><button type="button" data-v="RTO" aria-pressed="false">RTO</button></span></div>' +
+  '<div class="field"><label for="t-pre">Preset</label><input type="range" id="t-pre" min="1000" max="10000" step="500" value="5000"><output id="t-pre-o">5000 ms (5 seconds)</output></div>' +
+  '<div class="row"><button type="button" class="primary" id="t-in" aria-pressed="false">Turn rung on</button><button type="button" id="t-res">Reset (RES)</button></div></div>' +
+  '<div><dl class="readout"><div><dt>Accum</dt><dd id="t-acc">0 ms</dd></div><div><dt>Preset</dt><dd id="t-pv">5000 ms</dd></div></dl><div class="meter" style="margin-top:12px"><span id="t-bar"></span></div><div class="row"><span class="lamp" id="t-en">EN</span><span class="lamp" id="t-tt">TT</span><span class="lamp" id="t-dn">DN</span></div></div></div>' +
+  '<div class="say" id="t-say" aria-live="polite"></div>',
+ init:function(){
+  var t = {type:'TON', input:false, pre:5000, acc:0, en:false, tt:false, dn:false};
+  var notes = {TON:'TON: counts while the rung is on and resets as soon as it goes off. Use it for start delays and jam timers.', TOF:'TOF: DN comes on right away and stays on for the preset after the rung turns off. Use it to keep a fan running after shutdown.', RTO:'RTO: counts while the rung is on and keeps its count when the rung goes off. Only the Reset button clears it. Use it for run hours.'};
+  function draw(){
+   $('t-acc').textContent = t.acc + ' ms'; $('t-pv').textContent = t.pre + ' ms';
+   $('t-bar').style.width = Math.min(100, t.acc / t.pre * 100) + '%';
+   lamp('t-en', t.en ? 'warn' : ''); lamp('t-tt', t.tt ? 'warn' : ''); lamp('t-dn', t.dn ? 'on' : '');
+   $('t-res').disabled = t.type !== 'RTO';
+   say('t-say', notes[t.type], t.dn && t.type === 'TON' ? 'good' : '');
+  }
+  function tick(){
+   var i = t.input; t.en = i;
+   if (t.type === 'TON'){ t.acc = i ? Math.min(t.pre, t.acc + 100) : 0; t.dn = i && t.acc >= t.pre; t.tt = i && t.acc < t.pre; }
+   else if (t.type === 'TOF'){ if (i){ t.acc = 0; t.dn = true; t.tt = false; } else if (t.dn){ t.acc = Math.min(t.pre, t.acc + 100); if (t.acc >= t.pre) t.dn = false; t.tt = t.dn; } else t.tt = false; }
+   else { if (i && t.acc < t.pre) t.acc = Math.min(t.pre, t.acc + 100); t.dn = t.acc >= t.pre; t.tt = i && t.acc < t.pre; }
+   draw();
+  }
+  segBind('t-type', function(v){ t.type = v; t.acc = 0; t.en = t.tt = t.dn = false; draw(); });
+  on('t-pre','input',function(){ t.pre = +this.value; $('t-pre-o').textContent = t.pre + ' ms (' + (t.pre/1000) + ' seconds)'; if (t.acc > t.pre) t.acc = t.pre; draw(); });
+  on('t-in','click',function(){ t.input = !t.input; this.setAttribute('aria-pressed', t.input); this.textContent = t.input ? 'Turn rung off' : 'Turn rung on'; });
+  on('t-res','click',function(){ t.acc = 0; t.dn = false; draw(); });
+  draw();
+  var h = setInterval(tick, 100);
+  return function(){ clearInterval(h); };
+ },
+ quiz:[
+  {q:'A TON has a preset of 3000. How long does it wait?', o:['3000 seconds','3 seconds','0.3 seconds'], a:1, why:'Logix timers count in milliseconds. 3000 ms is 3 seconds.'},
+  {q:'A TON is halfway done when its rung goes false. What happens to the count?', o:['It holds','It resets to zero'], a:1, why:'A TON resets when its rung goes false. If you need it to hold, use an RTO.'}
+ ],
+ studio:['Add a rung with XIC Run_Light and a TON. Name the timer Delay_Tmr and set the preset to 5000.','Add another rung: XIC Delay_Tmr.DN, then OTE Delay_Light.','Verify. You just wrote “turn on a second light 5 seconds after the first.”']
+});
+
+/* 7. Counters */
+L.push({part:'Writing logic', title:'Counters', mins:8,
+ short:'A counter adds one every time its rung goes from false to true, and turns its done bit on when it reaches the preset.',
+ body:'<p>The <strong>CTU</strong>, or count up, adds 1 to its <strong>accumulator</strong> each time its rung changes from false to true. Holding the rung true doesn’t keep counting; it has to go off and on again.</p><p>When the accumulator reaches the <strong>preset</strong>, the <strong>DN</strong> bit turns on. The counter keeps counting past the preset until a <strong>RES</strong> instruction clears it.</p>',
+ like:'A hand tally counter at the gate. Each click is one, no matter how long you hold the button down.',
+ tryTitle:'Count parts into a box',
+ tryHTML:'<ol class="steps"><li>Send parts past the photo eye until the box is full.</li><li>Press Reset to start a new box.</li></ol>' +
+  '<div class="grid2"><div><div class="field"><label for="c-pre">Parts per box (preset)</label><input type="range" id="c-pre" min="2" max="10" value="5"><output id="c-pre-o">5</output></div><div class="row"><button type="button" class="primary" id="c-part">Send a part past the eye</button><button type="button" id="c-res">Reset (RES)</button></div></div>' +
+  '<div><dl class="readout"><div><dt>Accum</dt><dd id="c-acc">0</dd></div><div><dt>Preset</dt><dd id="c-pv">5</dd></div></dl><div class="row"><span class="lamp" id="c-cu">CU</span><span class="lamp" id="c-dn">DN, box full</span></div></div></div><div class="say" id="c-say" aria-live="polite">The box is empty.</div>',
+ init:function(){
+  var c = {pre:5, acc:0, h:null};
+  function draw(){ $('c-acc').textContent = c.acc; $('c-pv').textContent = c.pre; lamp('c-dn', c.acc >= c.pre ? 'on' : ''); }
+  on('c-pre','input',function(){ c.pre = +this.value; $('c-pre-o').textContent = c.pre; draw(); });
+  on('c-part','click',function(){
+   c.acc++; lamp('c-cu','warn'); clearTimeout(c.h); c.h = setTimeout(function(){ lamp('c-cu',''); }, 300);
+   draw();
+   say('c-say', c.acc >= c.pre ? (c.acc === c.pre ? 'Box full. DN is on, so your logic can stop the conveyor or call for a new box.' : 'The counter kept going past the preset to ' + c.acc + '. It won’t stop or reset on its own.') : 'Part ' + c.acc + ' counted. CU flashed because the eye went from off to on.', c.acc === c.pre ? 'good' : '');
+  });
+  on('c-res','click',function(){ c.acc = 0; draw(); say('c-say','Reset. The accumulator is back to 0 and DN is off.'); });
+  draw();
+  return function(){ clearTimeout(c.h); };
+ },
+ quiz:[
+  {q:'A photo eye stays blocked by one long part for 10 seconds. How many counts?', o:['One','One per scan','Ten'], a:0, why:'A CTU counts the change from false to true, not how long it stays true.'},
+  {q:'The counter reaches its preset. What happens next?', o:['It resets itself','DN turns on and it keeps counting until reset'], a:1, why:'Counters don’t reset themselves. You need a RES instruction.'}
+ ],
+ studio:['Add a rung: XIC Part_Eye, then a CTU named Box_Count with a preset of 5.','Add a rung: XIC Box_Full_Reset, then RES Box_Count.','Add a rung: XIC Box_Count.DN, then OTE Box_Full_Light. Verify.']
+});
+
+/* 8. VFD basics */
+L.push({part:'Drives and motion', title:'What a VFD does', mins:12,
+ short:'A VFD controls motor speed by changing the frequency of the power it sends. 60 Hz is full speed, 30 Hz is about half.',
+ body:'<p>A regular motor starter is on or off. A <strong>VFD</strong> (variable frequency drive), like the PowerFlex 525, can run the motor at any speed.</p><p><strong>Accel time</strong> is how long it takes to ramp from 0 to full speed. <strong>Decel time</strong> is how long to ramp back down. Gentle ramps are easier on belts, gearboxes and product.</p><p>Stopping a heavy load too fast causes a classic fault. The spinning load drives the motor like a generator and pushes energy back into the drive. The drive trips on <strong>F005 OverVoltage</strong>. The fix is a longer decel time, the drive’s bus regulator, or a braking resistor.</p>',
+ like:'The throttle on a gas turbine. You don’t slam from idle to full power or back; you ramp it so the machinery can keep up.',
+ tryTitle:'Drive a motor',
+ tryHTML:'<ol class="steps"><li>Press Start and move the speed slider.</li><li>Pick Heavy flywheel, set decel to 2 seconds, then press Stop.</li></ol>' +
+  '<div class="grid2"><div><div class="field"><label for="v-ref">Speed command</label><input type="range" id="v-ref" min="0" max="60" value="45"><output id="v-ref-o">45 Hz</output></div><div class="field"><label for="v-acc">Accel time</label><input type="range" id="v-acc" min="1" max="15" value="5"><output id="v-acc-o">5 seconds</output></div><div class="field"><label for="v-dec">Decel time</label><input type="range" id="v-dec" min="1" max="15" value="5"><output id="v-dec-o">5 seconds</output></div></div>' +
+  '<div><div class="row"><span class="txt">Load</span><span class="seg" id="v-load"><button type="button" data-v="light" aria-pressed="true">Light</button><button type="button" data-v="heavy" aria-pressed="false">Heavy flywheel</button></span></div><div class="row"><button type="button" class="go" id="v-start">Start</button><button type="button" class="stop" id="v-stop">Stop</button><button type="button" id="v-reset" disabled>Reset fault</button></div>' +
+  '<dl class="readout"><div><dt>Drive output</dt><dd id="v-out">0.0 Hz</dd></div><div><dt>Motor speed</dt><dd id="v-rpm">0 rpm</dd></div></dl></div></div>' +
+  '<div class="chart"><canvas id="v-chart" role="img" aria-label="Speed over the last 20 seconds"></canvas></div><div class="legend"><span style="color:var(--ink3)">Speed command</span><span style="color:var(--amber2)">Drive output</span></div><div class="say" id="v-say" aria-live="polite">Press Start.</div>',
+ init:function(){
+  var v = {run:false, fault:false, ref:45, acc:5, dec:5, load:'light', out:0, coast:0, hist:[]};
+  function bind(id, unit, k){ on(id,'input',function(){ v[k] = +this.value; $(id+'-o').textContent = this.value + ' ' + unit; }); }
+  bind('v-ref','Hz','ref'); bind('v-acc','seconds','acc'); bind('v-dec','seconds','dec');
+  segBind('v-load', function(x){ v.load = x; });
+  on('v-start','click',function(){ if (v.fault){ say('v-say','The drive is faulted. Reset the fault first.','bad'); return; } if (v.coast > 0){ say('v-say','Wait for the motor to coast to a stop.'); return; } v.run = true; say('v-say','Running. The drive ramps to the command at the accel rate. Try moving the slider.'); });
+  on('v-stop','click',function(){ if (!v.run) return; v.run = false; say('v-say','Stopping. The drive ramps down at the decel rate.'); });
+  on('v-reset','click',function(){ v.fault = false; say('v-say','Fault reset. On a real drive, fix the cause first: a longer decel time, the bus regulator, or a braking resistor.'); });
+  function tick(){
+   var dt = 0.05;
+   if (v.fault){ v.out = 0; v.coast = Math.max(0, v.coast - 4 * dt); }
+   else {
+    var target = v.run ? v.ref : 0;
+    if (v.out < target) v.out = Math.min(target, v.out + 60 / v.acc * dt);
+    else if (v.out > target){
+     if (v.load === 'heavy' && v.dec < 4){ v.fault = true; v.run = false; v.coast = v.out; v.out = 0; say('v-say','F005 OverVoltage. The heavy flywheel turned the motor into a generator and pushed the drive’s voltage too high. Reset, then set decel to 4 seconds or more and try again.','bad'); }
+     else v.out = Math.max(target, v.out - 60 / v.dec * dt);
+    }
+   }
+   var motor = v.fault || v.coast > 0 ? v.coast : v.out;
+   $('v-out').textContent = v.out.toFixed(1) + ' Hz'; $('v-rpm').textContent = Math.round(motor / 60 * 1750) + ' rpm';
+   $('v-reset').disabled = !v.fault;
+   v.hist.push([v.run ? v.ref : 0, v.out, motor]); if (v.hist.length > 400) v.hist.shift();
+   chart();
+  }
+  function chart(){
+   var cv = $('v-chart'); if (!cv) return;
+   var r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+   if (cv.width !== Math.round(r.width*d) || cv.height !== Math.round(r.height*d)){ cv.width = Math.round(r.width*d); cv.height = Math.round(r.height*d); }
+   var c = cv.getContext('2d'); c.setTransform(d,0,0,d,0,0);
+   var W = r.width, H = r.height, Lx = 46, R = 10, T = 10, B = 22;
+   c.clearRect(0,0,W,H); c.font = '11px ' + cssVar('--ff-mono'); c.fillStyle = cssVar('--ink3'); c.strokeStyle = cssVar('--border'); c.lineWidth = 1;
+   [0,30,60].forEach(function(hz){ var y = T + (H-T-B)*(1-hz/60); c.beginPath(); c.moveTo(Lx,y); c.lineTo(W-R,y); c.stroke(); c.fillText(hz+' Hz',4,y+4); });
+   c.fillText('last 20 seconds', W-R-110, H-6);
+   function line(i, col, w, dash){ c.strokeStyle = col; c.lineWidth = w; c.setLineDash(dash||[]); c.beginPath(); v.hist.forEach(function(p,j){ var x = Lx+(W-Lx-R)*(j/399), y = T+(H-T-B)*(1-p[i]/60); if (j) c.lineTo(x,y); else c.moveTo(x,y); }); c.stroke(); c.setLineDash([]); }
+   line(0, cssVar('--ink3'), 1.5, [5,4]); line(1, cssVar('--amber2'), 2.5);
+  }
+  var h = setInterval(tick, 50);
+  return function(){ clearInterval(h); };
+ },
+ quiz:[
+  {q:'A motor runs 1750 rpm at 60 Hz. About how fast is it at 30 Hz?', o:['About 875 rpm','About 1750 rpm','About 3500 rpm'], a:0, why:'Speed follows frequency. Half the frequency, about half the speed.'},
+  {q:'A drive trips F005 OverVoltage every time it stops a heavy roll. What’s the first fix to try?', o:['A shorter decel time','A longer decel time','A higher speed command'], a:1, why:'A gentler stop sends less energy back into the drive.'}
+ ],
+ studio:['In CCW, which is free, add a PowerFlex 525 to an offline project.','Find the accel time and decel time parameters and note their default values.','Find the motor nameplate parameters and enter the numbers from a real motor nameplate at work.']
+});
+
+/* 9. PLC talks to VFD */
+L.push({part:'Drives and motion', title:'How the PLC talks to the drive', mins:10,
+ short:'Over Ethernet, the PLC writes commands to the drive, like start and a speed number, and reads status back, like running and faulted.',
+ body:'<p>When a PowerFlex is added to the I/O Configuration in Studio 5000, it gets its own tags, just like an input card.</p><p><strong>Output tags</strong> go from the PLC to the drive: start, stop, fault reset, and the speed command.</p><p><strong>Input tags</strong> come back from the drive: running, at speed, faulted, and the actual output frequency.</p><p>If the Ethernet connection drops, the drive stops and faults, and the PLC flags the module with a yellow triangle in the I/O tree. That’s a very common call on the floor.</p>',
+ like:'Engine order telegraph on the bridge. The bridge rings down an order, and the engine room answers back to confirm what it’s actually doing. Commands go one way, status comes back the other.',
+ tryTitle:'Command the drive from the PLC',
+ tryHTML:'<ol class="steps"><li>Type a speed, then hold Start for a moment.</li><li>Pull the Ethernet cable and see what each side reports.</li></ol>' +
+  '<div class="grid2"><div><b style="font-size:.9rem">PLC writes to the drive</b><table class="tagtable"><tr><th>Tag</th><th>Value</th></tr><tr><td>Drive:O.Start</td><td><button type="button" class="go" id="d-start" style="padding:4px 10px">Hold to set 1</button></td></tr><tr><td>Drive:O.Stop</td><td><button type="button" class="stop" id="d-stop" style="padding:4px 10px">Hold to set 1</button></td></tr><tr><td>Drive:O.FaultReset</td><td><button type="button" id="d-reset" style="padding:4px 10px">Pulse 1</button></td></tr><tr><td>Drive:O.SpeedCommand</td><td><input type="number" id="d-speed" value="40" min="0" max="60"> Hz</td></tr></table></div>' +
+  '<div><b style="font-size:.9rem">Drive reports back to the PLC</b><table class="tagtable"><tr><th>Tag</th><th>Value</th></tr><tr><td>Drive:I.Running</td><td id="d-run">0</td></tr><tr><td>Drive:I.AtSpeed</td><td id="d-at">0</td></tr><tr><td>Drive:I.Faulted</td><td id="d-flt">0</td></tr><tr><td>Drive:I.OutputFreq</td><td id="d-hz">0.0 Hz</td></tr></table><div class="row"><span class="lamp" id="d-link">Connected</span><button type="button" id="d-cable" aria-pressed="false">Pull the Ethernet cable</button></div></div></div>' +
+  '<p class="dir">Tag names here are simplified examples. Real PowerFlex tags look similar but use the names from the drive’s profile, and the manual tells you the units for the speed command.</p><div class="say" id="d-say" aria-live="polite"></div>',
+ init:function(){
+  var d = {run:false, flt:false, link:true, out:0, start:false, stop:false};
+  function tick(){
+   var sp = Math.max(0, Math.min(60, parseFloat($('d-speed').value) || 0));
+   if (d.link){ if (d.start && !d.flt) d.run = true; if (d.stop) d.run = false; }
+   if (!d.link && d.run){ d.run = false; d.flt = true; }
+   var target = d.run && !d.flt ? sp : 0;
+   d.out = d.out < target ? Math.min(target, d.out + 0.6) : Math.max(target, d.out - 0.6);
+   var at = d.run && Math.abs(d.out - sp) < 0.05;
+   if (d.link){ $('d-run').textContent = d.run ? 1 : 0; $('d-at').textContent = at ? 1 : 0; $('d-flt').textContent = d.flt ? 1 : 0; $('d-hz').textContent = d.out.toFixed(1) + ' Hz'; }
+   else ['d-run','d-at','d-flt','d-hz'].forEach(function(id){ $(id).textContent = 'no data'; });
+   lamp('d-link', d.link ? 'on' : 'bad', d.link ? 'Connected' : 'Module fault in I/O tree');
+   var m;
+   if (!d.link) m = 'The PLC lost the connection, so it flags the module and its input tags can’t be trusted. The drive saw the comm loss and faulted to a stop. Plug the cable back in, then pulse FaultReset.';
+   else if (d.flt) m = 'Connection is back. The drive is still faulted until the PLC pulses FaultReset.';
+   else if (at) m = 'Running at ' + sp + ' Hz. The PLC set Start for a moment and the drive latched it. Running and AtSpeed both came back as 1.';
+   else if (d.run) m = 'The drive is ramping to ' + sp + ' Hz. AtSpeed stays 0 until it gets there.';
+   else m = 'Stopped. Type a speed and hold Start.';
+   say('d-say', m, !d.link ? 'bad' : (at ? 'good' : ''));
+  }
+  momentary($('d-start'), function(v){ d.start = v; });
+  momentary($('d-stop'), function(v){ d.stop = v; });
+  on('d-reset','click',function(){ if (d.link) d.flt = false; });
+  on('d-cable','click',function(){ d.link = !d.link; this.setAttribute('aria-pressed', !d.link); this.textContent = d.link ? 'Pull the Ethernet cable' : 'Plug the cable back in'; });
+  var h = setInterval(tick, 50);
+  return function(){ clearInterval(h); };
+ },
+ quiz:[
+  {q:'Which direction does Drive:I.Faulted travel?', o:['PLC to drive','Drive to PLC'], a:1, why:'Input tags are status coming back from the drive.'},
+  {q:'A drive shows a yellow triangle in the I/O tree and won’t run. What do you check first?', o:['The motor bearings','The Ethernet connection and the drive’s IP address','The timer presets'], a:1, why:'A yellow triangle means the PLC can’t talk to the module.'}
+ ],
+ studio:['In your offline project, right-click the Ethernet port in I/O Configuration and add a new module. Search for PowerFlex 525 and add one.','Open Controller Tags and find the new drive’s :O and :I tags. Match them to the ones in the simulator.']
+});
+
+/* 10. Servo motion */
+L.push({part:'Drives and motion', title:'Servo motion basics', mins:12,
+ short:'A servo always knows exactly where it is. You tell it where to go and how fast, and it gets there and stops.',
+ body:'<p>A VFD controls <strong>speed</strong>. A servo controls <strong>position</strong>. Its motor has an encoder that reports exactly where the shaft is, thousands of times a second.</p><p>Four instructions cover most of what you’ll do: <strong>MAH</strong> homes the axis so it knows where zero is, <strong>MAM</strong> moves it to a position, <strong>MAJ</strong> jogs it until you stop it, and <strong>MAS</strong> stops it.</p><p>Each instruction has status bits. <strong>IP</strong> (in process) is on while it’s working, and <strong>PC</strong> (process complete) comes on when it’s done. Your next step in the logic usually waits for PC.</p>',
+ like:'A VFD is like cruise control: it holds a speed. A servo is like a GPS: you give it a destination and it takes you there and parks.',
+ tryTitle:'Move an axis',
+ tryHTML:'<ol class="steps"><li>Press MAH to home the axis.</li><li>Send it to a few positions and watch IP and PC.</li></ol>' +
+  '<div class="track"><div class="mark" style="left:25%"></div><div class="mark" style="left:50%"></div><div class="mark" style="left:75%"></div><div class="car" id="m-car"></div></div><div class="ticks"><span>0 in</span><span>6</span><span>12</span><span>18</span><span>24 in</span></div>' +
+  '<div class="row"><button type="button" class="primary mono" id="m-home">MAH home</button><button type="button" class="mono" id="m-6">MAM to 6 in</button><button type="button" class="mono" id="m-12">MAM to 12 in</button><button type="button" class="mono" id="m-18">MAM to 18 in</button><button type="button" class="mono" id="m-jog">MAJ jog</button><button type="button" class="stop mono" id="m-stop">MAS stop</button></div>' +
+  '<dl class="readout"><div><dt>Position</dt><dd id="m-pos">0.00 in</dd></div><div><dt>Homed</dt><dd id="m-homed">No</dd></div><div><dt>Last instruction</dt><dd id="m-last">None</dd></div></dl><div class="row"><span class="lamp" id="m-ip">IP, working</span><span class="lamp" id="m-pc">PC, done</span></div><div class="say" id="m-say" aria-live="polite">The axis powered up at an unknown spot. Home it first.</div>',
+ init:function(){
+  var a = {pos:9.3, v:0, acc:12, spd:5, mode:'idle', tgt:0, homed:false, last:'', ip:false, pc:false};
+  function issue(name, mode, tgt, msg){ a.last = name; a.ip = true; a.pc = false; a.mode = mode; a.tgt = tgt; say('m-say', msg); }
+  on('m-home','click',function(){ issue('MAH','home',0,'Homing. The axis moves to its home switch and calls that spot 0.'); });
+  [6,12,18].forEach(function(p){ on('m-'+p,'click',function(){ issue('MAM','move',p, a.homed ? 'Moving to ' + p + ' inches. IP is on until it arrives.' : 'Moving to ' + p + ' inches, but the axis isn’t homed, so it doesn’t truly know where 0 is. On a real machine, always home first.'); }); });
+  on('m-jog','click',function(){ issue('MAJ','jog',0,'Jogging forward. A jog has no end point, so it keeps going until a MAS stops it.'); a.pc = true; });
+  on('m-stop','click',function(){ issue('MAS','stop',0,'Stopping. MAS ramps the axis down to zero speed.'); });
+  function finish(){ a.v = 0; a.ip = false; a.pc = true; if (a.mode === 'home'){ a.homed = true; say('m-say','Homed. Now positions are measured from a known zero, so a move to 12 inches really means 12 inches.','good'); } else if (a.mode === 'move') say('m-say','Arrived. PC is on, so your logic can move on to the next step.','good'); else if (a.mode === 'stop') say('m-say','Stopped. PC is on for the MAS.'); a.mode = 'idle'; }
+  function tick(){
+   var dt = 0.02;
+   if (a.mode === 'move' || a.mode === 'home'){
+    var dist = a.tgt - a.pos;
+    if (Math.abs(dist) < 0.001) { a.pos = a.tgt; finish(); }
+    else {
+     var dir = Math.sign(dist), sd = a.v*a.v/(2*a.acc);
+     if (Math.sign(a.v) === dir && Math.abs(dist) <= sd) a.v -= Math.sign(a.v)*Math.min(Math.abs(a.v), a.acc*dt);
+     else a.v += Math.max(-a.acc*dt, Math.min(a.acc*dt, dir*a.spd - a.v));
+     var np = a.pos + a.v*dt;
+     if ((np - a.tgt)*(a.pos - a.tgt) <= 0){ a.pos = a.tgt; finish(); } else a.pos = np;
+    }
+   } else if (a.mode === 'jog'){
+    a.v += Math.max(-a.acc*dt, Math.min(a.acc*dt, a.spd - a.v)); a.pos += a.v*dt;
+    if (a.pos >= 24){ a.pos = 24; a.v = 0; a.mode = 'idle'; a.ip = false; say('m-say','The axis hit the end of travel. On a real machine that’s a soft overtravel fault. Use MAM to move it back.','bad'); }
+   } else if (a.mode === 'stop'){
+    if (Math.abs(a.v) <= a.acc*dt) finish(); else { a.v -= Math.sign(a.v)*a.acc*dt; a.pos += a.v*dt; }
+   }
+   $('m-car').style.left = 'calc(15px + (100% - 30px) * ' + (a.pos/24) + ')';
+   $('m-pos').textContent = a.pos.toFixed(2) + ' in'; $('m-homed').textContent = a.homed ? 'Yes' : 'No'; $('m-last').textContent = a.last || 'None';
+   lamp('m-ip', a.ip ? 'warn' : ''); lamp('m-pc', a.pc ? 'on' : '');
+  }
+  var h = setInterval(tick, 20);
+  return function(){ clearInterval(h); };
+ },
+ quiz:[
+  {q:'Why home an axis before the first move?', o:['It warms up the motor','It sets a known zero so positions mean something','It clears the timers'], a:1, why:'Without homing, the axis only knows where it is relative to where it powered up.'},
+  {q:'Your logic needs to wait until a move is finished. Which bit do you check?', o:['IP','PC'], a:1, why:'PC, process complete, turns on when the move is done. IP is on while it’s still moving.'}
+ ],
+ studio:['In your offline project, right-click Motion Groups and add a new motion group.','Add a new axis and pick a virtual axis. Virtual axes need no drive or motor, so they’re perfect for practice.','Add a rung with XIC Home_PB and an MAH for that axis. Verify.']
+});
+
+/* 11. Troubleshooting */
+var drills = [
+ {t:'The motor starts, then stops the moment you let go of Start', look:'The seal-in branch around Start. Is it there, and does it use the right tag?', cause:'The seal-in contact is missing or points at the wrong tag.', lesson:5},
+ {t:'The Stop button doesn’t stop anything', look:'How Stop is used in logic. The real button is normally closed.', cause:'Stop was programmed with XIO instead of XIC, so the rung never sees the press the right way.', lesson:5},
+ {t:'A delay light turns on instantly instead of after 5 seconds', look:'The timer’s preset value.', cause:'The preset is 0, or something in the logic overwrites it.', lesson:6},
+ {t:'The box-full light never comes on', look:'The counter’s preset, then every rung that resets the counter.', cause:'A reset rung is true all the time, so the count keeps clearing.', lesson:7},
+ {t:'A new prox sensor is wired, but its input LED never lights', look:'The sensor type and the input card type.', cause:'A PNP sensor on a sourcing card, or an NPN sensor on a sinking card.', lesson:3},
+ {t:'The drive trips F005 on stops but never on starts', look:'Decel time and how heavy the load is.', cause:'Decel is too short for the load, so the motor regenerates and overvoltages the drive.', lesson:8},
+ {t:'A drive has a yellow triangle in the I/O tree', look:'The Ethernet cable, the switch port lights, and the drive’s IP address.', cause:'Lost connection, so the PLC can’t talk to the drive.', lesson:9},
+ {t:'The indexer’s next step never starts after a move', look:'Which bit the next rung waits for.', cause:'The logic waits for a bit that never turns on, like PC from the wrong instruction.', lesson:10}
+];
+L.push({part:'Putting it together', title:'Troubleshooting drills', mins:15,
+ short:'When something’s wrong, start from the symptom, guess where to look, then check. Every lesson so far is a place to look.',
+ body:'<p>This is where your floor experience counts most. Each card below is a real-world symptom tied to one of the lessons.</p><p>Read the symptom and say out loud where you’d look before you reveal anything. If you get stuck, the card tells you which lesson to revisit.</p><p>Once you can do these in your head, build each fault into a copy of your own Studio 5000 project and find it the way you would on a real line.</p>',
+ like:'Damage control drills. You practice the casualty before it happens, so the real one is routine.',
+ tryTitle:'Draw a fault card',
+ tryHTML:'<div class="row"><button type="button" class="primary" id="dr-draw">Draw a card</button><span class="txt" id="dr-n"></span></div><div id="dr-card" aria-live="polite"></div>',
+ init:function(){
+  var deck = [], k = 0;
+  function shuffle(){ deck = drills.map(function(_,i){ return i; }); for (var i = deck.length-1; i > 0; i--){ var j = Math.floor(Math.random()*(i+1)), t = deck[i]; deck[i] = deck[j]; deck[j] = t; } k = 0; }
+  shuffle();
+  on('dr-draw','click',function(){
+   if (k >= deck.length) shuffle();
+   var d = drills[deck[k++]];
+   $('dr-n').textContent = 'Card ' + k + ' of ' + deck.length;
+   $('dr-card').innerHTML = '<div class="card"><h4>' + d.t + '</h4><div id="dr-r"><p class="why">Where would you look first?</p><button type="button" id="dr-look">Show where to look</button></div></div>';
+   on('dr-look','click',function(){
+    $('dr-r').innerHTML = '<p><strong>Where to look:</strong> ' + d.look + '</p><button type="button" id="dr-cause">Show the cause</button>';
+    on('dr-cause','click',function(){ $('dr-r').innerHTML = '<p><strong>Where to look:</strong> ' + d.look + '</p><p><strong>Cause:</strong> ' + d.cause + '</p><button type="button" id="dr-go">Review lesson ' + d.lesson + '</button>'; on('dr-go','click',function(){ show(d.lesson - 1); }); });
+   });
+  });
+ },
+ quiz:[
+  {q:'A machine won’t start and the PLC shows no faults. What’s a good first question?', o:['Is the PLC broken?','Which input or condition is keeping the rung false?','Should we replace the motor?'], a:1, why:'Trace the rung. Find the instruction that isn’t true, then find out why.'},
+  {q:'Where do you find the exact rung behind a controller fault?', o:['The menu bar','Controller Properties, on the Major Faults tab','The instruction toolbar'], a:1, why:'The Major Faults tab shows the fault type and code, plus the program and rung that caused it.'}
+ ],
+ studio:['Make a copy of your practice project and name it Drill.','Ask a coworker who knows Logix to break one thing in it, or break it yourself and wait a day.','Find the fault using only the symptom and the Studio 5000 tools you’ve learned.']
+});
+
+/* =================== ENGINE =================== */
+var cur = 0, cleanup = null;
+var list = $('lesson-list'), pick = $('pick');
+function buildNav(){
+ list.innerHTML = ''; pick.innerHTML = '';
+ var lastPart = '';
+ L.forEach(function(l, i){
+  if (l.part !== lastPart){ var p = document.createElement('li'); p.className = 'part'; p.textContent = l.part; list.appendChild(p); lastPart = l.part; }
+  var li = document.createElement('li'); if (done[i]) li.className = 'done';
+  li.innerHTML = '<button type="button" data-i="' + i + '"' + (i === cur ? ' aria-current="true"' : '') + '><span class="n">' + (done[i] ? '✓' : (i+1)) + '</span>' + l.title + '</button>';
+  list.appendChild(li);
+  var o = document.createElement('option'); o.value = i; o.textContent = (i+1) + '. ' + l.title + (done[i] ? ' (done)' : ''); if (i === cur) o.selected = true; pick.appendChild(o);
+ });
+ var n = Object.keys(done).length;
+ $('nav-count').textContent = n + ' of ' + L.length + ' lessons done';
+ $('nav-bar').style.width = (n / L.length * 100) + '%';
+}
+list.addEventListener('click', function(e){ var b = e.target.closest('button[data-i]'); if (b) show(+b.dataset.i, true); });
+pick.addEventListener('change', function(){ show(+pick.value, true); });
+on('reset','click',function(){ if (confirm('Clear all lesson progress saved in this browser?')){ done = {}; store.set('clx-lessons-done', done); show(0, true); } });
+
+function show(i, focus){
+ if (cleanup){ cleanup(); cleanup = null; }
+ cur = i; store.set('clx-lesson-cur', i);
+ var l = L[i];
+ var html = '<div class="lesson-top"><div class="label">Lesson ' + (i+1) + ' of ' + L.length + ', about ' + l.mins + ' minutes</div>' + (done[i] ? '<span class="badge">Completed</span>' : '') + '</div>' +
+  '<h2 class="title">' + l.title + '</h2><div class="short">' + l.short + '</div><div class="body">' + l.body + '</div><div class="like">' + l.like + '</div>' +
+  '<div class="block"><div class="block-head"><h3>Try it: ' + l.tryTitle + '</h3><span>Simulator</span></div><div class="block-body">' + l.tryHTML + '</div></div>' +
+  '<div class="block"><div class="block-head"><h3>Check yourself</h3><span id="qz-n">0 of ' + l.quiz.length + ' right</span></div><div class="block-body" id="qz">';
+ l.quiz.forEach(function(q, qi){
+  html += '<div class="q" data-q="' + qi + '"><p class="qt">' + (qi+1) + '. ' + q.q + '</p><div class="opts">';
+  q.o.forEach(function(o, oi){ html += '<button type="button" class="opt" data-o="' + oi + '">' + o + '</button>'; });
+  html += '</div><p class="why" hidden></p></div>';
+ });
+ html += '</div></div><div class="studio"><h3>Now try it in Studio 5000</h3><p style="margin:0;font-size:.92rem;color:var(--ink2)">On the plant laptop, offline, in a training project.</p><ol>' + l.studio.map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ol></div>' +
+  '<div class="pager"><button type="button" id="pg-prev"' + (i === 0 ? ' disabled' : '') + '>Previous lesson</button><button type="button" class="primary" id="pg-next">' + (i === L.length - 1 ? 'Back to lesson 1' : 'Next lesson') + '</button></div>';
+ $('lesson-body').innerHTML = html;
+ var right = {};
+ $('qz').addEventListener('click', function(e){
+  var b = e.target.closest('.opt'); if (!b) return;
+  var qd = b.closest('.q'), qi = +qd.dataset.q, q = l.quiz[qi], ok = +b.dataset.o === q.a;
+  qd.querySelectorAll('.opt').forEach(function(x){ x.classList.remove('right','wrong'); });
+  b.classList.add(ok ? 'right' : 'wrong');
+  var w = qd.querySelector('.why'); w.hidden = false; w.textContent = (ok ? 'Right. ' : 'Not quite. Try another answer. ') + (ok ? q.why : '');
+  if (ok) right[qi] = 1; else delete right[qi];
+  var n = Object.keys(right).length;
+  $('qz-n').textContent = n + ' of ' + l.quiz.length + ' right';
+  if (n === l.quiz.length && !done[i]){ done[i] = 1; store.set('clx-lessons-done', done); buildNav(); var top = document.querySelector('.lesson-top'); if (top && !top.querySelector('.badge')) top.insertAdjacentHTML('beforeend','<span class="badge">Completed</span>'); }
+ });
+ on('pg-prev','click',function(){ show(i - 1, true); });
+ on('pg-next','click',function(){ show(i === L.length - 1 ? 0 : i + 1, true); });
+ cleanup = l.init() || null;
+ buildNav();
+ if (focus){ var m = $('lesson'); m.focus({preventScroll:true}); window.scrollTo({top: m.getBoundingClientRect().top + window.scrollY - 80, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); }
+}
+show(Math.min(L.length - 1, store.get('clx-lesson-cur', 0)));
+})();
+
+</script>
+</body>
+</html>
