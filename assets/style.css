@@ -47,7 +47,7 @@ p { margin: 0 0 1em; }
 .solid .brand { color: var(--ink); }
 .brand:hover { text-decoration: none; }
 .brand .brand-name { display: none; }
-.brand-mark { width: 56px; height: 56px; border-radius: 14px; background: #fff; display: grid; place-items: center; padding: 3px; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+.brand-mark { width: 56px; height: 56px; border-radius: 14px; background: #fff; display: grid; place-items: center; padding: 2px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
 @media (max-width: 560px) { .nav { height: 76px; } .brand-mark { width: 48px; height: 48px; border-radius: 12px; } }
 .brand-mark img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .nav-links { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
