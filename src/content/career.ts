@@ -1,67 +1,97 @@
 export interface Job {
   title: string;
   org: string;
+  /** Location, shown in italics after the employer. */
+  where: string;
   /** Date range as printed on the résumé. */
   when: string;
   current?: boolean;
-  bullets: string[];
+  /** One-line italic description of the role's scope. */
+  scope: string;
+  responsibilities: string[];
+  accomplishments: string[];
 }
+
+export const headline = [
+  'Maintenance Planner & Scheduler',
+  'Reliability Practitioner',
+  'CMMS Administrator',
+  'Navy Veteran',
+];
+
+export const expertise = [
+  'Maintenance Planning', 'CMMS Administration', 'Root Cause Analysis', 'Hydraulics & Pneumatics',
+  'Work Scheduling', 'KPI Tracking', 'A3 & FMEA', 'Conveyors & Drives',
+  'Backlog Management', 'Job Plans & SOPs', 'LOTO & Safety', 'PLC & VFD Diagnostics',
+  'PM Program Design', 'Equipment Criticality', 'Spare Parts Coordination', 'Technician Training',
+];
+
+export const highlights: [string, string][] = [
+  ['Downtime Reduction', 'Led an A3 project that cut downtime on the plant’s top five breakdown assets by 53%, from 537 to 250 hours.'],
+  ['Proactive Maintenance', 'Reduced the emergency work rate from 68% to 54% by moving reactive repairs into planned, scheduled work.'],
+  ['PM Program', 'Built a 182-PM library and 13-week rotation calendar covering about 1,862 work order line items across four crews.'],
+  ['Schedule Performance', 'Sustain 95% schedule compliance and 90% PM compliance across four 12-hour rotating maintenance crews.'],
+];
 
 export const jobs: Job[] = [
   {
     title: 'Maintenance Planner & Scheduler',
-    org: 'Cardinal IG · Roanoke Facility, Vinton, VA',
+    org: 'Cardinal IG',
+    where: 'Vinton, VA',
     when: 'Nov 2024 – Present',
     current: true,
-    bullets: [
-      'Led an A3 capstone project that cut downtime on the top five breakdown assets by 53% (537 → 250 hours) and lowered the emergency work rate from 68% to 54%.',
-      "Built the plant's maintenance planning program from the ground up: a 182-PM library and 13-week rotation calendar covering about 1,862 work order line items across four rotating crews and all departments.",
-      'Sustain 90% PM compliance and 95% schedule compliance through weekly scheduling, reported on weekly KPI scorecards covering backlog, emergency work, and planned work.',
-      "Administer PMware, the plant's CMMS, including PM scheduling setup, asset and equipment records, and work order standards for every crew and department.",
-      'Found and fixed a plant-wide PMware scheduling defect that generated duplicate PM work orders: audited 156 duplicate completions, moved the PM program to floating schedules, and documented the change for crews.',
-      'Traced unreliable maintenance data to incorrect PMs, missed work order entry, and no user training; built a PMware cleanup plan, with PMware and iPad training for technicians now in development.',
-      'Authored the site Maintenance & Reliability Standard, SOPs for each work order type, one-point lessons, and PM job plans; built the equipment registry with QR codes, LOTO asset list, and PM gap analysis.',
-      'Ran root cause analysis (5-Why, FMEA, Pareto) on chronic bad-actor equipment and benchmarked PM content against sister facilities.',
+    scope: 'Reporting to the Maintenance Manager, the role plans and schedules all maintenance for an insulating glass plant with four production lines, supporting four rotating crews across the IG, Cutting, Tempering, and Mezzanine departments.',
+    responsibilities: [
+      'Build and publish the weekly maintenance schedule to production, prioritizing the backlog by equipment criticality.',
+      'Administer the PMware CMMS end to end, including PM scheduling, work order standards, and data quality for every department.',
+      'Write PM job plans, SOPs, and one-point lessons, and coordinate parts so corrective work is ready before it is scheduled.',
+      'Track and report weekly KPIs: schedule compliance, PM compliance, backlog, rework, and reactive vs. proactive work.',
+    ],
+    accomplishments: [
+      'Built the site’s planning system from scratch: QR-coded equipment registry, LOTO asset list, and PM gap analysis.',
+      'Authored the ROIG-MRS-001 Maintenance & Reliability Standard defining planning, scheduling, and PM practices for the plant.',
+      'Audited 156 duplicate PM completions plant-wide and fixed the root scheduling defect by converting PMs to floating intervals.',
+      'Completed A3 and root cause analyses on chronic bad-actor equipment using 5-Why, FMEA, and Pareto methods.',
     ],
   },
   {
     title: 'Maintenance Technician Lead',
-    org: 'Cardinal Glass',
+    org: 'Cardinal Glass Industries',
+    where: 'Vinton, VA',
     when: 'Jun 2021 – Nov 2024',
-    bullets: [
-      'Led a crew of three maintenance technicians: assigned daily work and directed troubleshooting and repair across glass processing lines, including Billco cutting tables and washers and a Glasstech tempering furnace.',
-      'Trained new hires on line equipment and repair procedures until they could take on troubleshooting and repairs on their own.',
-      'Repaired bearings, gearboxes, chains and belts, conveyors and drive systems, and hydraulic and pneumatic systems.',
-      'Diagnosed Allen-Bradley drive and PLC faults to restore production.',
+    scope: 'Led a crew of three maintenance technicians supporting glass cutting, tempering, and insulating glass production equipment.',
+    responsibilities: [
+      'Troubleshot and repaired Billco cutting tables and washers, Glasstech furnace, conveyors, and Allen-Bradley drives and PLCs.',
+      'Maintained bearings, gearboxes, chains, belts, and hydraulic and pneumatic systems across the plant.',
+      'Assigned daily work to the crew and trained new-hire technicians on equipment, procedures, and safe work practices.',
     ],
+    accomplishments: [],
   },
   {
-    title: 'Customer Service Representative, Federal Employee Program',
-    org: 'Anthem Blue Cross Blue Shield',
-    when: 'Jun 2017 – Mar 2020',
-    bullets: ['Resolved member benefit and claims questions for federal employees in a high-volume, metrics-driven environment.'],
-  },
-  {
-    title: 'Production Assembler · Quality Auditor',
-    org: 'Altec',
-    when: 'Nov 2011 – Mar 2017',
-    bullets: [
-      'Built utility trucks on the production floor for three years: hung booms and hydraulic cylinders, connected hydraulic systems, and installed cabs.',
-      'Moved into quality auditing for the final two years, inspecting finished units against quality standards and documenting nonconformances for correction.',
-    ],
-  },
-  {
-    title: 'Gas Turbine Systems Technician, Mechanical (GSM3) · Lead Oil King',
-    org: 'U.S. Navy · USS Mahan (DDG-72)',
+    title: 'Gas Turbine Systems Technician (GSM3) / Lead Oil King',
+    org: 'U.S. Navy',
+    where: 'USS Mahan (DDG-72)',
     when: 'Oct 2003 – Nov 2011',
-    bullets: [
-      "Maintained the ship's four GE LM2500 gas turbine engines, which together drive about 100,000 shaft horsepower of propulsion.",
-      'Performed scheduled preventive and corrective maintenance on the turbines and their support systems, including compressor water washes, borescope inspections, fuel and lube oil filter changes, and start air, fuel and lube oil system servicing.',
-      'Stood engine room watches, monitoring turbine and plant conditions and responding to alarms and casualties.',
-      "As Lead Oil King, ran the engineering department's fuel and lube oil program: tracked inventory, directed transfers between tanks, sampled and tested fluids for quality, and kept the accountability records.",
-      'Awarded three Navy and Marine Corps Achievement Medals and an Army Achievement Medal.',
+    scope: 'Engineering department of a guided-missile destroyer, operating and maintaining gas turbine propulsion and auxiliary systems.',
+    responsibilities: [
+      'Performed and tracked 3-M Planned Maintenance System (PMS) checks on pumps, purifiers, valves, and fuel and lube oil systems.',
+      'As Lead Oil King, managed fuel and lube oil inventory, sampling, and transfers, and kept the sampling and inventory logs.',
+      'Performed gas turbine inspections and stood watch as an engine room operator, monitoring propulsion and auxiliary equipment.',
+      'Supervised and trained junior sailors on equipment, maintenance procedures, and watch standing.',
     ],
+    accomplishments: ['Awarded three Navy Achievement Medals and one Army Achievement Medal.'],
   },
+];
+
+/** Earlier roles listed one line each. */
+export const additional: { title: string; org: string; when: string }[] = [
+  { title: 'Customer Service Representative', org: 'Anthem Blue Cross Blue Shield (Federal Employee Program)', when: 'Jun 2017 – Mar 2020' },
+  { title: 'Production Assembler & Quality Auditor', org: 'Altec', when: 'Nov 2011 – Mar 2017' },
+];
+
+export const education: { name: string; org: string; where?: string }[] = [
+  { name: 'RMIC Planning & Scheduling Certification', org: 'Reliability & Maintainability Center, University of Tennessee', where: 'Knoxville, TN' },
+  { name: 'Gas Turbine Systems Technician “A” School', org: 'U.S. Navy' },
 ];
 
 /** Shorter titles/orgs used on the home-page timeline. */
@@ -71,23 +101,4 @@ export const timeline = [
   { when: '2017 — 2020', title: 'Customer Service Representative', org: 'Anthem Blue Cross Blue Shield · Federal Employee Program' },
   { when: '2011 — 2017', title: 'Production Assembler · Quality Auditor', org: 'Altec' },
   { when: '2003 — 2011', title: 'Gas Turbine Systems Technician · Lead Oil King', org: 'U.S. Navy · USS Mahan (DDG-72)' },
-];
-
-export const summary =
-  "Maintenance planner and U.S. Navy veteran with nearly 20 years in maintenance, mechanical, and quality roles. Built a glass plant's planning and scheduling program from scratch, administer its PMware CMMS, and sustain 90% PM compliance and 95% schedule compliance. Turns unreliable maintenance data into a program crews can trust through root cause analysis, clear work standards, and hands-on training.";
-
-export const skills: [string, string][] = [
-  ['Planning', 'PM program design, weekly scheduling, backlog management, job plans, SOPs and OPLs, work order standards'],
-  ['CMMS', 'PMware administration, PM scheduling setup (fixed vs. floating), asset and equipment records, data audits and cleanup, user training'],
-  ['Reliability', 'A3, 5-Why, FMEA, Pareto analysis, criticality-based prioritization, KPI scorecards'],
-  ['Mechanical', 'Bearings, gearboxes, chains and belts, hydraulics, pneumatics, conveyors and drives; Allen-Bradley drive and PLC fault diagnostics'],
-  ['Software', 'PMware, Microsoft Excel and Word, HTML/CSS/JavaScript'],
-];
-
-export const certifications: [string, string][] = [
-  ['RMIC', 'Planning & Scheduling Certification — Reliability & Maintainability Center, University of Tennessee'],
-];
-
-export const education: [string, string][] = [
-  ['High school', 'Diploma — Pekin Community High School, Pekin, IL'],
 ];

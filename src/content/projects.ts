@@ -66,6 +66,16 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    title: 'ROIG KPI App',
+    blurb:
+      'A native Apple app built in Xcode that puts the plant’s maintenance KPI dashboard on a Mac, iPhone, iPad, and Apple Watch. The Mac app serves the live dashboard to the iPhone, iPad, and Watch versions over the local network.',
+    teaser: 'The plant’s live KPI dashboard on Mac, iPhone, iPad, and Apple Watch.',
+    icon: 'trend',
+    status: 'proto',
+    tags: ['Xcode', 'macOS · iOS · watchOS', 'Local network'],
+    tint: 3,
+  },
+  {
     title: 'CompactLogix Lessons',
     blurb:
       'Eleven short, interactive lessons on PLCs, Studio 5000, VFDs and servo motion, written in plain language. Each one has an on-screen simulator, two quick questions, and a practice task to try in Studio 5000.',
