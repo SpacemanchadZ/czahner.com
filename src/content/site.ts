@@ -10,7 +10,7 @@ export type NavKey = 'home' | 'resume' | 'lab' | 'none';
 
 export const nav: { key: NavKey; label: string; href: string }[] = [
   { key: 'home', label: 'Home', href: '/' },
-  { key: 'resume', label: 'Résumé', href: '/resume/' },
+  { key: 'resume', label: 'Resume', href: '/resume/' },
   { key: 'lab', label: 'Lab', href: '/lab/' },
 ];
 
