@@ -10,9 +10,9 @@ export interface HeadlineKpi {
 
 export const headlineKpis: HeadlineKpi[] = [
   { value: 53, unit: '%', label: 'Less downtime on the top 5 breakdown assets', meter: 53 },
-  { value: 80, unit: '%', label: 'Weekly schedule compliance', meter: 80 },
+  { value: 95, unit: '%', label: 'Weekly schedule compliance', meter: 95 },
   { value: 182, label: 'PMs in a library built from scratch', meter: 82 },
-  { value: 85, unit: '%', label: 'PM compliance across four crews', meter: 85 },
+  { value: 90, unit: '%', label: 'PM compliance across four crews', meter: 90 },
 ];
 
 export const services: { icon: IconName; title: string; body: string }[] = [

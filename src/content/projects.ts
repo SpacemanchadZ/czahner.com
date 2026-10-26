@@ -53,19 +53,6 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'Maintenance KPI Dashboard',
-    blurb:
-      'KPIs calculated from raw work-order data: planned work, PM and schedule compliance, MTBF/MTTR by line, backlog weeks, and a bad-actor Pareto. Load your own CSV export or use the sample plant.',
-    teaser: 'Planned work, PM compliance, MTBF/MTTR and bad actors — computed from work-order data.',
-    icon: 'bars',
-    status: 'demo',
-    tags: ['React', 'TypeScript', 'Recharts'],
-    href: '/lab/kpi-dashboard/',
-    code: codeUrl('src/tools/kpi'),
-    tint: 2,
-    featured: true,
-  },
-  {
     title: 'ROIG KPI App',
     blurb:
       'A native Apple app built in Xcode that puts the plant’s maintenance KPI dashboard on a Mac, iPhone, iPad, and Apple Watch. The Mac app serves the live dashboard to the iPhone, iPad, and Watch versions over the local network.',
@@ -73,7 +60,8 @@ export const projects: Project[] = [
     icon: 'trend',
     status: 'proto',
     tags: ['Xcode', 'macOS · iOS · watchOS', 'Local network'],
-    tint: 3,
+    tint: 2,
+    featured: true,
   },
   {
     title: 'CompactLogix Lessons',
