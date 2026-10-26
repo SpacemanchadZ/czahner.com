@@ -10,7 +10,7 @@ export function Resume() {
     <Layout active="resume">
       <div className="band">
         <div className="wrap page-hero" style={{ paddingBottom: 110 }}>
-          <span className="eyebrow">Résumé</span>
+          <span className="eyebrow">Resume</span>
           <h1>Experience &amp; <em>skills.</em></h1>
           <p>Maintenance planning, reliability, and hands-on technical work — from the Navy to the plant floor.</p>
           <div className="actions no-print" style={{ marginTop: 28 }}>
