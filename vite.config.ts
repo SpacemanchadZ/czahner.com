@@ -8,7 +8,6 @@ const pages = {
   resume: 'resume/index.html',
   lab: 'lab/index.html',
   jobPlanBuilder: 'lab/job-plan-builder/index.html',
-  kpiDashboard: 'lab/kpi-dashboard/index.html',
   notFound: '404.html',
 };
 
