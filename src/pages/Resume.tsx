@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { Layout } from '../components/Layout';
 import { Icon } from '../components/Icon';
-import { certifications, jobs, skills, summary, education } from '../content/career';
+import { additional, education, expertise, headline, highlights, jobs } from '../content/career';
 import { site } from '../content/site';
 
 /** Shown only in the printed/saved PDF, never in the page itself or its HTML. */
@@ -37,50 +37,63 @@ export function Resume() {
       <div className="resume-area">
         <div className="wrap">
           <article className="paper">
-            <header className="r-head">
-              <div>
-                <h1>{site.name}</h1>
-                <div className="r-title">{site.title} · RMIC</div>
-                <div className="r-contact">
-                  <span>Rocky Mount, VA</span>
-                  {printing && <span>{PRINT_PHONE}</span>}
-                  <a href={`mailto:${site.email}`}>{site.email}</a>
-                  <a href={site.linkedin}>linkedin.com/in/czahner</a>
-                  <a href="https://czahner.com">czahner.com</a>
-                </div>
+            <header className="r-bar">
+              <h1>{site.name}</h1>
+              <div className="r-contact">
+                <span>Rocky Mount, VA</span>
+                {printing && <span>{PRINT_PHONE}</span>}
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+                <a href={site.linkedin}>linkedin.com/in/czahner</a>
+                <a href="https://czahner.com">czahner.com</a>
               </div>
             </header>
 
-            <div className="r-section"><h2>Summary</h2><p>{summary}</p></div>
+            <div className="r-band">{headline.join('  |  ')}</div>
 
             <div className="r-section">
-              <h2>Experience</h2>
+              <h2>Areas of Expertise</h2>
+              <ul className="r-expertise">{expertise.map((e) => <li key={e}>{e}</li>)}</ul>
+            </div>
+
+            <div className="r-section">
+              <h2>Career Highlights</h2>
+              {highlights.map(([k, v]) => <p className="r-hl" key={k}><b>{k}:</b> {v}</p>)}
+            </div>
+
+            <div className="r-section">
+              <h2>Professional Experience</h2>
               {jobs.map((j) => (
                 <div className="job" key={j.title}>
-                  <div className="job-top"><h3>{j.title}</h3><span className="job-when">{j.when}</span></div>
-                  <div className="job-org">{j.org}</div>
-                  <ul>{j.bullets.map((b) => <li key={b}>{b}</li>)}</ul>
+                  <div className="job-bar">
+                    <b>{j.title},</b> {j.org}, <i>{j.where}</i> <span className="job-when">|  {j.when}</span>
+                  </div>
+                  <p className="job-scope">{j.scope}</p>
+                  <h4>Responsibilities</h4>
+                  <ul>{j.responsibilities.map((r) => <li key={r}>{r}</li>)}</ul>
+                  {j.accomplishments.length > 0 && (
+                    <>
+                      <h4>Accomplishments</h4>
+                      <ul>{j.accomplishments.map((r) => <li key={r}>{r}</li>)}</ul>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
 
-            <DefinitionSection title="Skills" rows={skills} />
-            <DefinitionSection title="Certifications" rows={certifications} />
-            <DefinitionSection title="Education" rows={education} />
+            <div className="r-section">
+              <h2>Additional Experience</h2>
+              {additional.map((x) => <p className="r-line" key={x.title}><b>{x.title},</b> {x.org}  |  {x.when}</p>)}
+            </div>
+
+            <div className="r-section">
+              <h2>Education &amp; Certifications</h2>
+              {education.map((x) => (
+                <p className="r-line" key={x.name}><b>{x.name},</b> {x.org}{x.where && <>, <i>{x.where}</i></>}</p>
+              ))}
+            </div>
           </article>
         </div>
       </div>
     </Layout>
-  );
-}
-
-function DefinitionSection({ title, rows }: { title: string; rows: [string, string][] }) {
-  return (
-    <div className="r-section">
-      <h2>{title}</h2>
-      <dl className="skills-grid">
-        {rows.map(([k, v]) => [<dt key={`${k}-t`}>{k}</dt>, <dd key={`${k}-d`}>{v}</dd>])}
-      </dl>
-    </div>
   );
 }
