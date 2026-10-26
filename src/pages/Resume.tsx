@@ -1,26 +1,11 @@
-import { useEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
 import { Layout } from '../components/Layout';
 import { Icon } from '../components/Icon';
 import { additional, education, expertise, headline, highlights, jobs } from '../content/career';
 import { site } from '../content/site';
 
-/** Shown only in the printed/saved PDF, never in the page itself or its HTML. */
-const PRINT_PHONE = '540-493-6940';
+const PHONE = '540-493-6940';
 
 export function Resume() {
-  const [printing, setPrinting] = useState(false);
-  useEffect(() => {
-    const before = () => flushSync(() => setPrinting(true));
-    const after = () => setPrinting(false);
-    window.addEventListener('beforeprint', before);
-    window.addEventListener('afterprint', after);
-    return () => {
-      window.removeEventListener('beforeprint', before);
-      window.removeEventListener('afterprint', after);
-    };
-  }, []);
-
   return (
     <Layout active="resume">
       <div className="band">
@@ -41,7 +26,7 @@ export function Resume() {
               <h1>{site.name}</h1>
               <div className="r-contact">
                 <span>Rocky Mount, VA</span>
-                {printing && <span>{PRINT_PHONE}</span>}
+                <a href={`tel:${PHONE.replace(/-/g, '')}`}>{PHONE}</a>
                 <a href={`mailto:${site.email}`}>{site.email}</a>
                 <a href={site.linkedin}>linkedin.com/in/czahner</a>
                 <a href="https://czahner.com">czahner.com</a>
