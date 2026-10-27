@@ -15,6 +15,7 @@ export function Resume() {
           <p>Maintenance planning, reliability, and hands-on technical work — from the Navy to the plant floor.</p>
           <div className="actions no-print" style={{ marginTop: 28 }}>
             <button className="btn btn-amber" type="button" onClick={() => window.print()}><Icon name="download" />Save as PDF</button>
+            <a className="btn btn-ghost" href="/assets/Chad_Zahner_Resume.docx" download><Icon name="file" />Download Word</a>
             <a className="btn btn-ghost" href={`mailto:${site.email}`}>Email me</a>
           </div>
         </div>
