@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KPI Demo">
+<meta name="theme-color" content="#13233f">
+
+
+<title>Maintenance KPI Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+tr.grp td{background:var(--navy);color:#fff;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.04em;padding:6px 10px;border-top:2px solid var(--gold)}tr.grp td span{color:var(--gold);margin-left:6px;font-weight:600}tr.grp.dept td{background:var(--navy-2,#1c3157);font-size:13px;letter-spacing:.08em;text-transform:uppercase}tr.grp.sub td{background:var(--panel);color:var(--ink,inherit);border-top:1px solid var(--gold);padding-left:22px;font-size:12px}
+html.ios-app [data-t=import],html.ios-app #p-import{display:none!important}
+
+:root{--bg:#eef1f6;--panel:#fff;--ink:#15233d;--muted:#5d6a80;--line:#dde3ec;--soft:#f4f6fa;--navy:#13233f;--navy-2:#1c3157;--on-navy:#f3f5f9;--on-navy-muted:#aab6cc;--gold:#b8893b;--gold-soft:#f6eedf;--red:#d81f2a;--bad:#c42b2b;--bad-bg:#fbe5e5;--warn:#a46a00;--warn-bg:#fdf0d5;--ok:#1d7a4a;--ok-bg:#dff2e7;--info:#2e5d99;--info-bg:#e3ecf8;--purple:#6b4fb3;--display:"Outfit","Segoe UI",Arial,sans-serif;--body:"Source Sans 3","Segoe UI",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1424;--panel:#142039;--ink:#e9eef7;--muted:#9aa8c0;--line:#24345a;--soft:#1a2846;--navy:#0a1222;--navy-2:#16274a;--on-navy:#eef2f9;--on-navy-muted:#9aa8c0;--gold:#d8ad62;--gold-soft:#3a2f1c;--red:#ff5a63;--bad:#ff7b7b;--bad-bg:#43191c;--warn:#f2c060;--warn-bg:#3b2e12;--ok:#5fd194;--ok-bg:#133222;--info:#8db7ee;--info-bg:#182d4d;--purple:#b39ddb;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1424;--panel:#142039;--ink:#e9eef7;--muted:#9aa8c0;--line:#24345a;--soft:#1a2846;--navy:#0a1222;--navy-2:#16274a;--on-navy:#eef2f9;--on-navy-muted:#9aa8c0;--gold:#d8ad62;--gold-soft:#3a2f1c;--red:#ff5a63;--bad:#ff7b7b;--bad-bg:#43191c;--warn:#f2c060;--warn-bg:#3b2e12;--ok:#5fd194;--ok-bg:#133222;--info:#8db7ee;--info-bg:#182d4d;--purple:#b39ddb;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14.5px;line-height:1.45;margin:0}
+button,select,input{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em}
+.gut{max-width:1360px;margin:0 auto;padding:0 18px}
+.eyebrow{font-family:var(--display);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)}
+/* masthead */
+.mast{background:linear-gradient(180deg,var(--navy),var(--navy-2));color:var(--on-navy);border-bottom:3px solid var(--gold)}
+.mast .gut{padding-top:16px;display:flex;flex-direction:column;gap:12px}
+.mrow{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px}
+.logo{background:#fff;border-radius:6px;padding:6px 10px;display:flex}.logo img{height:32px;width:auto;display:block}
+.mast h1{font-size:25px;font-weight:700;color:var(--on-navy)}.mast .sub{color:var(--on-navy-muted);font-size:13.5px}
+.mtitle{flex:1 1 280px;min-width:0}
+.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ctl .moTo{color:var(--on-navy);opacity:.7;font-size:12px;margin:0 -2px}
+.ctl select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:var(--on-navy);border-radius:6px;padding:5px 9px;font-size:13px}
+.ctl .btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:var(--on-navy)}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 12px;font-size:13px;color:var(--on-navy);white-space:nowrap}
+.badge i{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tab{border:0;background:none;color:var(--on-navy-muted);padding:10px 14px 11px;font-family:var(--display);font-weight:600;font-size:14.5px;border-radius:8px 8px 0 0;white-space:nowrap}
+.tab:hover{color:var(--on-navy)}.tab.active{background:var(--bg);color:var(--ink)}
+main.gut{padding:20px 18px 56px}
+.pane{display:none}.pane.active{display:block}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:8px 20px;margin-bottom:14px}
+.head h2{font-size:24px;font-weight:700}.head p{margin:3px 0 0;color:var(--muted);font-size:14px;max-width:80ch}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--info);border-radius:8px;padding:13px 15px;min-width:0;box-shadow:0 1px 2px rgba(10,18,34,.06)}
+.kpi.k-red{border-left-color:var(--red)}.kpi.k-amber{border-left-color:var(--gold)}.kpi.k-green{border-left-color:var(--ok)}.kpi.k-blue,.kpi.k-info{border-left-color:var(--info)}.kpi.k-purple{border-left-color:var(--purple)}.kpi.k-muted{border-left-color:var(--muted)}
+.kpi .l{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:var(--display);font-size:32px;font-weight:700;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12.5px;color:var(--muted);margin-top:3px}
+.kpi .t{display:inline-block;font-family:var(--display);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:10px;padding:2px 9px;margin-top:7px}
+.green{color:var(--ok)}.red{color:var(--bad)}.amber{color:var(--warn)}.blue{color:var(--info)}.purple{color:var(--purple)}
+.t-bad{background:var(--bad-bg);color:var(--bad)}.t-ok{background:var(--ok-bg);color:var(--ok)}.t-warn{background:var(--warn-bg);color:var(--warn)}.t-info{background:var(--info-bg);color:var(--info)}
+/* panels */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+@media (max-width:980px){.grid,.grid3{grid-template-columns:minmax(0,1fr)}}
+/* tablet */
+@media (min-width:761px) and (max-width:1180px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* phone */
+html{-webkit-text-size-adjust:100%}
+.mast{padding-top:env(safe-area-inset-top)}
+body{padding-bottom:env(safe-area-inset-bottom)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:760px){
+ .gut{padding:0 12px}
+ .mast .gut{padding-top:10px;gap:8px}
+ .mrow{gap:6px 12px}
+ .logo{padding:4px 8px}.logo img{height:22px}
+ .mast h1{font-size:18px;line-height:1.15}
+ .eyebrow{font-size:10px;letter-spacing:.1em}
+ .mtitle{flex:1 1 160px}
+ .ctl{gap:6px}.badge{font-size:11.5px;padding:4px 9px}
+ .tabs{margin:0 -12px;padding:0 12px;scroll-snap-type:x proximity}
+ .tab{padding:9px 11px 10px;font-size:13px;scroll-snap-align:start}
+ .pane .head{margin:14px 0 10px}.pane .head h2{font-size:21px}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+ .kpi{padding:10px 11px}.kpi .v{font-size:23px}.kpi .s{font-size:11.5px}
+ .box{padding:12px 12px;border-radius:9px}.grid,.grid3{gap:10px;margin-bottom:10px}
+ .bt{font-size:15px}.bt span{font-size:11.5px}
+ .ob{grid-template-columns:minmax(0,1fr);gap:2px}
+ table{font-size:12px}th,td{padding:6px 7px}
+ .flt{gap:6px}
+ .drop{padding:18px 12px}
+ .log{font-size:12px}
+ #printBtn{display:none}
+}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 17px;min-width:0;box-shadow:0 1px 2px rgba(10,18,34,.06)}
+.box.full{grid-column:1/-1}
+.bt{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;margin-bottom:10px;font-family:var(--display);font-size:16px;font-weight:700}
+.bt span{font-family:var(--body);color:var(--muted);font-weight:400;font-size:12.5px}
+canvas{width:100%!important}
+/* observations */
+.obs{display:flex;flex-direction:column}
+.ob{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.ob:first-child{border-top:0}.ob b{font-size:14.5px}.ob p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.tag{display:inline-block;font-family:var(--display);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:10px;padding:2px 9px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.gold{background:var(--gold-soft);border-color:transparent;color:var(--gold)}.tag.navy{background:var(--info-bg);border-color:transparent;color:var(--info)}
+.link{border:0;background:none;color:var(--gold);font-weight:700;font-size:13.5px;padding:0;white-space:nowrap}.link:hover{text-decoration:underline}
+/* tables */
+.tw{max-height:380px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:7px 8px;border-bottom:2px solid var(--line);white-space:nowrap;position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}
+th:hover{color:var(--ink)}th.sorted:after{content:' ▾'}th.sorted.asc:after{content:' ▴'}
+td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.num{text-align:right}.ctr{text-align:center}
+tr:hover td{background:var(--soft)}
+tr.od td{background:var(--bad-bg)}tr.soon td{background:var(--warn-bg)}tr.done td{opacity:.55}tr.done td.ttl{text-decoration:line-through}
+.pill{display:inline-block;border-radius:4px;padding:1px 7px;font-size:12px;font-weight:700;white-space:nowrap}
+.p-red{background:var(--bad-bg);color:var(--bad)}.p-amber{background:var(--warn-bg);color:var(--warn)}.p-green{background:var(--ok-bg);color:var(--ok)}.p-blue{background:var(--info-bg);color:var(--info)}.p-gray{background:var(--soft);color:var(--muted)}.p-purple{background:var(--gold-soft);color:var(--gold)}
+.bar{position:relative}.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--bad-bg);border-radius:0 4px 4px 0}.bar b{position:relative;font-weight:500}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+/* shifts */
+.shift{background:var(--panel);border-radius:10px;border:1px solid var(--line);margin-bottom:10px;overflow:hidden}
+.shift .sh{display:flex;align-items:center;gap:12px;padding:10px 15px;cursor:pointer;background:var(--soft)}
+.shift .sh h3{font-size:15px;font-weight:700;flex:0 0 90px}.shift .sh .m{font-size:12.5px;color:var(--muted)}
+.shift .sh .pb{flex:1;height:9px;background:var(--line);border-radius:5px;overflow:hidden}.shift .sh .pb i{display:block;height:100%;background:var(--ok)}
+.shift .sb{display:none}.shift.open .sb{display:block}
+.shift .sh .car{transition:transform .15s;color:var(--muted);font-size:11px}.shift.open .sh .car{transform:rotate(90deg)}
+.ck{width:15px;height:15px;cursor:pointer;accent-color:var(--ok)}
+/* import */
+.drop{border:2px dashed var(--line);border-radius:10px;padding:26px;text-align:center;background:var(--panel);margin-bottom:12px;cursor:pointer;position:relative}
+.drop.over{border-color:var(--gold);background:var(--gold-soft)}
+.drop h3{font-size:17px;margin-bottom:5px}.drop p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.log{background:var(--soft);border-radius:6px;padding:10px;margin-top:10px;font-family:var(--mono);font-size:12px;max-height:220px;overflow-y:auto;display:none;border:1px solid var(--line)}
+.log div{padding:2px 0}.lok{color:var(--ok)}.lwarn{color:var(--warn)}.lerr{color:var(--bad)}.linfo{color:var(--info)}
+.src{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.sc{background:var(--panel);border-radius:8px;padding:10px 12px;border:1px solid var(--line)}
+.sc .l{font-family:var(--display);color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}.sc .c{font-family:var(--display);font-size:20px;font-weight:700}.sc .u{font-size:11px;color:var(--muted);margin-top:2px;word-break:break-all}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:6px 13px;font-weight:600;font-size:13px;margin-right:6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--panel)}.seg button{border:0;background:transparent;color:var(--muted);padding:7px 14px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit}.seg button+button{border-left:1px solid var(--line)}.seg button.on{background:var(--navy);color:var(--on-navy)}.an-sec{display:none}.an-sec.on{display:block}.an-ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-bottom:12px;font-size:13px;color:var(--muted)}.an-ctl select{margin-left:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:5px 8px;font-size:13px}.an-note{font-size:12.5px;color:var(--muted);line-height:1.55;margin:0 0 8px;max-width:90ch}
+.btn:hover{background:var(--soft)}.btn.pri{background:var(--navy);border-color:var(--navy);color:var(--on-navy)}.btn.dan{border-color:var(--bad);color:var(--bad)}
+.how{font-size:13px;color:var(--muted);line-height:1.6}.how b{color:var(--ink)}.how code{font-family:var(--mono);background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--info)}
+.flt{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+select,input[type=text]{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 8px;font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:0 0 10px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.prow{display:flex;align-items:center;margin-bottom:6px;font-size:13px}.prow .n{width:46px;font-weight:700;font-family:var(--display)}.prow .w{flex:1;height:18px;background:var(--soft);border-radius:3px;overflow:hidden;display:flex}.prow .w div{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}.prow .v{width:130px;text-align:right;font-size:12px;color:var(--muted);margin-left:6px}
+.prow.me{background:var(--gold-soft);border-radius:4px}
+.printhead{display:none}
+@media print{@page{size:letter landscape;margin:.4in}:root,:root[data-theme="dark"]{--bg:#fff;--panel:#fff;--ink:#15233d;--muted:#5d6a80;--line:#dde3ec;--soft:#f4f6fa;--bad-bg:#fbe5e5;--warn-bg:#fdf0d5;--ok-bg:#dff2e7;--info-bg:#e3ecf8;--gold-soft:#f6eedf}body{background:#fff;font-size:12.5px}.mast,.tabs,.ctl,button,.drop,.log,.flt,.link{display:none!important}main.gut{padding:0;max-width:none}.printhead{display:flex;align-items:center;gap:16px;border-bottom:3px solid #b8893b;padding-bottom:8px;margin-bottom:12px}.printhead .plogo img{height:34px;width:auto;display:block}.printhead .ptitle{flex:1}.printhead h1{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.1;margin:1px 0}.printhead .psub{font-size:12px;color:var(--muted)}.printhead .pmeta{text-align:right;font-size:11.5px;color:var(--muted);line-height:1.5;white-space:nowrap}.pane .head{display:none}.pane{display:none!important}.pane.active{display:block!important}.head{margin-bottom:8px}.head h2{font-size:18px}.kpis{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:10px}.kpi{padding:8px 10px}.kpi .v{font-size:22px}.grid,.grid3{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.box{padding:10px 12px;box-shadow:none}.kpi,tr,.box,.shift{break-inside:avoid}.tw{max-height:none!important;overflow:visible!important}th{position:static}.shift .sb{display:block!important}.ck{display:none}canvas.hasimg{display:none!important}.printimg{width:100%;display:block}#p-trends .grid,#p-labor .grid{grid-template-columns:repeat(3,minmax(0,1fr))}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+/* print legibility: the Mac app lays the page out ~980px wide and scales it to the paper (~75%), so sizes here are set to land around 10–11pt on paper; !important beats the narrow-screen breakpoints */
+@media print{body{font-size:14px!important}
+.kpis{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}.kpi{padding:8px 10px!important}.kpi .l{font-size:12px!important}.kpi .v{font-size:26px!important}.kpi .s{font-size:12.5px!important}.kpi .t{font-size:11px!important}
+.grid,.grid3{grid-template-columns:repeat(2,minmax(0,1fr))!important}#p-trends .grid,#p-labor .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.bt{font-size:15px!important}.bt span{font-size:12.5px!important}
+table{font-size:12.5px!important;width:100%}th,td{white-space:normal!important;padding:4px 6px!important;line-height:1.3}thead{display:table-header-group}
+.box:has(table){break-inside:auto}.printimg{max-height:290px}[data-print-tall] .printimg{max-height:none}}
+@media (min-width:1181px){#ovKpis.k8{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
+<body><div style="position:sticky;top:0;z-index:9999;background:#F2B705;color:#1a1a1a;font:600 13px/1.4 system-ui,sans-serif;text-align:center;padding:6px 10px">Demo with sample data. Built by <a href="https://czahner.com" style="color:#1a1a1a">Chad Zahner</a>. Changes you make stay in your browser.</div>
+<header class="mast"><div class="gut">
+  <div class="mrow">
+    <div class="logo"></div>
+    <div class="mtitle"><div class="eyebrow">Maintenance planning</div><h1>Maintenance KPI Dashboard</h1><span id="srcNote" hidden></span></div>
+    <div class="ctl"><select id="yearSel" title="Analysis year"></select><select id="moFrom" title="From month"></select><span class="moTo">to</span><select id="moTo" title="To month"></select><select id="deptSel" title="Department"><option value="">All depts</option></select><select id="wcSel" title="Work center"><option value="">All work centers</option></select><select id="typeSel" title="Work type"><option value="">All types</option></select><button class="btn" id="csvBtn" title="Export the filtered completed work orders as CSV">CSV</button><span class="badge"><i></i><span id="periodBadge">—</span></span><button class="btn" id="themeBtn" title="Toggle light/dark">◐</button><button class="btn" id="printBtn" title="Print">⎙</button></div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-t="overview">Overview</button>
+    <button class="tab" data-t="trends">Trends</button>
+    <button class="tab" data-t="breakdowns">Bad actors</button>
+    <button class="tab" data-t="reliability">MTBF / MTTR</button>
+    <button class="tab" data-t="analytics">Analytics</button>
+    <button class="tab" data-t="correctives">Correctives</button>
+    <button class="tab" data-t="schedule">Schedule compliance</button>
+    <button class="tab" data-t="labor">Labor</button>
+    <button class="tab" data-t="plants">Plants</button>
+    <button class="tab" data-t="observations">Observations</button>
+    <button class="tab" data-t="import">Add data</button>
+  </nav>
+</div></header>
+<main class="gut">
+<div class="printhead" id="printhead"></div>
+<!-- OVERVIEW -->
+<div class="pane active" id="p-overview">
+  <div class="head"><div><h2>Overview</h2><p>Headline KPIs for the selected year with this week's schedule compliance and the open corrective backlog.</p></div></div>
+  <div class="kpis" id="ovKpis"></div>
+  <div class="grid">
+    <div class="box"><div class="bt">Work Order Mix by Month <span>count by type</span></div><canvas id="cMix" height="200"></canvas></div>
+    <div class="box"><div class="bt">PM On-Time % &amp; Breakdown % <span>monthly trend</span></div><canvas id="cTrend" height="200"></canvas></div>
+  </div>
+  <div class="box"><div class="bt">Monthly KPI Table</div><div class="tw"><table id="tMonthly"></table></div></div>
+  <div class="box"><div class="bt">How These Numbers Are Calculated</div>
+    <div class="prose" style="font-size:12.5px;color:var(--muted);line-height:1.55;columns:2;column-gap:28px">
+      <p><b>PM compliance</b> — a preventative WO counts as on time when it is completed by 6:00 am on the Monday after its due date (the "due week" rule). Completed later counts as late.</p>
+      <p><b>Proactive / planned work</b> — preventative, corrective, service and project orders. <b>Reactive</b> — breakdown orders. Shop, request and production orders are support work and sit outside both.</p>
+      <p><b>Breakdown rate</b> — breakdown WOs as a share of all completed WOs in the period. <b>Planned : BD hours</b> — labor on planned work divided by labor on breakdowns.</p>
+      <p><b>Schedule compliance</b> — WOs on the A/B/C/D shift schedules with a scheduled date inside the Mon–Sun week that appear in the completed report (or are checked off manually). Mezz is tracked separately.</p>
+      <p><b>Correctives over 30 days</b> — open correctives whose requested date is more than 30 days ago. <b>Overdue</b> — open correctives past their due date.</p>
+      <p><b>Repeat work</b> — a breakdown or corrective on an asset that had another unplanned order 1–30 days earlier; same-day pairs are ignored. Used in place of a rework count, which PMware does not record.</p>
+      <p><b>Cause named</b> — share of breakdown WOs whose title says what failed (read from keywords; "Not specified" and bare "down / not running" titles don't count). FMEA, Pareto and Weibull by cause all depend on it.</p>
+      <p><b>MTBF / MTTR</b> — from PMware's Metrics › MTBF\MTTR page for the IG lines. MTBF = line hours ÷ breakdowns, MTTR = repair time ÷ breakdowns; availability = line hours less repair time. One page per line per month; combining months or lines applies the same formulas to the combined totals.</p>
+      <p><b>Estimate variance</b> — booked labor against the estimate, only on WOs that have both. <b>Labor hours</b> are what was entered on the work order, not payroll time.</p>
+      <p><b>Source</b> — PMware completed-WO report, corrective W/O list and shift schedule pages. Per-person views list everyone who closed work orders.</p>
+    </div>
+  </div>
+  <div class="box"><div class="bt">Data Quality <span>gaps in PMware entry that weaken the KPIs above — the goal is to drive these to zero</span></div>
+    <div class="kpis" id="dqKpis" style="margin-bottom:12px"></div>
+    <div class="grid">
+      <div><div class="bt" style="margin-bottom:6px">Gaps by Month <span>% of completed WOs missing labor · % of breakdowns not naming the cause</span></div><canvas id="cDQ" height="180"></canvas></div>
+      <div><div class="bt" style="margin-bottom:6px">Missing Labor by Who Closed the WO <span>selected year</span></div><div class="tw" style="max-height:220px"><table id="tDQ"></table></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRENDS -->
+<div class="pane" id="p-trends">
+  <div class="head"><div><h2>Trends</h2><p>Month-by-month movement for the selected year, with year-over-year PM compliance where prior-year data is loaded.</p></div></div>
+  <div class="grid">
+    <div class="box"><div class="bt">PM Compliance — Year over Year <span>% of PMs completed within their due week (Mon–Mon 6am)</span></div><canvas id="cYoY" height="200"></canvas></div>
+    <div class="box"><div class="bt">Work Orders &amp; Breakdown Events <span>monthly volume</span></div><canvas id="cVol" height="200"></canvas></div>
+    <div class="box"><div class="bt">Labor Hours by Type <span>monthly</span></div><canvas id="cLabor" height="200"></canvas></div>
+    <div class="box"><div class="bt">Breakdown Labor Hours <span>monthly · hover for top equipment</span></div><canvas id="cBDTrend" height="200"></canvas></div>
+    <div class="box"><div class="bt">Proactive vs Reactive Share <span>% of completed work orders</span></div><canvas id="cShare" height="200"></canvas></div>
+    <div class="box"><div class="bt">Planned : Breakdown Hours Ratio <span>monthly · target 3 : 1</span></div><canvas id="cRatio" height="200"></canvas></div>
+  </div>
+</div>
+
+<!-- OBSERVATIONS -->
+<div class="pane" id="p-breakdowns">
+  <div class="head"><div><h2>Bad actors</h2><p>Equipment consuming the most breakdown labor, and how often it fails.</p></div></div>
+  <div class="kpis" id="bdKpis"></div>
+  <div class="grid">
+    <div class="box"><div class="bt">Top 12 Breakdown Equipment <span>labor hours</span></div><canvas id="cTopBD" height="300"></canvas></div>
+    <div class="box"><div class="bt">Top 12 Breakdown Equipment <span>event count</span></div><canvas id="cTopBDn" height="300"></canvas></div>
+    <div class="box"><div class="bt">Breakdown Hours by Department</div><canvas id="cBDDept" height="240"></canvas></div>
+    <div class="box"><div class="bt">Breakdown Hours by Workcenter</div><canvas id="cBDWc" height="240"></canvas></div>
+  </div>
+  <div class="box"><div class="bt">Repeat Offenders <span>equipment with breakdowns in the most months · avg days between events</span></div><div class="tw"><table id="tRepeat"></table></div></div>
+  <div class="box"><div class="bt">Repeat Work within 30 Days <span>a breakdown or corrective on an asset that had another one 1–30 days earlier (same-day pairs ignored) — the closest thing to a rework measure in PMware</span></div><div class="tw"><table id="tRepeat30"></table></div></div>
+</div>
+
+<!-- RELIABILITY (MTBF / MTTR) -->
+<div class="pane" id="p-reliability">
+  <div class="head"><div><h2>MTBF / MTTR</h2><p>Mean time between failures and mean time to repair for the IG lines, from PMware's Metrics › MTBF\MTTR page saved once per line per month. Follows the year and month filters above.</p></div></div>
+  <div class="flt" style="margin-bottom:10px"><span style="font-size:11px;color:var(--muted)">Line:</span><select id="rlLine"><option value="">All IG lines</option></select><span id="rlPeriod" style="font-size:11px;color:var(--muted)"></span></div>
+  <div class="kpis" id="rlKpis"></div>
+  <div class="box" style="margin-bottom:12px"><div class="bt">Breakdown Work Orders by Month · IG lines <span>from the completed-WO report, so it covers every month you have loaded · the MTBF / MTTR pages below add line hours and repair time</span></div><canvas id="cRlBdWo" width="1000" height="230"></canvas></div>
+  <div class="grid">
+    <div class="box"><div class="bt">MTBF by Line <span>hours between breakdowns · higher is better</span></div><canvas id="cRlMtbf" height="220"></canvas></div>
+    <div class="box"><div class="bt">MTTR by Line <span>hours to repair · lower is better</span></div><canvas id="cRlMttr" height="220"></canvas></div>
+    <div class="box"><div class="bt">MTBF Trend <span>by month · one line per IG line</span></div><canvas id="cRlMtbfT" height="220"></canvas></div>
+    <div class="box"><div class="bt">MTTR Trend <span>by month</span></div><canvas id="cRlMttrT" height="220"></canvas></div>
+  </div>
+  <div class="box"><div class="bt">Line Summary by Month <span>one row per saved page</span></div><div class="tw"><table id="tRlLines"></table></div></div>
+  <div class="box"><div class="bt">Assets by Breakdown Count <span>worst first · MTBF = line hours ÷ breakdowns, MTTR = repair time ÷ breakdowns, as PMware calculates them · months in the filter are combined</span></div><div class="tw" style="max-height:480px"><table id="tRlAssets"></table></div></div>
+  <div class="box how">
+    <b>Feeding this tab</b> — at month end open PMware › Reports › Metrics › MTBF\MTTR, set From/To to the first and last day of the month, pick the line, Search, then save the page as HTML and drop it on <b>Add data</b> — one file per line. Put the month in the file name (<code>MTBF IG1 2026-10.html</code>); without one the file is filed under the current month. Dropping the same line and month again replaces it.
+  </div>
+</div>
+
+<!-- ANALYTICS -->
+<div class="pane" id="p-analytics">
+  <div class="head"><div><h2>Analytics</h2><p>Tools for deciding what to fix: where breakdown time goes, how each machine fails, which PM estimates are wrong, and which PMs actually prevent breakdowns. Uses the year, month, department and work-center filters.</p></div>
+    <div class="seg" id="anSeg"><button type="button" class="on" data-s="pareto">Pareto</button><button type="button" data-s="weibull">Weibull</button><button type="button" data-s="pmstd">PM time standards</button><button type="button" data-s="pmeff">PM effectiveness</button></div></div>
+
+  <section class="an-sec on" id="an-pareto">
+    <div class="an-ctl">
+      <label>Measure <select id="parMetric"><option value="lab">Labor hours</option><option value="n">Event count</option></select></label>
+      <label>Group by <select id="parBy"><option value="eq">Equipment</option><option value="cause">Failure cause</option><option value="eqcause">Equipment + cause</option></select></label>
+      <label>Work <select id="parType"><option value="Breakdown">Breakdowns</option><option value="Unplanned">Breakdowns + correctives</option><option value="Corrective">Correctives</option></select></label>
+    </div>
+    <div class="kpis" id="parKpis"></div>
+    <div class="box"><div class="bt">Pareto <span id="parSub"></span></div><div style="position:relative;height:340px"><canvas id="cPareto"></canvas></div></div>
+    <div class="box"><div class="bt">Ranked list <span>red rank = the vital few that make up the first 80%</span></div><div class="tw"><table id="tPareto"></table></div></div>
+    <div class="box"><div class="bt">How to use it</div><p class="an-note">A Pareto ranks problems biggest first, with a running total. Usually a handful of items make up most of the total — the <b>vital few</b>. Work on those first: pull their work orders, find what physically failed and fix the cause instead of repairing it again. Group by <b>Failure cause</b> to see which kind of problem costs most plant-wide, or by <b>Equipment + cause</b> to get specific root-cause targets. Causes are read from keywords in the WO title, so "Not specified" means the title didn't say what failed. Labor that looks mistyped (over 24 h, or 8 h+ and 8× the estimate) is left out.</p></div>
+  </section>
+
+  <section class="an-sec" id="an-weibull">
+    <div class="kpis" id="wbKpis"></div>
+    <div class="grid">
+      <div class="box"><div class="bt">Failure pattern by machine <span>β with 90% range · dashed line = 1</span></div><div id="wbWrap" data-print-tall style="position:relative;height:400px"><canvas id="cWeibull"></canvas></div></div>
+      <div class="box"><div class="bt">How to read it</div>
+        <p class="an-note">Each machine with 8 or more breakdowns gets a Weibull fit from the days between its breakdowns.</p>
+        <p class="an-note"><b class="amber">β below 1 — early failures.</b> Breakdowns cluster right after a repair: the fix isn't holding. Look at repair quality, parts and root cause; more PM won't help.</p>
+        <p class="an-note"><b>β near 1 — random.</b> Breakdowns come at any time. A PM can't be timed to beat them; change what the PM checks, use inspections, and fix the top causes on the Pareto.</p>
+        <p class="an-note"><b class="red">β above 1 — wear-out.</b> Risk grows with time since the last repair. Time-based PM works: service before the B10 day, when 10% would have failed.</p>
+        <p class="an-note"><b>η</b> is the typical days between breakdowns (63% have happened by then). <b>Trend</b> says whether breakdowns are coming closer together through the period. A machine only counts as early failure or wear-out when its whole 90% range is on one side of 1.</p>
+      </div>
+    </div>
+    <div class="box"><div class="bt">How often they break down vs. how often they get PM <span id="wbPmSub"></span></div>
+      <p class="an-note">η is roughly how many days a machine runs between breakdowns. The PM interval is the typical gap between its PM work orders. A machine that breaks down several times between PMs is a sign the PM isn't covering what fails — or isn't happening often enough.</p>
+      <div id="wbPmWrap" data-print-tall style="position:relative;height:300px"><canvas id="cWbPm"></canvas></div></div>
+    <div class="box"><div class="bt">Weibull by equipment <span>click a column to sort</span></div><div class="tw"><table id="tWeibull"></table></div></div>
+  </section>
+
+  <section class="an-sec" id="an-pmeff">
+    <div class="kpis" id="peKpis"></div>
+    <div class="grid">
+      <div class="box"><div class="bt">Breakdowns right after PM <span>share in the first third of the cycle between PMs</span></div><div id="peWrap" data-print-tall style="position:relative;height:400px"><canvas id="cPmEff"></canvas></div></div>
+      <div class="box"><div class="bt">How to read it</div>
+        <p class="an-note">For every breakdown that happens between two PMs on the same machine, this checks where in that PM cycle it fell. If the PM made no difference, about a third would land in the first third of the cycle (the dashed line).</p>
+        <p class="an-note"><b class="green">Working</b> — clearly fewer breakdowns right after the PM. The PM is holding failures off; breakdowns build up later in the cycle. Keep it, and don't stretch the interval.</p>
+        <p class="an-note"><b class="amber">No effect</b> — breakdowns land anywhere in the cycle. The PM isn't checking what actually fails. Rewrite its task list around the machine's top breakdown cause (see Pareto), or stretch the interval and use the hours elsewhere.</p>
+        <p class="an-note"><b class="red">Breakdowns after PM</b> — clearly more breakdowns right after the PM. Something about the PM is disturbing the machine: reassembly, adjustments, settings. Add a run check at the end of the PM.</p>
+        <p class="an-note">Machines need 8+ breakdowns that fall between two PMs. The test uses 90% confidence, so with many machines a few verdicts will be chance — check the work orders before changing a PM.</p>
+      </div>
+    </div>
+    <div class="box"><div class="bt">PM effectiveness by equipment <span>sorted by PM hours a year</span></div><div class="tw"><table id="tPmEff"></table></div></div>
+  </section>
+
+  <section class="an-sec" id="an-pmstd">
+    <div class="kpis" id="pmsKpis"></div>
+    <div class="box"><div class="bt">PM estimates to change in PMWare <span>one PM on one machine · sorted by hours a year of estimate error</span></div><div class="tw"><table id="tPmStd"></table></div></div>
+    <div class="box"><div class="bt">PM types to change across all their equipment <span>PMs that run too rarely to judge one machine at a time</span></div><div class="tw"><table id="tPmType"></table></div></div>
+    <div class="box"><div class="bt">How it works</div><p class="an-note">Actual time is the median labor on completions where real time was entered. Labor that exactly equals the estimate is left out — it is almost always the default accepted, not a timed job. A change is suggested when actual differs from the estimate by more than 25% and at least 10 minutes, rounded to 5 minutes (15 above an hour). Confidence: <b>High</b> = 8+ timed completions with consistent times; <b>Low</b> = few completions or times vary a lot — ask the tech before changing. Labor is total crew time, so a two-person PM shows both people's time.</p></div>
+  </section>
+</div>
+
+<!-- CORRECTIVES -->
+<div class="pane" id="p-correctives">
+  <div class="head"><div><h2>Correctives</h2><p>Open corrective work orders from the PMware W/O list: where they sit in the backlog, how old they are, and what is overdue.</p></div></div>
+  <div class="kpis" id="crKpis"></div>
+  <div class="box" style="margin-bottom:12px"><div class="bt">Planning Queue <span id="pqSub"></span></div>
+    <p class="an-note">Every open corrective ranked by priority, safety or leak wording, days overdue, age, and breakdowns on the same machine in the last 90 days — with the next step to move it toward Ready. Work the top of <b>Needs planning</b> to grow ready backlog.</p>
+    <div class="seg" id="pqSeg" style="margin-bottom:10px;flex-wrap:wrap"></div>
+    <div class="tw"><table id="tPlanQ"></table></div></div>
+  <div class="grid3">
+    <div class="box"><div class="bt">By Status</div><canvas id="cCrStatus" height="220"></canvas></div>
+    <div class="box"><div class="bt">By Department</div><canvas id="cCrDept" height="220"></canvas></div>
+    <div class="box"><div class="bt">By Priority</div><canvas id="cCrPri" height="220"></canvas></div>
+  </div>
+  <div class="box" style="margin-bottom:12px"><div class="bt">Top Equipment with Open Correctives</div><canvas id="cCrEq" width="1000" height="260"></canvas></div>
+  <div class="box">
+    <div class="bt">Open Corrective Work Orders <span id="crCount"></span></div>
+    <div class="flt">
+      <input type="text" id="crSearch" placeholder="Search title / equipment / WO#…" style="flex:1;min-width:200px">
+      <select id="crStatusF"><option value="">All statuses</option></select>
+      <select id="crDeptF"><option value="">All departments</option></select>
+      <select id="crWcF"><option value="">All work centers</option></select>
+      <select id="crGroup" title="Group rows"><option value="wc">Group: Dept › Work center</option><option value="status">Group: Status</option><option value="">No grouping</option></select>
+      <label style="font-size:11px;color:var(--muted)"><input type="checkbox" id="crOdOnly"> Overdue only</label>
+      <button class="btn" onclick="exportCSV('correctives')">⬇ CSV</button>
+    </div>
+    <div class="tw" style="max-height:480px"><table id="tCr"></table></div>
+  </div>
+</div>
+
+<!-- SCHEDULE -->
+<div class="pane" id="p-schedule">
+  <div class="head"><div><h2>Schedule compliance</h2><p>Scheduled work by shift. A work order counts as complete when it appears in a completed-WO report, or when it is checked off manually.</p></div></div>
+  <div class="flt" style="margin-bottom:10px"><span style="font-size:11px;color:var(--muted)">Window:</span><select id="scWeek"><option value="thru">Through this week (incl. carry-over)</option><option value="last">Last week</option><option value="this">This week only</option><option value="next">Next week</option><option value="all">All scheduled</option></select><span id="scWin" style="font-size:11px;color:var(--muted)"></span></div>
+  <div class="kpis" id="scKpis"></div>
+  <div class="grid">
+    <div class="box"><div class="bt">Schedule Compliance by Shift <span>completed vs open vs overdue</span></div><canvas id="cShift" height="210"></canvas></div>
+    <div class="box"><div class="bt">Scheduled Hours by Shift <span>estimated · completed vs remaining</span></div><canvas id="cShiftHrs" height="210"></canvas></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--green)"></i>Completed (in completed-WO report, marked Completed on the schedule page, or checked)</span><span><i style="background:rgba(239,68,68,.6)"></i>Past original due date</span><span><i style="background:rgba(245,158,11,.6)"></i>Due within 2 days</span><span style="margin-left:auto">Compliance updates when you drop a fresh <b>Completed Work Orders</b> report — do it at week's end for the final number.</span></div>
+  <div id="shifts"></div>
+</div>
+
+<!-- LABOR -->
+<div class="pane" id="p-labor">
+  <div class="head"><div><h2>Labor</h2><p>Hours and work-order counts from completed work, by technician and department.</p></div></div>
+  <div class="kpis" id="lbKpis"></div>
+  <div class="grid">
+    <div class="box"><div class="bt">Work Orders Completed per Technician <span>top 15</span></div><canvas id="cTech" height="330"></canvas></div>
+    <div class="box"><div class="bt">Labor Hours per Technician <span>top 15 · PM vs breakdown vs other</span></div><canvas id="cTechH" height="330"></canvas></div>
+    <div class="box"><div class="bt">Labor Hours by Department</div><canvas id="cDeptH" height="240"></canvas></div>
+    <div class="box"><div class="bt">Estimated vs Actual Labor <span>PM work orders, monthly</span></div><canvas id="cEstAct" height="240"></canvas></div>
+  </div>
+  <div class="box"><div class="bt">Technician Workload <span>completed work · click a heading to sort</span></div><div class="tw"><table id="tTech"></table></div></div>
+</div>
+
+<!-- PLANTS -->
+<div class="pane" id="p-plants">
+  <div class="head"><div><h2>Plants</h2><p>Plant comparison from the All Plants Stats report.</p></div></div>
+  <div class="box" style="margin-bottom:12px">
+    <div class="bt">Plants — Work Mix <span>from all-plants stats</span></div>
+    <div class="legend"><span><i style="background:var(--green)"></i>Planned</span><span><i style="background:var(--red)"></i>Breakdown</span><span><i style="background:var(--blue)"></i>Other</span></div>
+    <div id="plantBars"></div>
+  </div>
+  <div class="box"><div class="bt">Preventative Share by Plant</div><canvas id="cPlantPM" width="1000" height="280"></canvas></div>
+</div>
+
+<!-- IMPORT -->
+<div class="pane" id="p-observations">
+  <div class="head"><div><h2>Observations</h2><p>What needs attention this period, who owns it, and where the evidence is.</p></div></div>
+  <div class="box"><div class="obs" id="obs"></div></div>
+</div>
+
+<!-- BREAKDOWNS -->
+<div class="pane" id="p-import">
+  <div class="head"><div><h2>Add data</h2><p>Save PMware pages as HTML and drop them here. Everything stays in this browser on this computer; nothing is uploaded. To give others the same data, use <b>Save shareable copy</b> and send them that file.</p></div></div>
+  <div class="drop" id="drop">
+    <input type="file" id="fileIn" multiple accept=".html,.htm,.json">
+    <h3>📂 Drop PMWare pages here</h3>
+    <p>Save any of these pages from PMWare as <b>Webpage, Complete</b> or <b>HTML only</b> and drop them in (several at once is fine):</p>
+  </div>
+  <div class="box how" style="margin-bottom:12px">
+    <b>Completed Work Orders report</b> — <code>pmw: w/o report</code> — rebuilds every KPI (PM on-time, breakdowns, labor, technicians). Rows merge by WO#, so dropping a new month-to-date report just adds the new ones.<br>
+    <b>Corrective W/O list</b> — <code>pmw: w/o list</code> — replaces the open-correctives snapshot.<br>
+    <b>MTBF\MTTR page</b> — <code>pmw: MTBF\MTTR</code> — Reports › Metrics › MTBF\MTTR, one page per IG line per month (From/To = the month). Name the file with the month, e.g. <code>MTBF IG1 2026-10.html</code>; the same line and month dropped again replaces the earlier page.<br>
+    <b>Shift schedules</b> — <code>pmw: schedule</code> — one file per shift (A/B/C/D/Mezz). Each drop replaces that shift's plan. Completion is detected automatically when the WO# appears in a completed-WO report or the schedule page shows it as Completed; use the checkbox for manual overrides. The combined <i>All</i> schedule page is split back into shifts using the single-shift pages you have loaded before.
+  </div>
+  <div style="margin-bottom:12px">
+    <button class="btn pri" onclick="document.getElementById('fileIn').click()">Browse files</button>
+    <button class="btn" onclick="shareCopy()" title="Download this dashboard as one HTML file with the current data inside — opens in Edge, Chrome, Safari or Firefox on Windows, Mac or iPad">⬇ Save shareable copy</button>
+    <button class="btn" onclick="backup()">💾 Backup snapshot</button>
+    <button class="btn" onclick="resetSeed()">🔄 Reset to built-in data</button>
+    <button class="btn dan" onclick="clearManual()">Clear manual check-offs</button>
+  </div>
+  <div class="src" id="srcCards"></div>
+  <div class="log" id="log"></div>
+</div>
+
+</main>
+<script id="seed" type="application/json">{}</script>
+<script>(function(){
+var now=new Date();now.setHours(12,0,0,0);
+function pad(n){return String(n).padStart(2,'0')}
+function ds(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function add(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+var s=7;function rnd(){s=(s*16807)%2147483647;return (s-1)/2147483646}
+function pick(a){return a[Math.floor(rnd()*a.length)]}
+function ri(a,b){return a+Math.floor(rnd()*(b-a+1))}
+var EQ={IG1:['IG1 Washer','IG1 Spacer Applicator','IG1 Gas Fill Press','IG1 Sealant Pump','IG1 Infeed Conveyor','IG1 Offload Robot'],IG2:['IG2 Washer','IG2 Spacer Applicator','IG2 Gas Fill Press','IG2 Sealant Pump','IG2 Infeed Conveyor'],IG3:['IG3 Washer','IG3 Spacer Applicator','IG3 Gas Fill Press','IG3 Sealant Pump','IG3 Stacker'],IG4:['IG4 Washer','IG4 Spacer Applicator','IG4 Gas Fill Press','IG4 Sealant Pump','IG4 Infeed Conveyor'],MEZZANINE:['Air Compressor 1','Air Compressor 2','Air Dryer','Process Chiller','Vacuum Pump'],CUTTING:['Cutting Table 1','Cutting Table 2','Breakout Table','Glass Loader','Remnant Crane'],TEMPERING:['Tempering Furnace','Quench Blower','Loading Table','Unload Table']};
+var DEPT={IG1:'IG',IG2:'IG',IG3:'IG',IG4:'IG',MEZZANINE:'MEZZANINE',CUTTING:'CUTTING',TEMPERING:'TEMPERING'};
+var WCW=[['IG1',5],['IG2',3],['IG3',4],['IG4',3],['MEZZANINE',2],['CUTTING',3],['TEMPERING',2]];
+function wcPick(){var t=0,r=rnd()*22;for(var i=0;i<WCW.length;i++){t+=WCW[i][1];if(r<t)return WCW[i][0]}return 'IG1'}
+var PMT=['Weekly PM','Monthly PM','Quarterly PM','Lubrication route','Belt and bearing inspection','Sensor and safety check'];
+var CMT=['Replace worn drive belt','Air leak at cylinder','Adjust guide rollers','Replace proximity sensor','Repair conveyor chain','Replace solenoid valve','Pressure dropping during run','Bearing noise on motor','Replace worn brushes','Repair torn curtain','Fix intermittent fault','Replace leaking fitting','Realign photo eye','Replace cracked hose'];
+var BDT=['Line down, drive fault','Motor tripped on overload','Conveyor jammed and stopped','Pump lost pressure','PLC fault, line stopped','Gearbox seized'];
+var SVT=['Change filters','Clean and inspect','Calibrate gauges','Top off fluids'];
+var PJT=['Install new guarding','Relocate air drop','Add LED lighting','Upgrade controls cabinet'];
+var TECH=['mech01','mech02','mech03','mech04','elec01','elec02','mech05'];
+var PRI=[['Critical',1],['High',3],['Normal',10],['Low',3]];
+function priPick(){var r=rnd()*17,t=0;for(var i=0;i<PRI.length;i++){t+=PRI[i][1];if(r<t)return PRI[i][0]}return 'Normal'}
+var wo=310000;
+var monday=add(now,-((now.getDay()+6)%7));
+var completed=[];
+function crow(type,wc,eq,pri,due,done,title,est){var lab=Math.round(est*(0.7+rnd()*0.7)/5)*5;var t=ri(6,17);completed.push([String(++wo),type,eq,wc,pri,ds(due),ds(done),pick(TECH),title,DEPT[wc],est,lab,ds(done)+' '+pad(t)+':'+pad(ri(0,59))]);return String(wo)}
+for(var w=52;w>=1;w--){var ws=add(monday,-7*w);var prog=(52-w)/52;var n=ri(38,52);for(var k=0;k<n;k++){var wc=wcPick(),eq=pick(EQ[wc]);var r=rnd();var due=add(ws,ri(0,6));var type,title,est,done;
+if(r<0.58){type='Preventative';title=pick(PMT)+' - '+eq;est=pick([30,45,60,90,120,180]);var late=rnd()<(0.17-0.12*prog);done=late?add(ws,ri(8,13)):add(due,-ri(0,2));if(done<ws)done=ws}
+else if(r<0.80){type='Corrective';title=pick(CMT);est=pick([60,90,120,180,240,360]);done=add(due,ri(-3,6))}
+else if(r<0.80+(0.11-0.05*prog)){type='Breakdown';title=pick(BDT);est=pick([60,120,180,240]);done=due}
+else if(r<0.95){type='Service';title=pick(SVT)+' - '+eq;est=pick([30,60,90]);done=add(due,ri(-1,2))}
+else{type='Project';title=pick(PJT);est=pick([240,480,600]);done=add(due,ri(0,5))}
+if(done>now)done=now;crow(type,wc,eq,type==='Breakdown'?'Critical':priPick(),due,done,title,est)}}
+var correctives=[];var STS=[['Requested',3],['Approved',2],['Planning',4],['WaitingOnParts',5],['ReadyToSchedule',4],['Scheduled',3]];
+function stPick(){var r=rnd()*21,t=0;for(var i=0;i<STS.length;i++){t+=STS[i][1];if(r<t)return STS[i][0]}return 'Planning'}
+for(var c=0;c<58;c++){var wc=wcPick(),eq=pick(EQ[wc]);var age=rnd()<0.3?ri(31,90):ri(1,30);var req=add(now,-age);var due=add(req,ri(7,21));var od=Math.max(0,Math.round((now-due)/864e5));var st=stPick();var sch=st==='Scheduled'?ds(add(monday,ri(0,6))):'';var est=pick([60,90,120,180,240,360]);
+correctives.push([String(++wo),'Corrective',eq,wc,priPick(),ds(due),od,sch,st,pick(CMT),st==='Requested'?'':pick(TECH),DEPT[wc],pick(TECH),ds(req),est,0])}
+var shifts={};['A Shift','B Shift','C Shift','D Shift','Mezz'].forEach(function(sh,si){var rows=[];var n=sh==='Mezz'?14:ri(20,26);for(var k=0;k<n;k++){var wc=sh==='Mezz'?'MEZZANINE':wcPick();if(sh!=='Mezz'&&wc==='MEZZANINE')wc='IG1';var eq=pick(EQ[wc]);var d=add(monday,ri(0,6));var isPm=rnd()<0.8;var type=isPm?'Preventative':'Corrective';var title=isPm?pick(PMT)+' - '+eq:pick(CMT);var est=pick([30,45,60,90,120]);var od=Math.max(0,Math.round((now-d)/864e5));
+var id=String(++wo);if(d<=now&&rnd()<0.9){completed.push([id,type,eq,wc,'Normal',ds(d),ds(d),pick(TECH),title,DEPT[wc],est,est,ds(d)+' 10:15']);rows.push([id,type,eq,wc,'Normal',ds(d),od,ds(d),'Completed',title,pick(TECH),DEPT[wc],isPm?'PM '+ri(100,999):'',est])}else rows.push([id,type,eq,wc,'Normal',ds(d),od,ds(d),'Scheduled',title,pick(TECH),DEPT[wc],isPm?'PM '+ri(100,999):'',est])}shifts[sh]=rows});
+var woShift={};Object.keys(shifts).forEach(function(k){shifts[k].forEach(function(r){woShift[r[0]]=k})});
+var reliability={};var LH={IG1:440,IG2:150,IG3:300,IG4:150};['IG1','IG2','IG3','IG4'].forEach(function(wc){for(var m=5;m>=0;m--){var d=new Date(now.getFullYear(),now.getMonth()-m,1);var per=d.getFullYear()+'-'+pad(d.getMonth()+1);var lh=Math.round(LH[wc]*(0.9+rnd()*0.2));var rows=[];var tb=0,tr=0;EQ[wc].forEach(function(a){var b=ri(0,4)-(m<2?1:0);if(b<0)b=0;var mttr=b?ri(40,180):0;tb+=b;tr+=b*mttr;rows.push([a,b,b?Math.round(lh*60/b):0,mttr])});rows.unshift([wc,tb,tb?Math.round(lh*60/tb):0,tb?Math.round(tr/tb):0]);reliability[wc+'|'+per]={wc:wc,period:per,lineHours:lh,rows:rows,src:'Sample data'}}});
+var plants=[{name:'Demo Plant',planned:79,bd:9,pm:54},{name:'Plant B',planned:84,bd:6,pm:58},{name:'Plant C',planned:72,bd:13,pm:47},{name:'Plant D',planned:81,bd:8,pm:55},{name:'Plant E',planned:68,bd:15,pm:44},{name:'Plant F',planned:76,bd:10,pm:50},{name:'Plant G',planned:88,bd:5,pm:61}];
+var src={completed:'Sample data',correctives:'Sample data',plants:'Sample data'};Object.keys(shifts).forEach(function(k){src['shift:'+k]='Sample data'});
+document.getElementById('seed').textContent=JSON.stringify({built:ds(now)+' demo',completed:completed,correctives:correctives,shifts:shifts,woShift:woShift,reliability:reliability,plants:plants,sources:src,manual:{}});
+})();</script>
+<script>
+/* ================= DATA ================= */
+const LS='kpi_demo_v3', LSM='kpi_demo_v3_manual';
+const SEED=JSON.parse(document.getElementById('seed').textContent||'{}');
+const PRISTINE=document.documentElement.outerHTML;  /* the page as shipped, before rendering — base for shareable copies */
+let D={completed:[],correctives:[],shifts:{},plants:[],sources:{},reliability:{},seedBuilt:''};
+let MANUAL={};
+const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const PLANNED=new Set(['Preventative','Corrective','Service','Project']);
+/* Usernames to keep out of per-person charts/tables (their work still counts in every total). Empty = show everyone. */
+const HIDE_USERS=new Set([]);
+const person=u=>HIDE_USERS.has((u||'').toLowerCase())?null:u;
+const showName=u=>HIDE_USERS.has((u||'').toLowerCase())?'Planning':(u||'');
+// hydrate compact rows
+const hC=r=>({wo:r[0],type:r[1],eq:r[2],wc:r[3],pri:r[4],due:r[5],done:r[6],by:r[7],title:r[8],dept:r[9],est:r[10],lab:r[11],dt:r[12]||''});
+/* PM on-time rule: a PM is on time if completed before the end of the week it is due in.
+   The maintenance week runs Monday 06:00 → next Monday 06:00 (night shift Sun 6pm–Mon 6am belongs to the week ending). */
+const WEEK_END_HOUR='06:00';
+function weekDeadline(due){if(!due)return '';const d=new Date(due+'T12:00:00');const dow=d.getDay()||7;/* Mon=1..Sun=7 */d.setDate(d.getDate()+(8-dow));return d.toISOString().slice(0,10)+'T'+WEEK_END_HOUR}
+function onTime(r){if(!r.due)return false;const dl=weekDeadline(r.due);return (r.dt||(r.done+'T00:00'))<=dl}
+const hR=r=>({wo:r[0],type:r[1],eq:r[2],wc:r[3],pri:r[4],due:r[5],od:r[6],sched:r[7],status:r[8],title:r[9],asg:r[10],dept:r[11],reqBy:r[12],reqOn:r[13],est:r[14],lab:r[15]});
+const hS=r=>({wo:r[0],type:r[1],eq:r[2],wc:r[3],pri:r[4],due:r[5],od:r[6],sched:r[7],status:r[8],title:r[9],asg:r[10],dept:r[11],pm:r[12],est:r[13]});
+
+const NATIVE=!!(window.webkit&&window.webkit.messageHandlers&&window.webkit.messageHandlers.native);
+if(window.__IOS_APP||(navigator.maxTouchPoints>1&&/iPhone|iPad|Macintosh/.test(navigator.userAgent)))document.documentElement.classList.add('ios-app');
+const nativeSend=(cmd,payload)=>{try{window.webkit.messageHandlers.native.postMessage({cmd,...(payload||{})})}catch(e){}};
+/* Browser storage: IndexedDB (room for years of work orders; localStorage stops at ~5 MB). Falls back to
+   localStorage where IndexedDB is unavailable (some browsers on file:// pages), then to memory only. */
+const IDB={db:null,
+  open(){return new Promise(res=>{try{const r=indexedDB.open('kpi_demo',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>{IDB.db=r.result;res(true)};r.onerror=r.onblocked=()=>res(false)}catch(e){res(false)}})},
+  req(mode,f){return new Promise(res=>{if(!IDB.db)return res(undefined);try{const t=IDB.db.transaction('kv',mode),q=f(t.objectStore('kv'));t.oncomplete=()=>res(mode==='readonly'?q.result:true);t.onerror=t.onabort=()=>res(mode==='readonly'?undefined:false)}catch(e){res(mode==='readonly'?undefined:false)}})},
+  get(k){return IDB.req('readonly',st=>st.get(k))},set(k,v){return IDB.req('readwrite',st=>st.put(v,k))},del(k){return IDB.req('readwrite',st=>st.delete(k))}};
+async function load(){
+  if(NATIVE&&window.__NATIVE_DATA){try{const j=JSON.parse(window.__NATIVE_DATA);MANUAL=j.manual||{};const s=j.data;if(s&&s.seedBuilt===SEED.built){D=s;return}}catch(e){}}
+  let s=null,m=null;
+  if(!NATIVE&&await IDB.open()){s=await IDB.get(LS)||null;m=await IDB.get(LSM)||null}
+  if(!s){try{s=JSON.parse(localStorage.getItem(LS))}catch(e){}}   /* older saves (and the fallback) live in localStorage */
+  if(!m){try{m=JSON.parse(localStorage.getItem(LSM)||'null')}catch(e){}}
+  MANUAL=m||{};
+  if(s && s.seedBuilt===SEED.built){D=s}
+  else{/* take every data key the seed carries (MTBF/MTTR pages included), so nothing new is dropped on the iPhone/iPad/web copies */D={completed:[],correctives:[],shifts:{},plants:[],sources:{},woShift:{},reliability:{},...SEED,seedBuilt:SEED.built||''};delete D.manual;delete D.built;delete D.source_note;if(SEED.manual&&!Object.keys(MANUAL).length)MANUAL=SEED.manual; save()}
+}
+function save(){if(NATIVE){nativeSend('save',{json:JSON.stringify({data:D,manual:MANUAL})});return}
+  if(IDB.db){IDB.set(LS,D).then(ok=>{if(!ok)log('Could not save to browser storage — data kept in memory only. Use Backup snapshot.','warn')});IDB.set(LSM,MANUAL);try{localStorage.removeItem(LS);localStorage.removeItem(LSM)}catch(e){}return}
+  try{localStorage.setItem(LS,JSON.stringify(D));localStorage.setItem(LSM,JSON.stringify(MANUAL))}catch(e){log('Storage full — data kept in memory only','warn')}}
+/* called by the Mac app: list of {name,text} */
+window.importFiles=async function(list){const files=list.map(f=>new File([f.text],f.name,{type:'text/html'}));document.querySelector('[data-t=import]').click();await handleFiles(files);return {completed:D.completed.length,correctives:D.correctives.length,shifts:Object.keys(D.shifts).length}};
+/* self-contained HTML snapshot with current data baked in (for sharing) */
+/* a new build stamp makes anyone who opens the copy load its data instead of what their browser saved from an older file */
+window.snapshotHTML=function(){const n=new Date(),stamp=new Date(n-n.getTimezoneOffset()*60000).toISOString().slice(0,16).replace('T',' ');const seed={...D,seedBuilt:stamp,built:stamp,manual:MANUAL};const html=PRISTINE;const re=/<script id="seed" type="application\/json">[\s\S]*?<\/script>/;return '<!DOCTYPE html>\n'+html.replace(re,()=>'<script id="seed" type="application/json">'+JSON.stringify(seed).replace(/<\//g,'<\\/')+'<'+'/script>').replace(/<div class="printimg"[^>]*><\/div>/g,'')};
+window.printActive=function(){window.print()};
+/* full structured feed for the native iPhone app */
+window.mobileData=function(){
+  const k=window.kpiSummary();const rows=yearRows(),m=monthly(rows);
+  const t0=today();
+  const months=m.map(o=>({k:o.k,label:o.label,wos:o.n,pm:o.pm,pmOnPct:o.pmOnPct,bd:o.bd,bdPct:o.bdPct,plPct:o.plPct,labH:+hrs(o.lab),labBDh:+hrs(o.labBD),topBD:o.topBD,topBDh:o.topBDh}));
+  const cr=D.correctives.map(hR).filter(r=>!String(r.status).startsWith('Completed')).map(r=>({wo:r.wo,title:r.title,eq:r.eq,wc:r.wc||'',dept:r.dept,pri:r.pri,status:r.status,due:r.due,od:+r.od||0,sched:r.sched||'',asg:r.asg||'',reqOn:r.reqOn||'',age:r.reqOn?daysBetween(r.reqOn,t0):null,est:+r.est||0,done:isDone(r.wo)}));
+  const W=weekWindow();const shifts={};Object.entries(D.shifts).forEach(([name,list])=>{shifts[name]=list.map(hS).filter(r=>inWin(r,W)).map(r=>({wo:r.wo,title:r.title,eq:r.eq,type:r.type,pri:r.pri,due:r.due,od:+r.od||0,sched:r.sched||'',asg:r.asg||'',est:+r.est||0,done:isDone(r.wo),manual:r.wo in MANUAL}))});
+  const bdEq={};rows.filter(r=>r.type==='Breakdown').forEach(r=>{const e=bdEq[r.eq]||(bdEq[r.eq]={h:0,n:0});e.h+=r.lab;e.n++});
+  const badActors=Object.entries(bdEq).map(([eq,v])=>({eq,hours:+hrs(v.h),events:v.n})).sort((a,b)=>b.hours-a.hours).slice(0,15);
+  const tech={};rows.forEach(r=>{if(!r.by)return;const t=tech[r.by]||(tech[r.by]={wos:0,h:0,pm:0,bd:0});t.wos++;t.h+=r.lab;if(r.type==='Preventative')t.pm+=r.lab;if(r.type==='Breakdown')t.bd+=r.lab});
+  const techs=Object.entries(tech).map(([name,t])=>({name,wos:t.wos,hours:+hrs(t.h),pmH:+hrs(t.pm),bdH:+hrs(t.bd)})).sort((a,b)=>b.hours-a.hours).slice(0,20);
+  const mix={};rows.forEach(r=>{mix[r.type]=(mix[r.type]||0)+1});
+  return {...k,mtbfMttr:rlMobile(),week:{lo:W.lo,hi:W.hi},months,correctives:{...k.correctives,list:cr},shifts,badActors,techs,mix,sources:D.sources,dataAsOf:(D.seedBuilt||'').slice(0,10)};
+};
+/* headline numbers for the Apple Watch / widgets */
+window.kpiSummary=function(){
+  const rows=yearRows(),m=monthly(rows),pm=rows.filter(r=>r.type==='Preventative'),pmOn=pm.filter(onTime).length;
+  const last=m[m.length-1],prev=m[m.length-2];
+  const crAll=D.correctives.map(hR).filter(r=>!String(r.status).startsWith('Completed')),od=crAll.filter(r=>r.od>0).length,wop=crAll.filter(r=>r.status==='WaitingOnParts').length;
+  const W=weekWindow();const sch=Object.values(D.shifts).flat().map(hS).filter(r=>inWin(r,W)),schDone=sch.filter(r=>isDone(r.wo)).length;
+  const bdM=last?last.bd:0;
+  /* for the widgets: correctives requested > 30 days ago, proactive share, and rework (an unplanned WO on an asset
+     that had another unplanned WO 1–30 days earlier; PMware has no rework flag) */
+  const t0=today(),over30=crAll.filter(r=>r.reqOn&&daysBetween(r.reqOn,t0)>30).length;
+  const pl=rows.filter(r=>PLANNED.has(r.type)).length,bdN=rows.filter(r=>r.type==='Breakdown').length;
+  const unpl={};rows.forEach(r=>{if((r.type==='Breakdown'||r.type==='Corrective')&&r.done)(unpl[r.eq]||(unpl[r.eq]=[])).push(r.done)});
+  let rework=0;Object.values(unpl).forEach(ds=>{ds.sort();for(let i=1;i<ds.length;i++){const g=daysBetween(ds[i-1],ds[i]);if(g>=1&&g<=30)rework++}});
+  return {updated:new Date().toISOString(),year:$('yearSel').value,
+    pm:{pct:pct(pmOn,pm.length),on:pmOn,total:pm.length,month:last?last.pmOnPct:null,prevMonth:prev?prev.pmOnPct:null,monthLabel:last?last.label:''},
+    correctives:{open:crAll.length,overdue:od,waitingParts:wop,over30},
+    rework:{count:rework},
+    proactive:{pct:pct(pl,rows.length),reactivePct:pct(bdN,rows.length)},
+    schedule:{pct:sch.length?pct(schDone,sch.length):null,done:schDone,total:sch.length},
+    breakdowns:{month:bdM,monthLabel:last?last.label:''},
+    completed:rows.length};
+};
+
+window.activeTab=function(){const t=document.querySelector('.tab.active');return t?t.textContent:''};
+async function resetSeed(){if(!confirm('Reset to the data built into this file?'))return;try{localStorage.removeItem(LS)}catch(e){}await IDB.del(LS);if(NATIVE){window.__NATIVE_DATA=null;nativeSend('save',{json:''})}await load();renderAll();log('Reset to built-in data','info')}
+function clearManual(){MANUAL={};save();renderAll()}
+function dlFile(name,text,type){if(NATIVE){nativeSend('download',{name,text});return}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+function shareCopy(){dlFile(`KPI Dashboard Demo ${new Date().toISOString().slice(0,10)}.html`,snapshotHTML(),'text/html');log('Shareable copy saved — send that file; whoever opens it gets this data','ok')}
+function backup(){dlFile('kpi_demo_backup_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({...D,manual:MANUAL}),'application/json');log('Backup saved','info')}
+/* wipe everything (no data at all) — used by the Mac app's Clear / Rebuild commands */
+window.clearAll=function(){D={completed:[],correctives:[],shifts:{},plants:SEED.plants||[],sources:{},reliability:{},seedBuilt:SEED.built||''};MANUAL={};try{localStorage.removeItem(LS);localStorage.removeItem(LSM)}catch(e){}save();renderAll();log('All data cleared','warn');document.querySelector('[data-t=import]').click()};
+
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const daysBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
+const hrs=m=>+(m/60).toFixed(1);
+const fmt=n=>n.toLocaleString();
+const pct=(a,b)=>b?+(a/b*100).toFixed(1):0;
+const kpi=(l,v,cls,t,tcls,s)=>`<div class="kpi k-${cls||'info'}"><div class="l">${l}</div><div class="v ${cls||''}">${v}</div>${s?`<div class="s">${s}</div>`:''}${t?`<div class="t ${tcls||'t-info'}">${t}</div>`:''}</div>`;
+const grade=(v,good,warn,higherBetter=true)=>higherBetter?(v>=good?'green':v>=warn?'amber':'red'):(v<=good?'green':v<=warn?'amber':'red');
+const tg={green:'t-ok',amber:'t-warn',red:'t-bad'};
+Chart.defaults.animation=false;
+let CH={}; function chart(id,cfg){if(CH[id]){CH[id].destroy();delete CH[id]}const el=$(id);if(!el||!el.closest('.pane.active'))return;CH[id]=new Chart(el,cfg)}
+const cv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const CO=()=>({responsive:true,plugins:{legend:{labels:{color:cv('--muted'),font:{size:11,family:cv('--body')},boxWidth:10}}},scales:{x:{ticks:{color:cv('--muted'),font:{size:11}},grid:{color:cv('--line')}},y:{ticks:{color:cv('--muted'),font:{size:11}},grid:{color:cv('--line')}}}});
+const DOUGH=()=>({responsive:true,plugins:{legend:{position:'right',labels:{color:cv('--muted'),font:{size:11},padding:6,boxWidth:10}}}});
+const PAL=['#d81f2a','#b8893b','#5f8fc7','#1d7a4a','#8a96a8','#7c5cbf','#e07b39','#2aa198','#c2185b','#6d4c41','#9aa8c0','#13233f'];
+const TYPECOL={Preventative:'#1d7a4a',Breakdown:'#d81f2a',Service:'#5f8fc7',Corrective:'#b8893b',Project:'#7c5cbf',Request:'#2aa198',Other:'#8a96a8'};
+const typeKey=t=>TYPECOL[t]?t:'Other';
+function topN(map,n,key='v'){return Object.entries(map).map(([k,v])=>({k,...(typeof v==='object'?v:{v})})).sort((a,b)=>b[key]-a[key]).slice(0,n)}
+function sortable(tableId,rows,cols,rowClass,grp){
+  // cols: [{h,k,fmt?,cls?,num?}]  grp: {key:r=>string, order:[...], label?:k=>string}
+  const st=sortable.state[tableId]||(sortable.state[tableId]={k:cols[0].k,asc:true});
+  const draw=()=>{
+    const cmp=(a,b)=>{const x=a[st.k],y=b[st.k];const r=(typeof x==='number'&&typeof y==='number')?x-y:(x==null)-(y==null)||String(x??'').localeCompare(String(y??''));return st.asc?r:-r};
+    const rank=k=>{if(!grp||!grp.order)return 0;const i=grp.order.indexOf(String(k).toUpperCase());return i<0?99:i};
+    const gcmp=(a,b)=>grp.sort?grp.sort(grp.key(a),grp.key(b)):(rank(grp.key(a))-rank(grp.key(b))||String(grp.key(a)).localeCompare(String(grp.key(b))));
+    const data=[...rows].sort((a,b)=>grp?(gcmp(a,b)||cmp(a,b)):cmp(a,b));
+    let h='<thead><tr>'+cols.map(c=>`<th data-k="${c.k}" class="${c.cls||''} ${st.k===c.k?'sorted'+(st.asc?' asc':''):''}">${c.h}</th>`).join('')+'</tr></thead><tbody>';
+    if(!data.length)h+=`<tr><td colspan="${cols.length}" class="empty">No data</td></tr>`;
+    let cur=null,curP=null;const counts={},pcounts={};if(grp)data.forEach(r=>{const k=grp.key(r);counts[k]=(counts[k]||0)+1;if(grp.parent){const p=grp.parent(k);if(p)pcounts[p]=(pcounts[p]||0)+1}});
+    data.forEach(r=>{if(grp){const k=grp.key(r);const p=grp.parent?grp.parent(k):null;if(p!==curP){curP=p;if(p)h+=`<tr class="grp dept"><td colspan="${cols.length}">${p} <span>${pcounts[p]}</span></td></tr>`}
+      if(k!==cur){cur=k;h+=`<tr class="grp${p?' sub':''}"><td colspan="${cols.length}">${grp.label?grp.label(k):k} <span>${counts[k]}</span></td></tr>`}}
+      h+=`<tr class="${rowClass?rowClass(r):''}">`+cols.map(c=>`<td class="${c.cls||''}">${c.fmt?c.fmt(r[c.k],r):(r[c.k]??'')}</td>`).join('')+'</tr>'});
+    $(tableId).innerHTML=h+'</tbody>';
+    $(tableId).querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(st.k===k)st.asc=!st.asc;else{st.k=k;st.asc=true}draw()});
+  };draw();
+}
+sortable.state={};
+const STAGE={InPlanning:'In Planning',Approved:'Approved',ReadyToSchedule:'Ready to Schedule',Assigned:'Assigned',Scheduled:'Scheduled',InProcess:'In Process',WaitingOnParts:'Waiting on Parts',OnHold:'On Hold',Requested:'Requested',Completed:'Completed',Closed:'Closed'};
+function pill(t){const m={WaitingOnParts:'p-amber',InPlanning:'p-blue',ReadyToSchedule:'p-purple',Scheduled:'p-blue',Assigned:'p-blue',InProcess:'p-green',Approved:'p-gray',Critical:'p-red',High:'p-amber',Normal:'p-gray',Low:'p-gray',Preventative:'p-green',Breakdown:'p-red',Corrective:'p-amber',Service:'p-blue'};const c=m[t]||(String(t).startsWith('Completed')?'p-green':'p-gray');const lbl=STAGE[t]||String(t).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^Completed on .*/,'Completed');return `<span class="pill ${c}">${lbl||'—'}</span>`}
+
+/* ================= DERIVED ================= */
+function completedRows(){return D.completed.map(hC)}
+function years(){const y=new Set(completedRows().map(r=>r.done.slice(0,4)).filter(Boolean));Object.values(D.reliability||{}).forEach(e=>y.add(e.period.slice(0,4)));return [...y].sort().reverse()}
+/* month range picked in the header (From … to …); both blank = whole year */
+function moRange(){const a=$('moFrom').value||'01',b=$('moTo').value||'12';return a<=b?[a,b]:[b,a]}
+function inMonths(r){const [a,b]=moRange(),m=r.done.slice(5,7);return m>=a&&m<=b}
+function yearRows(){const y=$('yearSel').value,d=$('deptSel').value,w=$('wcSel').value,t=$('typeSel').value;return completedRows().filter(r=>r.done.startsWith(y)&&inMonths(r)&&(!d||r.dept===d)&&(!w||r.wc===w)&&(!t||r.type===t))}
+function filterLabel(){const p=[$('deptSel').value,$('wcSel').value,$('typeSel').value].filter(Boolean);return p.length?' · '+p.join(' · '):''}
+function fillFilters(){
+  const all=completedRows();const opt=(id,vals,lbl)=>{const el=$(id);const cur=el.value;el.innerHTML=`<option value="">${lbl}</option>`+vals.map(v=>`<option>${v}</option>`).join('');if(vals.includes(cur))el.value=cur};
+  opt('deptSel',[...new Set(all.map(r=>r.dept).filter(Boolean))].sort(),'All depts');
+  opt('wcSel',[...new Set(all.map(r=>r.wc).filter(Boolean))].sort(),'All work centers');
+  opt('typeSel',[...new Set(all.map(r=>r.type).filter(Boolean))].sort(),'All types');
+}
+function exportCompletedCSV(){
+  const rows=yearRows();const h=['WO','Type','Equipment','Workcenter','Priority','Due','Completed','Title','Department','Est hrs','Labor hrs','PM on time'];
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const lines=[h.join(',')].concat(rows.map(r=>[r.wo,r.type,r.eq,r.wc,r.pri,r.due,r.done,r.title,r.dept,hrs(r.est),hrs(r.lab),r.type==='Preventative'?(onTime(r)?'yes':'no'):''].map(q).join(',')));
+  const [ma,mb]=moRange();dlFile(`Demo_completed_WOs_${$('yearSel').value}${ma==='01'&&mb==='12'?'':`_${MO[+ma-1]}-${MO[+mb-1]}`}${filterLabel().replace(/ · /g,'_')}.csv`,lines.join('\n'),'text/csv');
+}
+function monthly(rows){
+  const m={};
+  rows.forEach(r=>{const k=r.done.slice(0,7);if(!k)return;const o=m[k]||(m[k]={k,n:0,pm:0,pmOn:0,bd:0,pl:0,lab:0,labPM:0,labBD:0,labSvc:0,labCorr:0,labOther:0,bdEq:{},mix:{}});
+    o.n++;o.lab+=r.lab;o.mix[typeKey(r.type)]=(o.mix[typeKey(r.type)]||0)+1;
+    if(r.type==='Preventative'){o.pm++;o.labPM+=r.lab;if(onTime(r))o.pmOn++}
+    else if(r.type==='Breakdown'){o.bd++;o.labBD+=r.lab;o.bdEq[r.eq]=(o.bdEq[r.eq]||0)+r.lab}
+    else if(r.type==='Service')o.labSvc+=r.lab;else if(r.type==='Corrective')o.labCorr+=r.lab;else o.labOther+=r.lab;
+    if(PLANNED.has(r.type))o.pl++;
+  });
+  return Object.values(m).sort((a,b)=>a.k.localeCompare(b.k)).map(o=>{const top=topN(o.bdEq,1)[0];return {...o,label:MO[+o.k.slice(5,7)-1],pmOnPct:pct(o.pmOn,o.pm),pmPct:pct(o.pm,o.n),bdPct:pct(o.bd,o.n),plPct:pct(o.pl,o.n),topBD:top?top.k:'',topBDh:top?hrs(top.v):0}});
+}
+function isDone(wo){if(wo in MANUAL)return MANUAL[wo];return DONE_SET.has(wo)}
+/* PMWare's combined schedule page (Schedule → All) has no shift column, so it lands as one "All" shift.
+   Re-file each WO under the shift it was last seen on (remembered in D.woShift from single-shift pages);
+   the All page is the full plan, so it replaces every shift's list. */
+const OTHER_SHIFT='Other / unassigned';
+/* PMWare drops a WO from its schedule page once it is completed, so a fresh export would wipe last week's finished work.
+   Keep rows that vanished from the new export if they are done (completed report or schedule status); drop the rest
+   (rescheduled/cancelled). Kept rows age out after KEEP_DONE_DAYS by scheduled date. */
+const KEEP_DONE_DAYS=35;
+function keepDone(oldRows,newRows){
+  const seen=new Set(newRows.map(r=>r[0]));const comp=new Set(D.completed.map(r=>r[0]));
+  const cut=new Date();cut.setDate(cut.getDate()-KEEP_DONE_DAYS);const c=cut.toISOString().slice(0,10);
+  const kept=(oldRows||[]).filter(r=>!seen.has(r[0])&&(MANUAL[r[0]]??(comp.has(r[0])||String(r[8]).startsWith('Completed')))&&(!r[7]||r[7]>=c));
+  return newRows.concat(kept);
+}
+function splitAllShift(){
+  const ws=D.woShift||(D.woShift={});
+  Object.entries(D.shifts).forEach(([s,rows])=>{if(s!=='All'&&s!==OTHER_SHIFT)rows.forEach(r=>ws[r[0]]=s)});
+  const all=D.shifts.All;if(!all)return null;
+  const out={};let mapped=0,other=0;
+  all.forEach(r=>{const s=ws[r[0]];if(s)mapped++;else other++;(out[s||OTHER_SHIFT]||(out[s||OTHER_SHIFT]=[])).push(r)});
+  const src=D.sources['shift:All'];Object.keys(D.sources).filter(k=>k.startsWith('shift:')).forEach(k=>delete D.sources[k]);
+  const inAll=new Set(all.map(r=>r[0]));Object.entries(D.shifts).forEach(([s,rows])=>{if(s!=='All')out[s]=keepDone(rows.filter(r=>!inAll.has(r[0])),out[s]||[])});
+  D.shifts=out;Object.keys(out).forEach(s=>D.sources['shift:'+s]=src||'');
+  return {mapped,other};
+}
+let DONE_SET=new Set();
+
+/* ================= RENDER ================= */
+function renderAll(){
+  if(!D.reliability)D.reliability={};
+  if(D.shifts.All){splitAllShift();save()}
+  /* done = in a completed-WO report, or the schedule page itself shows "Completed on … by …" (catches work closed after the last report export) */
+  DONE_SET=new Set(D.completed.map(r=>r[0]));Object.values(D.shifts).flat().forEach(r=>{if(String(r[8]).startsWith('Completed'))DONE_SET.add(r[0])});
+  const ys=years();const sel=$('yearSel');const cur=sel.value;sel.innerHTML=ys.map(y=>`<option>${y}</option>`).join('')||'<option>—</option>';if(ys.includes(cur))sel.value=cur;
+  fillFilters();
+  renderOverview();renderTrends();renderBreakdowns();renderReliability();renderCorrectives();renderSchedule();renderLabor();renderPlants();renderSources();renderAnalytics();
+}
+function observations(o){
+  const L=[];const add=(who,b,p,tab)=>L.push({who,b,p,tab});
+  if(o.pmOnP<95)add('Planner',`PM compliance is ${o.pmOnP}% against a 95% target`,`${fmt(o.pm-o.pmOn)} of ${fmt(o.pm)} preventative work orders completed after the end of their due week (Monday 06:00 cutoff).`,'overview');
+  if(o.bdP>20)add('Manager',`${o.bdP}% of completed work is breakdown`,`${fmt(o.bd)} breakdown events · ${fmt(hrs(o.labBd))} labor hours. Proactive share is ${o.plP}% (target 80%).`,'breakdowns');
+  if(o.top)add('Planner',`${o.top.k} is the top breakdown consumer`,`${hrs(o.top.v)} hours across ${o.top.n} events. Candidate for root-cause review.`,'breakdowns');
+  if(o.aged>0)add('Planner',`${o.aged} open correctives are older than 30 days (${o.agedP}%)`,`Target is ≤ 20% of the open backlog. ${o.wop} are waiting on parts.`,'correctives');
+  if(o.sch.length)add(o.schP<90?'Manager':'Planner',`Schedule compliance ${o.schP}% this week`,`${o.schDone} of ${o.sch.length} scheduled work orders completed · ${o.schOd} open past due. Target 90%.`,'schedule');
+  if(o.last&&o.prev){const d=+(o.last.pmOnPct-o.prev.pmOnPct).toFixed(1);if(Math.abs(d)>=5)add('Manager',`PM on-time ${d>0?'improved':'fell'} ${Math.abs(d)} pts in ${o.last.label}`,`${o.prev.label} ${o.prev.pmOnPct}% → ${o.last.label} ${o.last.pmOnPct}%.`,'overview')}
+  rlObservations().forEach(x=>L.push(x));
+  $('obs').innerHTML=L.length?L.map(x=>`<div class="ob"><span class="tag ${x.who==='Manager'?'navy':'gold'}">${x.who}</span><div><b>${x.b}</b><p>${x.p}</p></div><button class="link" onclick="goTab('${x.tab}')">Open →</button></div>`).join(''):'<div class="empty">Nothing needs attention.</div>';
+}
+function goTab(t){document.querySelector(`.tab[data-t=${t}]`).click();window.scrollTo(0,0)}
+function renderOverview(){
+  const rows=yearRows(),m=monthly(rows);const y=$('yearSel').value+filterLabel();
+  const n=rows.length,pm=rows.filter(r=>r.type==='Preventative'),pmOn=pm.filter(onTime).length,bd=rows.filter(r=>r.type==='Breakdown').length,pl=rows.filter(r=>PLANNED.has(r.type)).length;
+  const labPl=rows.filter(r=>PLANNED.has(r.type)).reduce((s,r)=>s+r.lab,0),labBd=rows.filter(r=>r.type==='Breakdown').reduce((s,r)=>s+r.lab,0);
+  const pmOnP=pct(pmOn,pm.length),plP=pct(pl,n),bdP=pct(bd,n),ratio=labBd?+(labPl/labBd).toFixed(2):0;
+  const cr=D.correctives.map(hR),od=cr.filter(r=>r.od>0).length;
+  const W=weekWindow();const sch=Object.values(D.shifts).flat().map(hS).filter(r=>inWin(r,W)),schDone=sch.filter(r=>isDone(r.wo)).length,schP=pct(schDone,sch.length);
+  const last=m[m.length-1],prev=m[m.length-2];const delta=(a,b,inv)=>{if(!a||!b)return'';const d=+(a-b).toFixed(1);const good=inv?d<=0:d>=0;return `<span class="${good?'green':'red'}">${d>=0?'▲':'▼'} ${Math.abs(d)} vs ${prev.label}</span>`};
+  $('periodBadge').textContent=m.length?`${m[0].label} – ${last.label} ${y} · ${fmt(n)} completed WOs`:'No data';
+  const crAll=D.correctives.map(hR).filter(r=>!String(r.status).startsWith('Completed'));const t0=today();const aged=crAll.filter(r=>r.reqOn&&daysBetween(r.reqOn,t0)>30).length,agedP=pct(aged,crAll.length);
+  const bdEq={};rows.filter(r=>r.type==='Breakdown').forEach(r=>{const e=bdEq[r.eq]||(bdEq[r.eq]={v:0,n:0});e.v+=r.lab;e.n++});const top=topN(bdEq,1,'v')[0];
+  observations({pmOnP,pm:pm.length,pmOn,bdP,bd,labBd,plP,top,aged,agedP,wop:crAll.filter(r=>r.status==='WaitingOnParts').length,sch,schDone,schP,schOd:sch.filter(r=>!isDone(r.wo)&&r.od>0).length,last,prev});
+  $('ovKpis').innerHTML=
+    kpi('PM Compliance',pmOnP+'%',grade(pmOnP,95,80),'Target ≥ 95%',tg[grade(pmOnP,95,80)],`${fmt(pmOn)} of ${fmt(pm.length)} PMs done within due week (Mon 6am) · ${delta(last?.pmOnPct,prev?.pmOnPct)}`)+
+    kpi('Proactive Work',plP+'%',grade(plP,80,65),'Target ≥ 80%',tg[grade(plP,80,65)],delta(last?.plPct,prev?.plPct))+
+    kpi('Breakdown Rate',bdP+'%',grade(bdP,10,20,false),'Target <10%',tg[grade(bdP,10,20,false)],`${fmt(bd)} events · ${delta(last?.bdPct,prev?.bdPct,true)}`)+
+    kpi('Planned : BD Hours',ratio+' : 1',grade(ratio,3,2),'Target 3:1',tg[grade(ratio,3,2)],`${fmt(hrs(labPl))}h vs ${fmt(hrs(labBd))}h`)+
+    kpi('Schedule Compliance',sch.length?schP+'%':'—',sch.length?grade(schP,90,70):'muted',sch.length?'Target ≥ 90% · this week':'No schedule loaded',sch.length?tg[grade(schP,90,70)]:'t-info',sch.length?`${schDone} of ${sch.length} scheduled`:'')+
+    kpi('Correctives > 30 days',agedP+'%',grade(agedP,20,35,false),'Target ≤ 20%',tg[grade(agedP,20,35,false)],`${aged} of ${crAll.length} open · ${od} overdue`)+rlOverviewKpis();$('ovKpis').classList.toggle('k8',$('ovKpis').children.length===8);
+  const L=m.map(x=>x.label);
+  chart('cMix',{type:'bar',data:{labels:L,datasets:Object.keys(TYPECOL).map(t=>({label:t,data:m.map(x=>x.mix[t]||0),backgroundColor:TYPECOL[t],borderRadius:2}))},options:{...CO(),scales:{x:{...CO().scales.x,stacked:true},y:{...CO().scales.y,stacked:true}}}});
+  chart('cTrend',{type:'line',data:{labels:L,datasets:[
+    {label:'PM Compliance %',data:m.map(x=>x.pmOnPct),borderColor:'#1d7a4a',backgroundColor:'rgba(29,122,74,.12)',fill:true,tension:.3,pointRadius:3},
+    {label:'Planned %',data:m.map(x=>x.plPct),borderColor:'#5f8fc7',tension:.3,pointRadius:2,borderWidth:1.5},
+    {label:'Breakdown %',data:m.map(x=>x.bdPct),borderColor:'#d81f2a',backgroundColor:'rgba(216,31,42,.10)',fill:true,tension:.3,pointRadius:3},
+    {label:'95% target',data:L.map(()=>95),borderColor:'#8a96a8',borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,min:0,max:100}}}});
+  if(!sortable.state.tMonthly)sortable.state.tMonthly={k:'k',asc:true};
+  sortable('tMonthly',m,[{h:'Month',k:'label'},{h:'WOs',k:'n',cls:'ctr',fmt:fmt},{h:'PM Compliance',k:'pmOnPct',cls:'ctr',fmt:v=>`<b class="${grade(v,95,80)}">${v}%</b>`},{h:'Planned %',k:'plPct',cls:'ctr',fmt:v=>v+'%'},{h:'Breakdown %',k:'bdPct',cls:'ctr',fmt:v=>`<b class="${grade(v,10,20,false)}">${v}%</b>`},{h:'PM hrs',k:'labPM',cls:'ctr',fmt:v=>hrs(v)},{h:'BD hrs',k:'labBD',cls:'ctr',fmt:v=>hrs(v)},{h:'Total hrs',k:'lab',cls:'ctr',fmt:v=>hrs(v)},{h:'Top breakdown',k:'topBD',fmt:(v,r)=>v?`${v} <span class="muted">(${r.topBDh}h)</span>`:''}]);
+  renderDataQuality(rows,m);
+}
+function renderDataQuality(rows,m){
+  const noLab=rows.filter(r=>!r.lab),noEst=rows.filter(r=>!r.est),noWc=rows.filter(r=>!r.wc);
+  const cr=D.correctives.map(hR).filter(r=>!String(r.status).startsWith('Completed'));
+  const crNoEst=cr.filter(r=>!r.est),crNoSched=cr.filter(r=>!r.sched&&['ReadyToSchedule','Scheduled','Assigned'].includes(r.status));
+  const g=(v)=>grade(v,2,10,false);
+  const pL=pct(noLab.length,rows.length),pE=pct(noEst.length,rows.length),pC=pct(crNoEst.length,cr.length);
+  const bdRows=rows.filter(r=>r.type==='Breakdown'),bdNamed=bdRows.filter(causeNamed).length,pN=pct(bdNamed,bdRows.length);
+  $('dqKpis').innerHTML=
+    kpi('Breakdowns · Cause Named',bdRows.length?pN+'%':'—',grade(pN,85,65),'Target ≥ 85%',tg[grade(pN,85,65)],`${fmt(bdRows.length-bdNamed)} of ${fmt(bdRows.length)} don't say what failed`)+
+    kpi('Completed · No Labor Logged',fmt(noLab.length),g(pL),`${pL}% of ${fmt(rows.length)} WOs`,tg[g(pL)],'labor KPIs exclude these')+
+    kpi('Completed · No Estimate',fmt(noEst.length),g(pE),`${pE}% of WOs`,tg[g(pE)],'est-vs-actual needs both')+
+    kpi('Open Correctives · No Estimate',fmt(crNoEst.length),g(pC),`${pC}% of ${cr.length} open`,tg[g(pC)],'backlog hours unknown')+
+    kpi('Ready / Scheduled · No Date',fmt(crNoSched.length),crNoSched.length?'amber':'green','','t-info','ready work not on a schedule')+
+    kpi('Completed · No Work Center',fmt(noWc.length),noWc.length?'amber':'green','','t-info','drops out of WC charts');
+  // monthly trend of missing-labor %
+  const months=m.map(o=>o.k||o.month||o.label);
+  const byM={};rows.forEach(r=>{const k=r.done.slice(0,7);const o=byM[k]||(byM[k]={n:0,miss:0,bd:0,unnamed:0});o.n++;if(!r.lab)o.miss++;if(r.type==='Breakdown'){o.bd++;if(!causeNamed(r))o.unnamed++}});
+  const ks=Object.keys(byM).sort();
+  chart('cDQ',{type:'line',data:{labels:ks.map(k=>k.slice(5)),datasets:[{label:'% missing labor',data:ks.map(k=>pct(byM[k].miss,byM[k].n)),borderColor:'#d81f2a',backgroundColor:'rgba(216,31,42,.15)',fill:true,tension:.3,pointRadius:3},{label:'% breakdowns, cause not named',data:ks.map(k=>byM[k].bd?pct(byM[k].unnamed,byM[k].bd):null),borderColor:'#b8893b',backgroundColor:'#b8893b',tension:.3,pointRadius:3,borderWidth:2}]},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,min:0,max:100,ticks:{callback:v=>v+'%'}}}}});
+  const by={};let adminN=0,adminMiss=0;rows.forEach(r=>{const who=person(r.by);if(!who){adminN++;if(!r.lab)adminMiss++;return}const o=by[who]||(by[who]={n:0,miss:0});o.n++;if(!r.lab)o.miss++});
+  const tbl=Object.entries(by).map(([k,o])=>({who:k,n:o.n,miss:o.miss,p:pct(o.miss,o.n)})).filter(x=>x.n>=10).sort((a,b)=>b.miss-a.miss).slice(0,12);
+  if(adminN)tbl.push({who:'Office / admin closures',n:adminN,miss:adminMiss,p:pct(adminMiss,adminN)});
+  if(!sortable.state.tDQ)sortable.state.tDQ={k:'miss',asc:false};
+  sortable('tDQ',tbl,[{h:'Closed by',k:'who'},{h:'WOs closed',k:'n'},{h:'No labor',k:'miss',fmt:v=>v?`<b class="${v>=50?'red':v>=10?'amber':''}">${v}</b>`:'<span class="green">0</span>'},{h:'%',k:'p',fmt:v=>`<span class="${v>=25?'red':v>=5?'amber':'green'}">${v}%</span>`}]);
+}
+function renderTrends(){
+  const y=$('yearSel').value;const m=monthly(yearRows());const L=m.map(x=>x.label);
+  const allM={};years().forEach(yy=>{allM[yy]=monthly(completedRows().filter(r=>r.done.startsWith(yy)&&inMonths(r)))});
+  const yoyCols=['#d81f2a','#5f8fc7','#b8893b','#1d7a4a'];
+  chart('cYoY',{type:'line',data:{labels:MO,datasets:Object.keys(allM).sort().reverse().map((yy,i)=>({label:yy,data:MO.map(mo=>{const r=allM[yy].find(x=>x.label===mo);return r?r.pmOnPct:null}),borderColor:yoyCols[i%4],backgroundColor:yoyCols[i%4],tension:.3,pointRadius:3,borderWidth:yy===y?2.5:1.5,spanGaps:false})).concat([{label:'95% target',data:MO.map(()=>95),borderColor:'#8a96a8',borderDash:[5,4],pointRadius:0,borderWidth:1}])},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,min:0,max:100}}}});
+  chart('cVol',{type:'bar',data:{labels:L,datasets:[{label:'Completed WOs',data:m.map(x=>x.n),backgroundColor:'rgba(95,143,199,.7)',borderRadius:3,order:2},{label:'Breakdown events',data:m.map(x=>x.bd),type:'line',borderColor:'#d81f2a',backgroundColor:'#d81f2a',tension:.3,pointRadius:3,order:1}]},options:CO()});
+  chart('cLabor',{type:'bar',data:{labels:L,datasets:[{label:'PM',data:m.map(x=>hrs(x.labPM)),backgroundColor:'#1d7a4a'},{label:'Breakdown',data:m.map(x=>hrs(x.labBD)),backgroundColor:'#d81f2a'},{label:'Corrective',data:m.map(x=>hrs(x.labCorr)),backgroundColor:'#b8893b'},{label:'Service',data:m.map(x=>hrs(x.labSvc)),backgroundColor:'#5f8fc7'},{label:'Other',data:m.map(x=>hrs(x.labOther)),backgroundColor:'#8a96a8'}]},options:{...CO(),scales:{x:{...CO().scales.x,stacked:true},y:{...CO().scales.y,stacked:true}}}});
+  chart('cBDTrend',{type:'bar',data:{labels:L,datasets:[{label:'Breakdown hours',data:m.map(x=>hrs(x.labBD)),backgroundColor:'rgba(216,31,42,.8)',borderRadius:3}]},options:{...CO(),plugins:{legend:{display:false},tooltip:{callbacks:{afterLabel:c=>'Top: '+m[c.dataIndex].topBD+' ('+m[c.dataIndex].topBDh+'h)'}}}}});
+  chart('cShare',{type:'line',data:{labels:L,datasets:[{label:'Proactive %',data:m.map(x=>x.plPct),borderColor:'#1d7a4a',backgroundColor:'rgba(29,122,74,.12)',fill:true,tension:.3,pointRadius:3},{label:'Breakdown %',data:m.map(x=>x.bdPct),borderColor:'#d81f2a',backgroundColor:'rgba(216,31,42,.10)',fill:true,tension:.3,pointRadius:3},{label:'80% target',data:L.map(()=>80),borderColor:'#8a96a8',borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,min:0,max:100}}}});
+  const ratio=m.map(x=>x.labBD?+((x.labPM+x.labCorr+x.labSvc)/x.labBD).toFixed(2):null);
+  chart('cRatio',{type:'bar',data:{labels:L,datasets:[{label:'Planned : BD',data:ratio,backgroundColor:ratio.map(v=>v>=3?'#1d7a4a':v>=2?'#b8893b':'#d81f2a'),borderRadius:3},{label:'3 : 1 target',type:'line',data:L.map(()=>3),borderColor:'#8a96a8',borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:CO()});
+}
+function renderBreakdowns(){
+  const rows=yearRows().filter(r=>r.type==='Breakdown');
+  const eq={},dept={},wc={};
+  rows.forEach(r=>{const e=eq[r.eq]||(eq[r.eq]={v:0,n:0,months:new Set(),dates:[]});e.v+=r.lab;e.n++;e.months.add(r.done.slice(0,7));e.dates.push(r.done);dept[r.dept||'—']=(dept[r.dept||'—']||0)+r.lab;wc[r.wc||'—']=(wc[r.wc||'—']||0)+r.lab});
+  const tot=rows.reduce((s,r)=>s+r.lab,0);
+  const byH=topN(eq,12,'v'),byN=topN(eq,12,'n');
+  $('bdKpis').innerHTML=kpi('Breakdown Events',fmt(rows.length),'red')+kpi('Breakdown Hours',fmt(hrs(tot)),'red')+kpi('Avg Hours / Event',rows.length?hrs(tot/rows.length):0,'amber')+kpi('Equipment Affected',fmt(Object.keys(eq).length),'blue')+kpi('Top Offender',byH[0]?`<span style="font-size:20px">${byH[0].k}</span>`:'—','amber',byH[0]?hrs(byH[0].v)+' hrs':'' ,'t-warn');
+  chart('cTopBD',{type:'bar',data:{labels:byH.map(x=>x.k),datasets:[{label:'Hours',data:byH.map(x=>hrs(x.v)),backgroundColor:'#d81f2a',borderRadius:3}]},options:{...CO(),indexAxis:'y',plugins:{legend:{display:false}}}});
+  chart('cTopBDn',{type:'bar',data:{labels:byN.map(x=>x.k),datasets:[{label:'Events',data:byN.map(x=>x.n),backgroundColor:'#b8893b',borderRadius:3}]},options:{...CO(),indexAxis:'y',plugins:{legend:{display:false}}}});
+  const dd=topN(dept,9),ww=topN(wc,9);
+  chart('cBDDept',{type:'doughnut',data:{labels:dd.map(x=>x.k),datasets:[{data:dd.map(x=>hrs(x.v)),backgroundColor:PAL,borderWidth:0}]},options:DOUGH()});
+  chart('cBDWc',{type:'doughnut',data:{labels:ww.map(x=>x.k),datasets:[{data:ww.map(x=>hrs(x.v)),backgroundColor:PAL,borderWidth:0}]},options:DOUGH()});
+  // repeat work: an unplanned order (breakdown or corrective) on an asset that had another unplanned order 1–30 days earlier
+  const unpl={};yearRows().filter(r=>r.type==='Breakdown'||r.type==='Corrective').forEach(r=>{const e=unpl[r.eq]||(unpl[r.eq]={v:0,n:0,dates:[]});e.v+=r.lab;e.n++;e.dates.push(r.done)});
+  const rep30=Object.entries(unpl).map(([k,e])=>{const ds=e.dates.slice().sort();let rep=0,minGap=null,gaps=[];for(let i=1;i<ds.length;i++){const g=daysBetween(ds[i-1],ds[i]);gaps.push(g);if(g>=1&&g<=30){rep++;minGap=minGap==null?g:Math.min(minGap,g)}}return {eq:k,rep,n:e.n,repP:pct(rep,e.n),minGap,h:hrs(e.v),last:ds[ds.length-1]}}).filter(x=>x.rep>0).sort((a,b)=>b.rep-a.rep||b.h-a.h).slice(0,40);
+  const repTot=rep30.reduce((s,x)=>s+x.rep,0);
+  const unplN=Object.values(unpl).reduce((s,e)=>s+e.n,0);
+  const named=rows.filter(causeNamed).length,pN=pct(named,rows.length);
+  $('bdKpis').insertAdjacentHTML('beforeend',kpi('Cause Named',rows.length?pN+'%':'—',grade(pN,85,65),'Target ≥ 85%',tg[grade(pN,85,65)],'title says what failed — FMEA and Pareto need it'));
+  $('bdKpis').insertAdjacentHTML('beforeend',kpi('Repeat Work ≤ 30 d',fmt(repTot),repTot?'red':'green',unplN?`${pct(repTot,unplN)}% of unplanned WOs`:'',repTot?'t-bad':'t-ok',`${rep30.length} assets`));
+  const rep=Object.entries(eq).map(([k,e])=>{const ds=[...new Set(e.dates)].sort();let gaps=0;for(let i=1;i<ds.length;i++)gaps+=daysBetween(ds[i-1],ds[i]);const r30=rep30.find(x=>x.eq===k);return {eq:k,months:e.months.size,n:e.n,rep:r30?r30.rep:0,h:hrs(e.v),avg:+(e.v/e.n/60).toFixed(1),mtbf:ds.length>1?+(gaps/(ds.length-1)).toFixed(1):null,last:ds[ds.length-1]}}).filter(x=>x.n>=3).sort((a,b)=>b.months-a.months||b.h-a.h).slice(0,40);
+  const mx=Math.max(...rep.map(r=>r.h),1);
+  sortable('tRepeat',rep,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'Months hit',k:'months',fmt:v=>`<b class="${v>=8?'red':v>=5?'amber':''}">${v}</b>`},{h:'Events',k:'n'},{h:'Repeats ≤30d',k:'rep',fmt:v=>v?`<b class="${v>=4?'red':'amber'}">${v}</b>`:'—'},{h:'Labor hrs',k:'h',cls:'bar',fmt:v=>`<i style="width:${v/mx*100}%"></i><b>${v}</b>`},{h:'Avg hrs/event',k:'avg'},{h:'Avg days between',k:'mtbf',fmt:v=>v==null?'—':`<span class="${v<7?'red':v<14?'amber':'green'}">${v}</span>`},{h:'Last event',k:'last'}]);
+  if(!sortable.state.tRepeat30)sortable.state.tRepeat30={k:'rep',asc:false};
+  sortable('tRepeat30',rep30,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'Repeats ≤30d',k:'rep',fmt:v=>`<b class="${v>=4?'red':'amber'}">${v}</b>`},{h:'Of events',k:'n'},{h:'Repeat %',k:'repP',fmt:v=>`<span class="${v>=50?'red':v>=25?'amber':''}">${v}%</span>`},{h:'Shortest gap',k:'minGap',fmt:v=>v==null?'—':`<span class="${v<=7?'red':'amber'}">${v} d</span>`},{h:'Unplanned hrs',k:'h'},{h:'Last event',k:'last'}]);
+}
+function renderCorrectives(){
+  const cr=D.correctives.map(hR).filter(r=>!String(r.status).startsWith('Completed'));
+  const t=today();cr.forEach(r=>{r.age=r.reqOn?daysBetween(r.reqOn,t):null;r.started=r.lab>0});
+  const od=cr.filter(r=>r.od>0),wop=cr.filter(r=>r.status==='WaitingOnParts'),ready=cr.filter(r=>['ReadyToSchedule','Scheduled','Assigned'].includes(r.status));
+  const ages=cr.map(r=>r.age).filter(a=>a!=null);const avgAge=ages.length?Math.round(ages.reduce((s,a)=>s+a,0)/ages.length):0;
+  const estH=hrs(cr.reduce((s,r)=>s+r.est,0));
+  $('crKpis').innerHTML=kpi('Open Correctives',fmt(cr.length),'blue')+kpi('Overdue',fmt(od.length),od.length?'red':'green',od.length?`${pct(od.length,cr.length)}% of open`:'','t-bad')+kpi('Waiting on Parts',fmt(wop.length),'amber')+kpi('Ready / Scheduled',fmt(ready.length),'green')+kpi('Avg Age',avgAge+' d',grade(avgAge,14,30,false),'since requested',tg[grade(avgAge,14,30,false)])+kpi('Est. Backlog',estH+' h','purple','estimated labor','t-info');
+  const st={},dp={},pr={},eq={},wcs={};cr.forEach(r=>{wcs[r.wc||'']=(wcs[r.wc||'']||0)+1;st[r.status||'—']=(st[r.status||'—']||0)+1;dp[r.dept||'—']=(dp[r.dept||'—']||0)+1;pr[r.pri||'—']=(pr[r.pri||'—']||0)+1;eq[r.eq||'—']=(eq[r.eq||'—']||0)+1});
+  const S=topN(st,8),Dp=topN(dp,8),P=topN(pr,6),E=topN(eq,12);
+  chart('cCrStatus',{type:'doughnut',data:{labels:S.map(x=>x.k.replace(/([a-z])([A-Z])/g,'$1 $2')),datasets:[{data:S.map(x=>x.v),backgroundColor:['#b8893b','#5f8fc7','#8b5cf6','#06b6d4','#1d7a4a','#8a96a8','#ec4899','#d81f2a'],borderWidth:0}]},options:DOUGH()});
+  chart('cCrDept',{type:'doughnut',data:{labels:Dp.map(x=>x.k),datasets:[{data:Dp.map(x=>x.v),backgroundColor:PAL.slice(2),borderWidth:0}]},options:DOUGH()});
+  chart('cCrPri',{type:'bar',data:{labels:P.map(x=>x.k),datasets:[{data:P.map(x=>x.v),backgroundColor:P.map(x=>({Critical:'#d81f2a',High:'#b8893b',Normal:'#5f8fc7',Low:'#8a96a8'})[x.k]||'#8b5cf6'),borderRadius:3}]},options:{...CO(),plugins:{legend:{display:false}}}});
+  chart('cCrEq',{type:'bar',data:{labels:E.map(x=>x.k),datasets:[{label:'Open correctives',data:E.map(x=>x.v),backgroundColor:'#b8893b',borderRadius:3}]},options:{...CO(),plugins:{legend:{display:false}}}});
+  // filters
+  const sf=$('crStatusF'),df=$('crDeptF'),wf=$('crWcF');const keep=[sf.value,df.value,wf.value];
+  const WC_ORDER=['IG1','IG2','IG3','IG4','MEZZANINE','CUTTING','TEMPERING'],DEPT_ORDER=['IG','MEZZANINE','CUTTING','TEMPERING','MAINTENANCE','FACILITY'];
+  const wcName=k=>!k?'No work center':k.toUpperCase()==='MEZZANINE'?'Mezz':/^IG\d$/i.test(k)?k.toUpperCase():k.charAt(0).toUpperCase()+k.slice(1).toLowerCase();
+  const orderBy=(keys,ord)=>keys.sort((a,b)=>{const ia=ord.indexOf(a.toUpperCase()),ib=ord.indexOf(b.toUpperCase());return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b)});
+  wf.innerHTML='<option value="">All work centers</option>'+orderBy(Object.keys(wcs).filter(Boolean),WC_ORDER).map(w=>`<option value="${w}">${wcName(w)}</option>`).join('');
+  sf.innerHTML='<option value="">All statuses</option>'+Object.keys(st).sort().map(s=>`<option value="${s}">${s.replace(/([a-z])([A-Z])/g,'$1 $2')}</option>`).join('');
+  df.innerHTML='<option value="">All departments</option>'+orderBy(Object.keys(dp),DEPT_ORDER).map(s=>`<option>${s}</option>`).join('');
+  sf.value=keep[0];df.value=keep[1];wf.value=keep[2];
+  const draw=()=>{
+    const q=$('crSearch').value.toLowerCase();
+    const f=cr.filter(r=>(!sf.value||r.status===sf.value)&&(!df.value||r.dept===df.value)&&(!wf.value||(r.wc||'')===wf.value)&&(!$('crOdOnly').checked||r.od>0)&&(!q||(r.title+' '+r.eq+' '+r.wo).toLowerCase().includes(q)));
+    $('crCount').textContent=`${f.length} of ${cr.length}`;
+    window._crFiltered=f;
+    if(!sortable.state.tCr)sortable.state.tCr={k:'age',asc:false};
+    const ST_ORDER=['SCHEDULED','INPROCESS','ASSIGNED','READYTOSCHEDULE','INPLANNING','APPROVED','REQUESTED','WAITINGONPARTS','ONHOLD'];
+    const g=$('crGroup').value;const grp=g==='wc'?{key:r=>(r.dept||'—')+'\u0001'+(r.wc||''),order:null,sort:(a,b)=>{const [da,wa]=a.split('\u0001'),[db,wb]=b.split('\u0001');const r1=(DEPT_ORDER.indexOf(da.toUpperCase())+100)%100,r2=(DEPT_ORDER.indexOf(db.toUpperCase())+100)%100;return r1-r2||da.localeCompare(db)||((WC_ORDER.indexOf(wa.toUpperCase())+100)%100)-((WC_ORDER.indexOf(wb.toUpperCase())+100)%100)||wa.localeCompare(wb)},label:k=>wcName(k.split('\u0001')[1]),parent:k=>k.split('\u0001')[0]}:g==='status'?{key:r=>r.status||'',order:ST_ORDER,label:k=>STAGE[k]||k||'—'}:null;
+    sortable('tCr',f,[{h:'W/O',k:'wo',fmt:v=>`<a href="#" target="_blank" style="color:#93c5fd;text-decoration:none">${v}</a>`},{h:'Title',k:'title',cls:'ttl'},{h:'Equipment',k:'eq'},{h:'WC',k:'wc',fmt:v=>wcName(v)},{h:'Dept',k:'dept'},{h:'Priority',k:'pri',fmt:pill},{h:'Status',k:'status',fmt:(v,r)=>pill(v)+(r.started?' <span class="pill p-green" title="labor logged">started</span>':'')},{h:'Due',k:'due',fmt:(v,r)=>v?`${v.slice(5)}${r.od?` <b class="red">+${r.od}d</b>`:''}`:'—'},{h:'Sched',k:'sched',fmt:v=>v?v.slice(5):'—'},{h:'Age',k:'age',fmt:v=>v==null?'—':`<span class="${v>30?'red':v>14?'amber':''}">${v}d</span>`},{h:'Est',k:'est',fmt:v=>v?hrs(v)+'h':'—'},{h:'Assigned',k:'asg',fmt:showName}],r=>r.od>0?'od':(r.due&&daysBetween(t,r.due)<=2?'soon':''),grp);
+  };
+  ['crSearch','crStatusF','crDeptF','crWcF','crOdOnly','crGroup'].forEach(id=>$(id).oninput=$(id).onchange=draw);draw();
+  renderPlanQueue(cr);
+}
+function weekWindow(){const w=$('scWeek').value;const t=new Date();const dow=(t.getDay()+6)%7;const mon=new Date(t);mon.setDate(t.getDate()-dow);const sun=new Date(mon);sun.setDate(mon.getDate()+6);const iso=d=>d.toISOString().slice(0,10);const nm=new Date(mon);nm.setDate(mon.getDate()+7);const ns=new Date(sun);ns.setDate(sun.getDate()+7);
+  const lm=new Date(mon);lm.setDate(mon.getDate()-7);const ls=new Date(mon);ls.setDate(mon.getDate()-1);
+  if(w==='last')return{lo:iso(lm),hi:iso(ls),lbl:`${iso(lm)} → ${iso(ls)}`};
+  if(w==='this')return{lo:iso(mon),hi:iso(sun),lbl:`${iso(mon)} → ${iso(sun)}`};if(w==='next')return{lo:iso(nm),hi:iso(ns),lbl:`${iso(nm)} → ${iso(ns)}`};if(w==='all')return{lo:'0000',hi:'9999',lbl:'all dates'};return{lo:'0000',hi:iso(sun),carryFrom:iso(mon),lbl:`≤ ${iso(sun)} · earlier weeks: open only`}}
+/* in the schedule window? "Through this week" carries over earlier weeks' OPEN work only — finished work from past weeks is under "Last week" */
+function inWin(r,W){if(!r.sched)return true;if(r.sched<W.lo||r.sched>W.hi)return false;return !(W.carryFrom&&r.sched<W.carryFrom&&isDone(r.wo))}
+function renderSchedule(){
+  const names=Object.keys(D.shifts).sort((a,b)=>{const o=['A Shift','B Shift','C Shift','D Shift','Mezz'];return (o.indexOf(a)+1||99)-(o.indexOf(b)+1||99)});
+  const W=weekWindow();$('scWin').textContent=W.lbl;
+  const t=today();const per=names.map(n=>{const rows=D.shifts[n].map(hS).filter(r=>inWin(r,W));rows.forEach(r=>{r.done=isDone(r.wo);r.manual=r.wo in MANUAL});const done=rows.filter(r=>r.done);const od=rows.filter(r=>!r.done&&r.od>0);const est=rows.reduce((s,r)=>s+r.est,0),estDone=done.reduce((s,r)=>s+r.est,0);return {n,rows,done:done.length,od:od.length,open:rows.length-done.length-od.length,est,estDone,p:pct(done.length,rows.length),total:D.shifts[n].length}});
+  const all=per.flatMap(p=>p.rows);const done=all.filter(r=>r.done).length,od=all.filter(r=>!r.done&&r.od>0).length;const P=pct(done,all.length);
+  const dates=all.map(r=>r.sched).filter(Boolean).sort();
+  $('scKpis').innerHTML=kpi('Schedule Compliance',all.length?P+'%':'—',grade(P,90,70),'Target ≥ 90%',tg[grade(P,90,70)],all.length?`${done} of ${all.length} WOs`:'')+kpi('Scheduled WOs',fmt(all.length),'blue',dates.length?`${dates[0].slice(5)} → ${dates[dates.length-1].slice(5)}`:'','t-info')+kpi('Completed',fmt(done),'green')+kpi('Open · Past Due',fmt(od),od?'red':'green')+kpi('Scheduled Hours',fmt(hrs(all.reduce((s,r)=>s+r.est,0))),'purple',`${fmt(hrs(all.filter(r=>r.done).reduce((s,r)=>s+r.est,0)))}h done`,'t-info')+kpi('Shifts Loaded',per.length,'blue');
+  if(!per.length){$('shifts').innerHTML='<div class="box empty">No shift schedules loaded. Save each shift page from PMWare (Schedule → A Shift, B Shift…) and drop them on the Import tab.</div>';chart('cShift',{type:'bar',data:{labels:[],datasets:[]},options:CO()});chart('cShiftHrs',{type:'bar',data:{labels:[],datasets:[]},options:CO()});return}
+  chart('cShift',{type:'bar',data:{labels:per.map(p=>p.n),datasets:[{label:'Completed',data:per.map(p=>p.done),backgroundColor:'#1d7a4a'},{label:'Open',data:per.map(p=>p.open),backgroundColor:'#5f8fc7'},{label:'Open · past due',data:per.map(p=>p.od),backgroundColor:'#d81f2a'}]},options:{...CO(),scales:{x:{...CO().scales.x,stacked:true},y:{...CO().scales.y,stacked:true}}}});
+  chart('cShiftHrs',{type:'bar',data:{labels:per.map(p=>p.n),datasets:[{label:'Done (h)',data:per.map(p=>hrs(p.estDone)),backgroundColor:'#1d7a4a'},{label:'Remaining (h)',data:per.map(p=>hrs(p.est-p.estDone)),backgroundColor:'#b8893b'}]},options:{...CO(),scales:{x:{...CO().scales.x,stacked:true},y:{...CO().scales.y,stacked:true}}}});
+  const openState=renderSchedule.open||(renderSchedule.open={});
+  $('shifts').innerHTML=per.map(p=>`<div class="shift ${openState[p.n]?'open':''}" data-s="${p.n}">
+    <div class="sh" onclick="toggleShift('${p.n}')"><span class="car">▶</span><h3>${p.n}</h3><span class="m">${p.rows.length} WOs${p.total!==p.rows.length?` <span title="in window / total on schedule page">of ${p.total}</span>`:''} · ${hrs(p.est)}h est</span><div class="pb"><i style="width:${p.p}%"></i></div><b class="${grade(p.p,90,70)}">${p.p}%</b><span class="m">${p.done} done${p.od?` · <span class="red">${p.od} past due</span>`:''}</span></div>
+    <div class="sb"><div class="tw" style="max-height:420px"><table id="tS_${p.n.replace(/\W/g,'_')}"></table></div></div></div>`).join('');
+  per.forEach(p=>{const id='tS_'+p.n.replace(/\W/g,'_');sortable(id,p.rows,[{h:'✓',k:'done',fmt:(v,r)=>`<input type="checkbox" class="ck" ${v?'checked':''} onchange="setDone('${r.wo}',this.checked)" title="${r.manual?'manual override':'auto from completed report'}">`},{h:'W/O',k:'wo'},{h:'Type',k:'type',fmt:pill},{h:'Title',k:'title',cls:'ttl'},{h:'Equipment',k:'eq'},{h:'Dept',k:'dept'},{h:'Sched',k:'sched',fmt:v=>v?v.slice(5):'—'},{h:'Orig due',k:'due',fmt:(v,r)=>v?`${v.slice(5)}${r.od?` <b class="red">+${r.od}d</b>`:''}`:'—'},{h:'Est',k:'est',fmt:v=>v?hrs(v)+'h':'—'},{h:'PM',k:'pm'},{h:'Assigned',k:'asg',fmt:showName}],r=>r.done?'done':r.od>0?'od':(r.due&&daysBetween(t,r.due)<=2?'soon':''));sortable.state[id]={k:'sched',asc:true}});
+}
+function toggleShift(n){renderSchedule.open=renderSchedule.open||{};renderSchedule.open[n]=!renderSchedule.open[n];document.querySelector(`.shift[data-s="${n}"]`).classList.toggle('open')}
+function setDone(wo,v){if(v===DONE_SET.has(wo))delete MANUAL[wo];else MANUAL[wo]=v;save();renderSchedule();renderOverview()}
+function renderLabor(){
+  const rows=yearRows();const by={},dept={},m={};
+  rows.forEach(r=>{const who=person(r.by);if(who){const b=by[who]||(by[who]={n:0,v:0,pm:0,bd:0,pmN:0,pmOn:0,unpl:0,est:0,estAct:0,estN:0});b.n++;b.v+=r.lab;if(r.type==='Preventative'){b.pm+=r.lab;b.pmN++;if(onTime(r))b.pmOn++}if(r.type==='Breakdown')b.bd+=r.lab;if(r.type==='Breakdown'||r.type==='Corrective')b.unpl++;if(r.est&&r.lab){b.est+=r.est;b.estAct+=r.lab;b.estN++}}dept[r.dept||'—']=(dept[r.dept||'—']||0)+r.lab;if(r.type==='Preventative'){const k=r.done.slice(0,7);const o=m[k]||(m[k]={est:0,act:0});o.est+=r.est;o.act+=r.lab}});
+  const tot=rows.reduce((s,r)=>s+r.lab,0),techs=Object.keys(by).length;
+  const tt=Object.entries(by).map(([k,b])=>({who:k,n:b.n,h:hrs(b.v),avg:b.n?+(b.v/b.n/60).toFixed(2):0,onT:b.pmN?pct(b.pmOn,b.pmN):null,unpl:pct(b.unpl,b.n),share:pct(b.v,tot),var:b.estN?pct(b.estAct-b.est,b.est):null})).filter(x=>x.n>=5);
+  if(!sortable.state.tTech)sortable.state.tTech={k:'h',asc:false};
+  sortable('tTech',tt,[{h:'Technician',k:'who'},{h:'Work orders',k:'n'},{h:'Labor hrs',k:'h'},{h:'Avg h / WO',k:'avg'},{h:'PM on-time',k:'onT',fmt:v=>v==null?'—':`<span class="${grade(v,95,80)}">${v}%</span>`},{h:'Unplanned share',k:'unpl',fmt:v=>`<span class="${v>=40?'red':v>=20?'amber':''}">${v}%</span>`},{h:'Hours share',k:'share',fmt:v=>v+'%'},{h:'Est. variance',k:'var',fmt:v=>v==null?'—':`<span class="${Math.abs(v)<=20?'green':'amber'}">${v>0?'+':''}${v}%</span>`}]);
+  const N=topN(by,15,'n'),H=topN(by,15,'v'),Dp=topN(dept,10);
+  $('lbKpis').innerHTML=kpi('Labor Hours',fmt(hrs(tot)),'green')+kpi('Technicians',techs,'blue','with completed work','t-info')+kpi('Avg hrs / WO',rows.length?hrs(tot/rows.length):0,'amber')+kpi('Avg hrs / Tech / Month',techs?fmt(Math.round(hrs(tot)/techs/Math.max(1,Object.keys(m).length))):0,'purple')+kpi('Most Work Orders',N[0]?N[0].k:'—','blue',N[0]?fmt(N[0].n)+' completed':'','t-info');
+  chart('cTech',{type:'bar',data:{labels:N.map(x=>x.k),datasets:[{label:'WOs',data:N.map(x=>x.n),backgroundColor:'#5f8fc7',borderRadius:3}]},options:{...CO(),indexAxis:'y',plugins:{legend:{display:false}}}});
+  chart('cTechH',{type:'bar',data:{labels:H.map(x=>x.k),datasets:[{label:'PM',data:H.map(x=>hrs(x.pm)),backgroundColor:'#1d7a4a'},{label:'Breakdown',data:H.map(x=>hrs(x.bd)),backgroundColor:'#d81f2a'},{label:'Other',data:H.map(x=>hrs(x.v-x.pm-x.bd)),backgroundColor:'#5f8fc7'}]},options:{...CO(),indexAxis:'y',scales:{x:{...CO().scales.x,stacked:true},y:{...CO().scales.y,stacked:true}}}});
+  chart('cDeptH',{type:'doughnut',data:{labels:Dp.map(x=>x.k),datasets:[{data:Dp.map(x=>hrs(x.v)),backgroundColor:PAL.slice(2),borderWidth:0}]},options:DOUGH()});
+  const mk=Object.keys(m).sort();
+  chart('cEstAct',{type:'bar',data:{labels:mk.map(k=>MO[+k.slice(5,7)-1]),datasets:[{label:'Estimated',data:mk.map(k=>hrs(m[k].est)),backgroundColor:'#8a96a8'},{label:'Actual',data:mk.map(k=>hrs(m[k].act)),backgroundColor:'#1d7a4a'}]},options:CO()});
+}
+function renderPlants(){
+  const pl=[...D.plants].sort((a,b)=>b.planned-a.planned);
+  $('plantBars').innerHTML=pl.map(p=>{const o=Math.max(0,100-p.planned-p.bd);const me=p.name==='Demo Plant';return `<div class="prow ${me?'me':''}"><div class="n" style="${me?'color:#f87171':''}">${p.name}</div><div class="w"><div style="width:${p.planned}%;background:#22c55e">${p.planned>8?p.planned.toFixed(0)+'%':''}</div><div style="width:${p.bd}%;background:#ef4444">${p.bd>8?p.bd.toFixed(0)+'%':''}</div><div style="width:${o}%;background:#3b82f6">${o>8?o.toFixed(0)+'%':''}</div></div><div class="v">${p.planned.toFixed(1)}% P · ${p.bd.toFixed(1)}% BD</div></div>`}).join('')||'<div class="empty">No plant data</div>';
+  chart('cPlantPM',{type:'bar',data:{labels:pl.map(p=>p.name),datasets:[{label:'Preventative %',data:pl.map(p=>p.pm),backgroundColor:pl.map(p=>p.pm>=60?'#1d7a4a':p.pm>=40?'#b8893b':'#d81f2a'),borderRadius:3},{label:'80% target',type:'line',data:pl.map(()=>80),borderColor:'#8a96a8',borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,min:0,max:100}}}});
+}
+function renderSources(){
+  const c=[['Completed WOs',D.completed.length,D.sources.completed],['Open correctives',D.correctives.length,D.sources.correctives],...Object.keys(D.shifts).map(s=>[s+' schedule',D.shifts[s].length,D.sources['shift:'+s]]),['Plants',D.plants.length,D.sources.plants],...Object.values(D.reliability||{}).sort((a,b)=>(a.wc+a.period).localeCompare(b.wc+b.period)).map(r=>[`MTBF\\MTTR ${r.wc} · ${rlLabel(r.period)}`,r.rows.length,D.sources['mtbf:'+r.wc+' '+r.period]]),['Manual check-offs',Object.keys(MANUAL).length,'']];
+  $('srcCards').innerHTML=c.map(([l,n,u])=>`<div class="sc"><div class="l">${l}</div><div class="c ${n?'green':'red'}">${fmt(n)}</div><div class="u">${u||''}</div></div>`).join('');
+}
+
+/* ================= IMPORT (JS port of pmware_html_parser.py) ================= */
+function log(m,t='info'){const el=$('log');el.style.display='block';el.innerHTML+=`<div class="l${t}">${{ok:'✓',warn:'⚠',err:'✗'}[t]||'ℹ'} ${m}</div>`;el.scrollTop=el.scrollHeight}
+const tmin=s=>{const m=/(\d+)h\s*(\d+)m/.exec(s||'');return m?+m[1]*60+ +m[2]:0};
+const dtnorm=s=>{const m=/(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AP]M)?)?/i.exec((s||'').trim());if(!m)return'';let y=+m[3];if(y<100)y+=2000;let hh=+(m[4]||0);const mm=+(m[5]||0),ap=(m[6]||'').toUpperCase();if(ap==='PM'&&hh<12)hh+=12;if(ap==='AM'&&hh===12)hh=0;return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}T${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`};
+const dnorm=s=>{const m=/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/.exec((s||'').trim());if(!m)return'';let y=+m[3];if(y<100)y+=2000;return `${y}-${String(+m[1]).padStart(2,'0')}-${String(+m[2]).padStart(2,'0')}`};
+const odays=s=>{const m=/\+(\d+)d/.exec(s||'');return m?+m[1]:0};
+const icon=td=>{const e=td&&td.querySelector('span.bi-list-icon');return e?(e.getAttribute('title')||'').trim():(td?td.textContent.trim():'')};
+const txt=td=>td?td.textContent.replace(/\s+/g,' ').trim():'';
+function parsePage(html){
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  const title=(doc.title||'').toLowerCase();
+  const kind=title.includes('w/o report')?'completed':title.includes('w/o list')?'correctives':title.includes('schedule')?'schedule':title.includes('mtbf')?'reliability':'unknown';
+  if(kind==='reliability'){const wm=/Metrics - MTBF\\MTTR - ([^<]+)</.exec(html);const wc=wm?wm[1].trim():'';const lm=/Line hours:\s*([\d,]+)/.exec(html);const lineHours=lm?+lm[1].replace(/,/g,''):0;
+    const tb=doc.querySelector('table');const rows=tb?[...tb.querySelectorAll('tr')].map(tr=>[...tr.querySelectorAll('td')]).filter(td=>td.length>=4).map(td=>[txt(td[0]),+txt(td[1]).replace(/,/g,''),tmin(txt(td[2])),tmin(txt(td[3]))]).filter(r=>r[0]&&isFinite(r[1])):[];
+    return {kind,title,wc,lineHours,rows,pagePeriod:rlPeriodFromPage(html)}}
+  const t=doc.querySelector('table#wolist');if(!t)return {kind:'unknown',title};
+  const trs=[...t.querySelectorAll('tr')];const hdr=[...trs[0].querySelectorAll('th,td')].map(c=>txt(c));
+  const col=n=>hdr.findIndex(h=>h.toLowerCase()===n.toLowerCase());
+  const body=trs.slice(1).map(tr=>[...tr.querySelectorAll('td')]).filter(td=>td.length>=hdr.length-2);
+  if(kind==='completed'){const c=Object.fromEntries(['W/O','Type','Equipment','Workcenter','Priority','Due','Completed on','Completed by','Title','Department','Est','Labor'].map(k=>[k,col(k)]));const g=(td,k)=>c[k]>=0?txt(td[c[k]]):'';
+    return {kind,rows:body.map(td=>[g(td,'W/O'),icon(td[c.Type]),g(td,'Equipment'),g(td,'Workcenter'),icon(td[c.Priority]),dnorm(g(td,'Due')),dnorm(g(td,'Completed on')),g(td,'Completed by'),g(td,'Title'),g(td,'Department'),tmin(g(td,'Est')),tmin(g(td,'Labor')),dtnorm(g(td,'Completed on'))]).filter(r=>r[0])}}
+  if(kind==='correctives'){const c=Object.fromEntries(['W/O','Type','Equipment','Workcenter','Priority','Due','Sched','Status','Title','Assigned','Department','Requested','Est','Labor'].map(k=>[k,col(k)]));const g=(td,k)=>c[k]>=0?txt(td[c[k]]):'';
+    return {kind,rows:body.map(td=>{const req=g(td,'Requested');const rm=/(\S+)\s+(\d{1,2}\/\d{1,2}\/\d{2,4})/.exec(req);const due=g(td,'Due');return [g(td,'W/O'),c.Type>=0?icon(td[c.Type])||'Corrective':'Corrective',g(td,'Equipment'),g(td,'Workcenter'),icon(td[c.Priority]),dnorm(due),odays(due),dnorm(g(td,'Sched')),icon(td[c.Status]),g(td,'Title'),g(td,'Assigned'),g(td,'Department'),rm?rm[1]:'',rm?dnorm(rm[2]):'',tmin(g(td,'Est')),tmin(g(td,'Labor')),0]}).filter(r=>r[0])}}
+  if(kind==='schedule'){const c=Object.fromEntries(['W/O','Type','Equipment','Workcenter','Priority','Original Due Date','Scheduled Due Date','Status','Title','Assigned','Department','Requested','Est'].map(k=>[k,col(k)]));const g=(td,k)=>c[k]>=0?txt(td[c[k]]):'';const shifts={};
+    body.forEach(td=>{const a=c.Type>=0&&td[c.Type].querySelector('a[href]');let s='Unknown';if(a){const m=/ScheduleByScheduleType\/([^/]+)\//.exec(a.getAttribute('href'));if(m)s=decodeURIComponent(m[1]).trim()}const od=g(td,'Original Due Date');const rm=/(PM\s+\d+|\S+)\s+\d{1,2}\/\d{1,2}\/\d{2,4}/.exec(g(td,'Requested'));(shifts[s]||(shifts[s]=[])).push([g(td,'W/O'),icon(td[c.Type]),g(td,'Equipment'),g(td,'Workcenter'),icon(td[c.Priority]),dnorm(od),odays(od),dnorm(g(td,'Scheduled Due Date')),icon(td[c.Status]),g(td,'Title'),g(td,'Assigned'),g(td,'Department'),rm?rm[1]:'',tmin(g(td,'Est'))])});
+    return {kind,shifts}}
+  return {kind:'unknown',title};
+}
+async function handleFiles(files){
+  $('log').innerHTML='';const stamp=new Date().toLocaleDateString();
+  for(const f of files){
+    try{
+      const text=await f.text();
+      if(f.name.endsWith('.json')){const j=JSON.parse(text);if(j.completed&&j.correctives){MANUAL=j.manual||MANUAL;delete j.manual;D={...D,...j};log(`Restored backup ${f.name}`,'ok')}else log(`${f.name}: not a dashboard backup`,'warn');continue}
+      const p=parsePage(text);
+      if(p.kind==='completed'){const have=new Map(D.completed.map(r=>[r[0],r]));let add=0,upd=0;p.rows.forEach(r=>{if(have.has(r[0]))upd++;else add++;have.set(r[0],r)});D.completed=[...have.values()];D.sources.completed=`${f.name} (${stamp})`;log(`${f.name}: completed-WO report — ${p.rows.length} rows (${add} new, ${upd} updated) → ${D.completed.length} total`,'ok')}
+      else if(p.kind==='correctives'){D.correctives=p.rows;D.sources.correctives=`${f.name} (${stamp})`;log(`${f.name}: corrective list — ${p.rows.length} open WOs`,'ok')}
+      else if(p.kind==='schedule'){const ks=Object.keys(p.shifts);if(!ks.length){log(`${f.name}: schedule page but no rows`,'warn');continue}ks.forEach(s=>{D.shifts[s]=s==='All'?p.shifts[s]:keepDone(D.shifts[s],p.shifts[s]);D.sources['shift:'+s]=`${f.name} (${stamp})`;log(`${f.name}: ${s} — ${p.shifts[s].length} scheduled WOs`,'ok')});const n=splitAllShift();if(n)log(`${f.name}: combined "All" schedule split by shift — ${n.mapped} WOs matched to a shift, ${n.other} not on any single-shift page yet (listed as "${OTHER_SHIFT}")`,n.other?'warn':'ok')}
+      else if(p.kind==='reliability'){if(!p.wc||!p.rows.length){log(`${f.name}: MTBF\\MTTR page but no line or rows — pick a line in PMware and press Search before saving`,'warn');continue}const fromName=rlPeriodFromName(f.name);const period=fromName||p.pagePeriod||today().slice(0,7);const how=fromName?'':p.pagePeriod?' · month read from the page\'s To-date box':' · no month in the file name or page, used the current month';const span=rlSpanFromName(f.name);if(span)log(`${f.name}: the name says it covers ${span} — the MTBF / MTTR trend needs one page per month (From/To = the month), so this page is filed under ${rlLabel(period)} only`,'warn');const key=p.wc+'|'+period;const had=!!D.reliability[key];D.reliability[key]={wc:p.wc,period,lineHours:p.lineHours,rows:p.rows,src:f.name};D.sources['mtbf:'+p.wc+' '+period]=`${f.name} (${stamp})`;const tot=p.rows.find(r=>r[0]===p.wc);log(`${f.name}: MTBF\\MTTR ${p.wc} filed under ${rlLabel(period)}${had?' (replaced)':''} — ${p.rows.length-(tot?1:0)} assets, ${tot?tot[1]:'?'} breakdowns, ${fmt(p.lineHours)} line hours${how}`,'ok')}
+      else log(`${f.name}: not a recognised PMWare page (title "${p.title||''}"). Expected pmw: w/o report / w/o list / schedule / MTBF\\MTTR.`,'warn');
+    }catch(e){log(`${f.name}: ${e.message}`,'err')}
+  }
+  save();renderAll();log('Dashboard updated','ok');
+}
+function exportCSV(which){const rows=which==='correctives'?(window._crFiltered||[]):[];if(!rows.length)return;const cols=['wo','title','eq','dept','pri','status','due','od','sched','age','est','asg'];const csv=[cols.join(',')].concat(rows.map(r=>cols.map(c=>`"${String(c==='asg'?showName(r[c]):(r[c]??'')).replace(/"/g,'""')}"`).join(','))).join('\n');dlFile('open_correctives.csv',csv,'text/csv')}
+
+/* ================= RELIABILITY (MTBF / MTTR from PMware Metrics page) ================= */
+const RL_COL=['#d81f2a','#5f8fc7','#b8893b','#1d7a4a','#7c5cbf','#2aa198'];
+function rlLabel(p){return p?MO[+p.slice(5,7)-1]+' '+p.slice(0,4):''}
+/* month in the file name: "MTBF IG1 2026-10.html", "mtbf_ig2_202610.html", "IG3 2026-10-01 to 2026-10-31.html" */
+function rlSpanFromName(name){const ds=[...(name||'').matchAll(/(20\d\d)[-_. ]?(0[1-9]|1[0-2])(?:[-_. ]?(\d\d))?/g)].map(m=>m[1]+'-'+m[2]);const u=[...new Set(ds)];return u.length>=2&&u[0]!==u[u.length-1]?`${rlLabel(u[0])} – ${rlLabel(u[u.length-1])}`:''}
+const RL_MONTHS={jan:1,january:1,feb:2,february:2,mar:3,march:3,apr:4,april:4,may:5,jun:6,june:6,jul:7,july:7,aug:8,august:8,sep:9,sept:9,september:9,oct:10,october:10,nov:11,november:11,dec:12,december:12};
+function rlMonthWord(name){const s=(name||'').toLowerCase().replace(/\.html?$/,'');const m=/(?:^|[^a-z])(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)(?:[^a-z0-9]*|\s*)((?:20)?\d\d)?(?![a-z])/.exec(s);if(!m)return'';const mo=RL_MONTHS[m[1]];let y=m[2]?+m[2]:new Date().getFullYear();if(y<100)y+=2000;return `${y}-${String(mo).padStart(2,'0')}`}
+function rlPeriodFromName(name){const w=rlMonthWord(name);if(w)return w;const t=(name||'').replace(/\.html?$/i,'').split(/\D+/).filter(Boolean);for(let i=0;i<t.length;i++){if(t[i].length===4&&t[i].startsWith('20')&&i+1<t.length&&t[i+1].length<=2){const m=+t[i+1];if(m>=1&&m<=12)return `${t[i]}-${String(m).padStart(2,'0')}`}}const six=t.find(x=>x.length===6&&x.startsWith('20'));if(six){const m=+six.slice(4);if(m>=1&&m<=12)return six.slice(0,4)+'-'+six.slice(4)}
+  /* "1-26", "10.26", "10-2026": month then 2- or 4-digit year */
+  for(let i=0;i+1<t.length;i++){const m=+t[i],y=t[i+1];if(t[i].length<=2&&m>=1&&m<=12&&y.length===4&&y.startsWith('20'))return `${y}-${String(m).padStart(2,'0')}`}
+  for(let i=0;i+1<t.length;i++){const m=+t[i],y=t[i+1];if(t[i].length<=2&&m>=1&&m<=12&&y.length===2&&+y>=20&&+y<=39)return `20${y}-${String(m).padStart(2,'0')}`}
+  return ''}
+/* the page's own To-date box (saved in the page's view model) — right when the month was picked before the page was saved */
+function rlPeriodFromPage(html){const m=/ToDateText(?:&quot;|")\s*:\s*(?:&quot;|")(20\d\d)-(\d\d)/.exec(html||'');return m?`${m[1]}-${m[2]}`:''}
+/* one record per saved page -> line totals (the page's bold last row, else the sum of the asset rows) */
+function rlEntry(e){const tot=e.rows.find(r=>r[0]===e.wc);const bd=tot?tot[1]:e.rows.reduce((s,r)=>s+r[1],0);const repairMin=tot?tot[3]*tot[1]:e.rows.reduce((s,r)=>s+r[3]*r[1],0);const lineHours=e.lineHours||(tot&&tot[2]?tot[2]/60*bd:0);return {...e,bd,repairH:repairMin/60,lineHours}}
+function rlRows(ignoreLine){const y=$('yearSel').value,[a,b]=moRange(),line=ignoreLine?'':$('rlLine').value;return Object.values(D.reliability||{}).filter(e=>e.period.startsWith(y)&&e.period.slice(5,7)>=a&&e.period.slice(5,7)<=b&&(!line||e.wc===line)).map(rlEntry).sort((p,q)=>p.period.localeCompare(q.period)||p.wc.localeCompare(q.wc))}
+function rlStat(list){const bd=list.reduce((s,e)=>s+e.bd,0),lh=list.reduce((s,e)=>s+e.lineHours,0),rh=list.reduce((s,e)=>s+e.repairH,0);return {bd,lineHours:lh,repairH:rh,mtbf:bd?+(lh/bd).toFixed(1):null,mttr:bd?+(rh/bd).toFixed(2):null,avail:lh?+Math.max(0,(1-rh/lh)*100).toFixed(1):null}}
+function rlSummary(list){const s=rlStat(list);const lines=[...new Set(list.map(e=>e.wc))].sort(),months=[...new Set(list.map(e=>e.period))].sort();return {...s,lines,months}}
+function rlOverviewKpis(){const list=rlRows(true);if(!list.length)return'';const s=rlSummary(list);const span=s.months.length===1?rlLabel(s.months[0]):`${rlLabel(s.months[0])} – ${rlLabel(s.months[s.months.length-1])}`;
+  return kpi('MTBF · IG lines',s.mtbf!=null?s.mtbf+' h':'—','blue','hours between breakdowns','t-info',`${fmt(s.bd)} breakdowns · ${s.lines.join(', ')} · ${span}`)+kpi('MTTR · IG lines',s.mttr!=null?s.mttr+' h':'—','blue','hours to repair','t-info',`${fmt(Math.round(s.repairH))} repair hrs · availability ${s.avail!=null?s.avail+'%':'—'}`)}
+function rlObservations(){const out=[];const list=rlRows(true);const lines=[...new Set(list.map(e=>e.wc))].sort();
+  lines.forEach(wc=>{const ms=list.filter(e=>e.wc===wc);if(ms.length<2)return;const last=rlStat([ms[ms.length-1]]),prev=rlStat([ms[ms.length-2]]);const lm=rlLabel(ms[ms.length-1].period),pm=rlLabel(ms[ms.length-2].period);
+    if(last.mtbf!=null&&prev.mtbf&&last.mtbf<prev.mtbf*0.8)out.push({who:'Manager',b:`${wc} MTBF fell ${Math.round((1-last.mtbf/prev.mtbf)*100)}% in ${lm}`,p:`${pm} ${prev.mtbf} h → ${lm} ${last.mtbf} h between breakdowns · ${last.bd} breakdowns in ${fmt(last.lineHours)} line hours.`,tab:'reliability'});
+    if(last.mttr!=null&&prev.mttr&&last.mttr>prev.mttr*1.25)out.push({who:'Planner',b:`${wc} repairs are taking ${Math.round((last.mttr/prev.mttr-1)*100)}% longer in ${lm}`,p:`MTTR ${pm} ${prev.mttr} h → ${lm} ${last.mttr} h. Check parts availability and whether the same asset keeps failing.`,tab:'reliability'})});
+  return out}
+/* compact MTBF/MTTR feed for the iPhone's native MTBF tab and Overview tiles */
+function rlMobile(){const list=rlRows(true);if(!list.length)return null;const s=rlSummary(list);
+  const r1=v=>v==null?null:+(+v).toFixed(1),r2=v=>v==null?null:+(+v).toFixed(2);
+  const lines=s.lines.map(wc=>{const st=rlStat(list.filter(e=>e.wc===wc));return {wc,bd:st.bd,mtbf:r1(st.mtbf),mttr:r2(st.mttr),avail:r1(st.avail)}});
+  const points=list.map(e=>{const st=rlStat([e]);return {period:e.period,label:MO[+e.period.slice(5,7)-1],wc:e.wc,bd:st.bd,mtbf:r1(st.mtbf),mttr:r2(st.mttr),avail:r1(st.avail)}});
+  const A={};list.forEach(e=>e.rows.filter(r=>r[0]!==e.wc).forEach(r=>{const k=e.wc+'|'+r[0];const a=A[k]||(A[k]={eq:r[0],wc:e.wc,bd:0,lh:0,rh:0});a.bd+=r[1];a.lh+=e.lineHours;a.rh+=r[3]*r[1]/60}));
+  const assets=Object.values(A).sort((p,q)=>q.bd-p.bd||q.rh-p.rh).slice(0,15).map(a=>({eq:a.eq,wc:a.wc,bd:a.bd,mtbf:a.bd?r1(a.lh/a.bd):null,mttr:a.bd?r2(a.rh/a.bd):null,repairH:r1(a.rh)}));
+  const span=s.months.length===1?rlLabel(s.months[0]):`${rlLabel(s.months[0])} – ${rlLabel(s.months[s.months.length-1])}`;
+  return {mtbf:r1(s.mtbf),mttr:r2(s.mttr),avail:r1(s.avail),bd:s.bd,lineHours:Math.round(s.lineHours),repairH:r1(s.repairH),span,lines,points,assets}}
+function renderReliability(){
+  const all=Object.values(D.reliability||{});const sel=$('rlLine');const cur=sel.value;const wcs=[...new Set(all.map(e=>e.wc))].sort();sel.innerHTML='<option value="">All IG lines</option>'+wcs.map(w=>`<option>${w}</option>`).join('');if(wcs.includes(cur))sel.value=cur;
+  const list=rlRows();const s=rlSummary(list);
+  {const igs=[...new Set([...wcs,...completedRows().map(r=>r.wc).filter(w=>/^IG\d$/i.test(w))])].sort();const sel2=$('rlLine').value;const use=sel2?igs.filter(w=>w===sel2):igs;const rows=yearRows().filter(r=>r.type==='Breakdown'&&use.includes(r.wc));const months=[...new Set(rows.map(r=>r.done.slice(0,7)))].sort();
+   chart('cRlBdWo',{type:'line',data:{labels:months.map(rlLabel),datasets:use.map((wc,i)=>({label:wc,data:months.map(mo=>rows.filter(r=>r.wc===wc&&r.done.startsWith(mo)).length),borderColor:RL_COL[i%RL_COL.length],backgroundColor:RL_COL[i%RL_COL.length],tension:.3,pointRadius:3}))},options:{...CO(),scales:{...CO().scales,y:{...CO().scales.y,beginAtZero:true}}}})}
+  $('rlPeriod').textContent=list.length?`${s.months.length} month${s.months.length===1?'':'s'} · ${s.lines.length} line${s.lines.length===1?'':'s'} · ${s.months.map(rlLabel).join(', ')}`:'';
+  if(!list.length){$('rlKpis').innerHTML=kpi('MTBF / MTTR','—','muted',all.length?'No pages in the selected year / months':'No MTBF\\MTTR page loaded yet','t-info',all.length?'':'Save PMware › Reports › Metrics › MTBF\\MTTR for each IG line and drop it on Add data');['cRlMtbf','cRlMttr','cRlMtbfT','cRlMttrT'].forEach(id=>chart(id,{type:'bar',data:{labels:[],datasets:[]},options:CO()}));$('tRlLines').innerHTML='';$('tRlAssets').innerHTML='';return}
+  $('rlKpis').innerHTML=
+    kpi('MTBF',s.mtbf+' h','blue','hours between breakdowns','t-info',`${fmt(s.lineHours)} line hrs ÷ ${fmt(s.bd)} breakdowns`)+
+    kpi('MTTR',s.mttr+' h','amber','hours to repair','t-info',`${fmt(Math.round(s.repairH))} repair hrs ÷ ${fmt(s.bd)} breakdowns`)+
+    kpi('Availability',s.avail+'%',grade(s.avail,98,95),'line hrs less repair time',tg[grade(s.avail,98,95)])+
+    kpi('Breakdowns',fmt(s.bd),'red',`${s.lines.length} line${s.lines.length===1?'':'s'}`,'t-info')+
+    kpi('Line Hours',fmt(s.lineHours),'purple','scheduled line time in the period','t-info')+
+    kpi('Months',s.months.length,'muted',s.months.length?`${rlLabel(s.months[0])}${s.months.length>1?' – '+rlLabel(s.months[s.months.length-1]):''}`:'','t-info');
+  const byLine=s.lines.map(wc=>({wc,...rlStat(list.filter(e=>e.wc===wc))}));
+  chart('cRlMtbf',{type:'bar',data:{labels:byLine.map(x=>x.wc),datasets:[{label:'MTBF (h)',data:byLine.map(x=>x.mtbf),backgroundColor:'#1d7a4a',borderRadius:3}]},options:{...CO(),plugins:{legend:{display:false}}}});
+  chart('cRlMttr',{type:'bar',data:{labels:byLine.map(x=>x.wc),datasets:[{label:'MTTR (h)',data:byLine.map(x=>x.mttr),backgroundColor:'#d81f2a',borderRadius:3}]},options:{...CO(),plugins:{legend:{display:false}}}});
+  const months=s.months;const trend=k=>s.lines.map((wc,i)=>({label:wc,data:months.map(p=>{const e=list.find(x=>x.wc===wc&&x.period===p);return e?rlStat([e])[k]:null}),borderColor:RL_COL[i%RL_COL.length],backgroundColor:RL_COL[i%RL_COL.length],tension:.3,pointRadius:3,spanGaps:true}));
+  chart('cRlMtbfT',{type:'line',data:{labels:months.map(rlLabel),datasets:trend('mtbf')},options:CO()});
+  chart('cRlMttrT',{type:'line',data:{labels:months.map(rlLabel),datasets:trend('mttr')},options:CO()});
+  const lineRows=list.map(e=>{const st=rlStat([e]);return {period:e.period,month:rlLabel(e.period),wc:e.wc,bd:st.bd,lh:Math.round(st.lineHours),mtbf:st.mtbf,mttr:st.mttr,avail:st.avail,assets:e.rows.filter(r=>r[0]!==e.wc).length,src:e.src||''}});
+  if(!sortable.state.tRlLines)sortable.state.tRlLines={k:'period',asc:false};
+  sortable('tRlLines',lineRows,[{h:'Month',k:'period',fmt:(v,r)=>r.month},{h:'Line',k:'wc'},{h:'Breakdowns',k:'bd',cls:'ctr',fmt:fmt},{h:'Line hrs',k:'lh',cls:'ctr',fmt:fmt},{h:'MTBF (h)',k:'mtbf',cls:'ctr'},{h:'MTTR (h)',k:'mttr',cls:'ctr'},{h:'Availability',k:'avail',cls:'ctr',fmt:v=>v==null?'—':`<span class="${grade(v,98,95)}">${v}%</span>`},{h:'Assets',k:'assets',cls:'ctr'},{h:'Source',k:'src',cls:'ttl'}]);
+  const A={};list.forEach(e=>e.rows.filter(r=>r[0]!==e.wc).forEach(r=>{const k=e.wc+'|'+r[0];const a=A[k]||(A[k]={eq:r[0],wc:e.wc,bd:0,lh:0,repairH:0,last:''});a.bd+=r[1];a.lh+=e.lineHours;a.repairH+=r[3]*r[1]/60;if(e.period>a.last)a.last=e.period}));
+  const assets=Object.values(A).map(a=>({...a,mtbf:a.bd?+(a.lh/a.bd).toFixed(1):null,mttr:a.bd?+(a.repairH/a.bd).toFixed(2):null,repairH:+a.repairH.toFixed(1),lastM:rlLabel(a.last)})).sort((p,q)=>q.bd-p.bd||q.repairH-p.repairH).slice(0,80);
+  const mx=Math.max(...assets.map(a=>a.bd),1);
+  if(!sortable.state.tRlAssets)sortable.state.tRlAssets={k:'bd',asc:false};
+  sortable('tRlAssets',assets,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'Line',k:'wc'},{h:'Breakdowns',k:'bd',cls:'bar',fmt:v=>`<i style="width:${v/mx*100}%"></i><b>${v}</b>`},{h:'MTBF (h)',k:'mtbf',cls:'ctr'},{h:'MTTR (h)',k:'mttr',cls:'ctr',fmt:v=>v==null?'—':`<span class="${v>=2?'red':v>=1?'amber':''}">${v}</span>`},{h:'Repair hrs',k:'repairH',cls:'ctr'},{h:'Last month',k:'last',cls:'ctr',fmt:(v,r)=>r.lastM}]);
+}
+
+/* ================= WIRING ================= */
+(function(){try{const t=localStorage.getItem('kpi_demo_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}})();
+function toggleTheme(){const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');const n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;try{localStorage.setItem('kpi_demo_theme',n)}catch(e){}renderAll()}
+$('themeBtn').onclick=toggleTheme;$('printBtn').onclick=()=>window.print();
+let PRINTING=false;
+/* before snapshotting a chart for print: bigger axis/legend text and 3x resolution so it stays sharp once scaled to paper (afterprint re-renders the pane, which restores screen sizes) */
+function printReady(c){const up=(o,d)=>{if(!o||typeof o!=='object'||d>5)return;Object.keys(o).forEach(k=>{if(k==='font'&&o[k]&&typeof o[k]==='object')o[k].size=Math.max(14,(o[k].size||12)+3);else up(o[k],d+1)})};
+  const o=c.config.options;up(o.plugins,0);up(o.scales,0);Object.values(o.scales||{}).forEach(sc=>{sc.ticks=sc.ticks||{};sc.ticks.font=sc.ticks.font||{size:14}});o.devicePixelRatio=3;
+  /* draw at the width it will occupy on paper (980px layout: ~450px half-width box, ~920px full-width) so the text isn't shrunk again when the image is fitted */
+  const cv=c.canvas,w=cv.closest('.grid,.grid3')?450:920,h=Math.round(w*cv.clientHeight/Math.max(1,cv.clientWidth));o.responsive=false;
+  /* tall charts (one row per item, e.g. Weibull by machine): keep a row per label instead of squeezing to the usual height */
+  const tall=cv.closest('[data-print-tall]');if(tall){const yt=(o.scales.y=o.scales.y||{}).ticks=o.scales.y.ticks||{};yt.font={...(yt.font||{}),size:11};c.resize(w,Math.max(h,(c.data.labels||[]).length*14+110));c.update('none');return}
+  c.resize(w,Math.min(h,Math.round(w*(w>600?0.42:0.62))));c.update('none')}
+let PRINT_THEME=null;
+/* The Mac app prints through WKWebView, which slices the page at fixed heights and ignores CSS break-inside.
+   So for the Mac app: apply the print styles on screen at the 980px print width (printEmu), then push any box,
+   chart row or table row that would straddle a page cut down to the next page (macPaginate). H = page height in CSS px, sent by the app. */
+function printEmu(on){const old=$('printemu');if(old)old.remove();if(!on)return;let css='';
+  for(const sh of document.styleSheets){let rules;try{rules=sh.cssRules}catch(e){continue}for(const r of rules)if(r.media&&[...r.media].includes('print'))for(const x of r.cssRules)if(!x.cssText.startsWith('@page'))css+=x.cssText+'\n'}
+  const st=document.createElement('style');st.id='printemu';st.textContent=css+'html{width:980px!important}*{break-inside:auto!important;page-break-inside:auto!important}'/* WebKit's own break spacing uses a different page height than the real cuts; macPaginate places boxes instead */;document.head.appendChild(st)}
+let PAGINATED=[];
+function unpaginate(){PAGINATED.forEach(([el,mt])=>el.style.marginTop=mt);PAGINATED=[];document.querySelectorAll('.pgsp').forEach(e=>e.remove())}
+async function macPaginate(H){
+  await Promise.all([...document.querySelectorAll('#printhead img')].map(i=>i.decode().catch(()=>{})));
+  const nodes=document.querySelectorAll('#printhead, .pane.active .kpis, .pane.active .box, .pane.active .grid>*, .pane.active .grid3>*, .pane.active .legend, .pane.active .shift, .pane.active tr');
+  for(const el of nodes){
+    if(!el.getClientRects().length)continue;const r=el.getBoundingClientRect(),t=r.top+scrollY,b=r.bottom+scrollY;
+    if(b-t<=0||b-t>H-8||Math.floor(t/H)===Math.floor((b-1)/H))continue;
+    const push=Math.ceil((Math.floor((b-1)/H)*H)-t+6);
+    if(el.tagName==='TR'){const sp=document.createElement('tr');sp.className='pgsp';sp.innerHTML=`<td colspan="99" style="height:${push}px;padding:0;border:0;background:none"></td>`;el.before(sp);continue}
+    const g=el.parentElement,row=g&&g.matches('.grid,.grid3')?[...g.children].filter(x=>Math.abs(x.getBoundingClientRect().top-r.top)<2):[el];
+    row.forEach(x=>{PAGINATED.push([x,x.style.marginTop]);x.style.marginTop=((parseFloat(getComputedStyle(x).marginTop)||0)+push)+'px'});
+  }
+}
+window.macPrintPrep=async function(H){window.__PRINT_READY=false;if(PRINTING)window.dispatchEvent(new Event('afterprint'));window.__PRINT_PAGE_H=H;window.dispatchEvent(new Event('beforeprint'));await window.__PRINT_PREP;window.__PRINT_READY=true};
+window.addEventListener('beforeprint',()=>{if(PRINTING)return;PRINTING=true;if(window.__MAC_APP)printEmu(true);PRINT_THEME=document.documentElement.dataset.theme||'';document.documentElement.dataset.theme='light';const act=document.querySelector('.tab.active');const f=act&&PANE_RENDER[act.dataset.t];if(f)f();const t=document.querySelector('.tab.active');$('printhead').innerHTML=`<div class="plogo"></div><div class="ptitle"><div class="eyebrow">Maintenance planning · Demo Plant</div><h1>${t?t.textContent:'Dashboard'}</h1><div class="psub">Maintenance KPI Dashboard</div></div><div class="pmeta"><div>${$('periodBadge').textContent}</div><div>Printed ${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}</div><div>Source: PMware</div></div>`;
+  const shots=[];document.querySelectorAll('.pane.active canvas').forEach(cv=>{const c=Chart.getChart(cv);if(!c||!cv.width)return;printReady(c);shots.push([cv,c.toBase64Image(),cv.width,cv.height])});
+  /* a background-image div, not an <img>: WebKit's print code moves images off what it thinks is a page edge, which leaves gaps */
+  shots.forEach(([cv,u,w,h])=>{const d=document.createElement('div');d.className='printimg';d.style.cssText=`background:url(${u}) center/contain no-repeat;aspect-ratio:${w}/${h}`;cv.classList.add('hasimg');cv.after(d)});document.body.classList.add('printing');
+  window.__PRINT_PREP=window.__MAC_APP&&window.__PRINT_PAGE_H?macPaginate(window.__PRINT_PAGE_H):Promise.resolve()});
+window.addEventListener('afterprint',()=>{PRINTING=false;unpaginate();printEmu(false);if(PRINT_THEME)document.documentElement.dataset.theme=PRINT_THEME;else delete document.documentElement.dataset.theme;const act=document.querySelector('.tab.active');const f=act&&PANE_RENDER[act.dataset.t];document.body.classList.remove('printing');document.querySelectorAll('.printimg').forEach(i=>i.remove());document.querySelectorAll('canvas.hasimg').forEach(cv=>cv.classList.remove('hasimg'));if(f)f()});
+/* ===== Analytics tab: Pareto, Weibull, PM time standards ===== */
+/* Same period/department/work-center filters as the other tabs, but not the WO-type filter (each tool picks its own types). */
+function anRows(){const y=$('yearSel').value,d=$('deptSel').value,w=$('wcSel').value;return completedRows().filter(r=>r.done.startsWith(y)&&inMonths(r)&&(!d||r.dept===d)&&(!w||r.wc===w))}
+/* Labor that looks mistyped: over 24 h on one WO, or 8 h+ and more than 8x its estimate. */
+/* Placeholder equipment names that aren't a machine. */
+const realEq=e=>!!e&&!/^(n\s*[\\/]?\s*a|none|misc\.?|maintenance shop)$/i.test(String(e).trim());
+/* Equipment named after a line or area (IG1, Plant…) is line-level work, not a machine: it counts in Pareto, but not in per-machine tools. */
+const isLine=e=>/^(ig\s?\d|mezz(anine)?|cutting|tempering|facility|plant|hand seal|shipping|offices|maintenance)$/i.test(String(e||'').trim());
+const machineEq=e=>realEq(e)&&!isLine(e);
+const suspectLab=r=>r.lab>1440||(r.lab>=480&&r.est>0&&r.lab>8*r.est);
+/* Failure cause from keywords in the WO title (checked in order; equipment name removed first). */
+const CAUSES=[
+  ['Safety/Interlocks',/safety|interlock|e ?-?stop|guard|light curtain|door|key\b|relay/i],
+  ['Rollers/Belts',/\broll|belt|pulley|conveyor|chain|cat track|carriage|carraige|gearbox|\bgears?\b|bearing/i],
+  ['Electrical/Sensors',/sensor|prox|\beyes?\b|fault|error|alarm|electric|wire|wiring|cable|motor|drive|servo|encoder|plc|screen|power|homing|home\b|robot|froze|freez|computer|read head/i],
+  ['Heat/Extrusion',/barrel|heat|\btemp\b|temperature|nozzle|butyl|hot ?melt|pump|furnace/i],
+  ['Pneumatic/Vacuum',/\bair\b|vacuum|\bvac\b|cylinder|valve|pneumatic|suction|leak|festo|pressure/i],
+  ['Material Feed/Jams',/jam|stuck|crush|feed|not letting|stop block|picking|\bbars?\b|channel|dent|loading|pile ?up|collid|crash|finger|clamp/i],
+  ['Calibration/Adjust',/adjust|measur|alignment|align|calibrat|corner|weight|out of square|length|gap|tracking/i],
+  ['Sealing/Quality',/seal|silicone|zipper|tack strip|broken (window|glass|lite)|dropping|dye|dirty glass|reject/i],
+  ['Cutting/Tooling',/blade|knife|\bcut|scor(e|ing)|punch|\bsaw|\bbit\b|grind|wheel|brush|bend arm|\barm\b/i],
+  ['Fluids/Filters',/alcohol|filter|water|\boil\b|grease|lube|fluid/i],
+  ['Stops (no detail)',/stop|shut ?off|not running|won.?t run|not working|reset|down\b/i],
+];
+function causeOf(r){let t=String(r.title||'');if(r.eq)t=t.split(r.eq).join(' ');for(const [c,re] of CAUSES)if(re.test(t))return c;return 'Not specified'}
+/* A breakdown WO "names its cause" when the title says what failed — "Not specified" and bare "machine down" titles don't. */
+function causeNamed(r){const c=causeOf(r);return c!=='Not specified'&&c!=='Stops (no detail)'}
+const median=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
+const quant=(a,q)=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),p=(s.length-1)*q,i=Math.floor(p);return s[i]+(s[Math.min(i+1,s.length-1)]-s[i])*(p-i)};
+const hm=m=>m==null?'—':`${Math.floor(Math.round(m)/60)}h ${Math.round(m)%60}m`;
+/* Period covered by the filters, clipped to the data: [start, end] as YYYY-MM-DD. */
+function anWindow(rows){const y=$('yearSel').value,[a,b]=moRange();const lastDay=new Date(+y,+b,0).getDate();const s=`${y}-${a}-01`,e=`${y}-${b}-${String(lastDay).padStart(2,'0')}`;const maxDone=rows.reduce((m,r)=>r.done>m?r.done:m,'');return [s,maxDone&&maxDone<e?maxDone:e]}
+
+let AN_SEC='pareto';
+document.querySelectorAll('#anSeg button').forEach(b=>b.onclick=()=>{AN_SEC=b.dataset.s;document.querySelectorAll('#anSeg button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.an-sec').forEach(s=>s.classList.toggle('on',s.id==='an-'+AN_SEC));renderAnalytics()});
+['parMetric','parBy','parType'].forEach(id=>$(id).onchange=()=>renderPareto());
+function renderAnalytics(){if(!$('p-analytics').classList.contains('active'))return;({pareto:renderPareto,weibull:renderWeibull,pmstd:renderPmStd,pmeff:renderPmEff})[AN_SEC]()}
+
+/* ---------- Pareto ---------- */
+function renderPareto(){
+  const metric=$('parMetric').value,by=$('parBy').value,typ=$('parType').value;
+  const rows=anRows().filter(r=>(typ==='Unplanned'?(r.type==='Breakdown'||r.type==='Corrective'):r.type===typ)&&!suspectLab(r));
+  const g={};rows.forEach(r=>{const c=causeOf(r),eq=!realEq(r.eq)?'(no equipment)':isLine(r.eq)?r.eq+' (whole line)':r.eq;const k=by==='eq'?eq:by==='cause'?c:`${eq} · ${c}`;const o=g[k]||(g[k]={k,cause:c,n:0,lab:0});o.n++;o.lab+=r.lab});
+  const list=Object.values(g).map(o=>({...o,v:metric==='lab'?o.lab/60:o.n})).sort((a,b)=>b.v-a.v);
+  const tot=list.reduce((s,o)=>s+o.v,0);let cum=0;
+  list.forEach((o,i)=>{o.rank=i+1;o.share=tot?+(o.v/tot*100).toFixed(1):0;o.vital=cum<80;cum+=o.v/(tot||1)*100;o.cum=+cum.toFixed(1);o.hrs=+(o.lab/60).toFixed(1)});
+  const vital=list.filter(o=>o.vital).length,unit=metric==='lab'?'labor hours':'events';
+  const top3=list.slice(0,3).reduce((s,o)=>s+o.share,0);
+  const unspec=by==='eq'?null:list.filter(o=>o.cause==='Not specified').reduce((s,o)=>s+o.share,0);
+  $('parKpis').innerHTML=kpi(metric==='lab'?'Labor Hours':'Events',fmt(Math.round(tot)),'red','','',`${fmt(rows.length)} work orders`)+
+    kpi('Vital Few',`${vital} <span style="font-size:18px">of ${list.length}</span>`,'amber','','',`make up 80% of ${unit}`)+
+    kpi('Top 3 Share',top3.toFixed(0)+'%',top3>=40?'red':'blue','','',list.slice(0,3).map(o=>o.k).join(' · '))+
+    (unspec==null?'':kpi('Cause Not Specified',unspec.toFixed(0)+'%',grade(unspec,15,30,false),'Target ≤ 15%',tg[grade(unspec,15,30,false)],'titles that don\'t say what failed'));
+  
+  const top=list.slice(0,$('cPareto').parentElement.clientWidth<600?12:25);
+  $('parSub').textContent=`${unit} · top ${top.length} of ${list.length}`;
+  chart('cPareto',{data:{labels:top.map(o=>o.k),datasets:[
+    {type:'bar',label:unit,data:top.map(o=>+o.v.toFixed(1)),backgroundColor:top.map(o=>o.vital?'#d81f2a':cv('--muted')),borderRadius:3,yAxisID:'y',order:2},
+    {type:'line',label:'Cumulative %',data:top.map(o=>o.cum),borderColor:cv('--ink'),backgroundColor:cv('--ink'),pointRadius:2,borderWidth:2,yAxisID:'y2',order:1},
+    {type:'line',label:'80%',data:top.map(()=>80),borderColor:'#b8893b',borderDash:[5,4],pointRadius:0,borderWidth:1.5,yAxisID:'y2',order:0}]},
+    options:{...CO(),maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:{ticks:{color:cv('--muted'),font:{size:10},maxRotation:60,minRotation:45,autoSkip:false},grid:{display:false}},y:{beginAtZero:true,title:{display:true,text:unit,color:cv('--muted')},ticks:{color:cv('--muted')},grid:{color:cv('--line')}},y2:{position:'right',min:0,max:100,ticks:{color:cv('--muted'),callback:v=>v+'%'},grid:{display:false}}}}});
+  if(!sortable.state.tPareto)sortable.state.tPareto={k:'rank',asc:true};
+  const mx=Math.max(...list.map(o=>o.v),1);
+  sortable('tPareto',list,[{h:'#',k:'rank',fmt:(v,r)=>`<b class="${r.vital?'red':''}">${v}</b>`},{h:by==='cause'?'Cause':by==='eq'?'Equipment':'Equipment · cause',k:'k',cls:'ttl'},{h:'Events',k:'n'},{h:'Labor hrs',k:'hrs'},{h:metric==='lab'?'Share of hours':'Share of events',k:'share',cls:'bar',fmt:(v,r)=>`<i style="width:${r.v/mx*100}%"></i><b>${v}%</b>`},{h:'Cumulative',k:'cum',fmt:v=>v+'%'}]);
+}
+
+/* ---------- Weibull ---------- */
+/* Maximum-likelihood Weibull fit with right-censoring (Newton's method on beta). */
+function weibullFit(fails,susp){
+  const all=fails.concat(susp),r=fails.length,mlf=fails.reduce((s,t)=>s+Math.log(t),0)/r;let b=1.2;
+  for(let it=0;it<200;it++){let s0=0,s1=0,s2=0;for(const t of all){const tb=Math.pow(t,b),lt=Math.log(t);s0+=tb;s1+=tb*lt;s2+=tb*lt*lt}
+    const g=s1/s0-1/b-mlf,dg=(s2*s0-s1*s1)/(s0*s0)+1/(b*b);let nb=b-g/dg;if(!isFinite(nb)||nb<=0)nb=b/2;if(Math.abs(nb-b)<1e-8){b=nb;break}b=nb}
+  const eta=Math.pow(all.reduce((s,t)=>s+Math.pow(t,b),0)/r,1/b),se=0.78/Math.sqrt(r);
+  return {beta:b,eta,lo:b*Math.exp(-1.645*se),hi:b*Math.exp(1.645*se),b10:eta*Math.pow(-Math.log(0.9),1/b)};
+}
+/* Laplace trend test: U > 1.645 breakdowns are coming closer together, U < -1.645 further apart. */
+function laplaceU(dates,s,e){const T=daysBetween(s,e);const t=dates.map(d=>daysBetween(s,d));const n=t.length;if(n<4||T<=0)return 0;return (t.reduce((a,x)=>a+x,0)/n-T/2)/(T*Math.sqrt(1/(12*n)))}
+function renderWeibull(){
+  const rows=anRows(),[ws,we]=anWindow(rows);
+  const bd={},pm={};rows.forEach(r=>{if(!machineEq(r.eq))return;if(r.type==='Breakdown')(bd[r.eq]=bd[r.eq]||new Set()).add(r.done);else if(r.type==='Preventative')(pm[r.eq]=pm[r.eq]||new Set()).add(r.done)});
+  const out=[];
+  Object.entries(bd).forEach(([eq,set])=>{const ds=[...set].sort();if(ds.length<9)return;
+    const fails=[];for(let i=1;i<ds.length;i++)fails.push(Math.max(daysBetween(ds[i-1],ds[i]),0.5));
+    const tail=daysBetween(ds[ds.length-1],we),f=weibullFit(fails,tail>0?[tail]:[]);
+    const U=laplaceU(ds,ws,we),pds=pm[eq]?[...pm[eq]].sort():[];const pgaps=[];for(let i=1;i<pds.length;i++)pgaps.push(daysBetween(pds[i-1],pds[i]));
+    const pattern=f.hi<1?'Early failures':f.lo>1?'Wear-out':'Random';
+    const action=pattern==='Early failures'?'Repairs aren\'t holding — check repair quality, parts and root cause':pattern==='Wear-out'?(f.b10<7?'Wears out within days — add an operator start-of-shift check':`Time-based PM works — service before day ${Math.round(f.b10)}`):'No age pattern — change what the PM checks and fix the top causes';
+    out.push({eq,n:ds.length,beta:+f.beta.toFixed(2),lo:+f.lo.toFixed(2),hi:+f.hi.toFixed(2),eta:+f.eta.toFixed(1),b10:+f.b10.toFixed(1),pm:pgaps.length?median(pgaps):null,pattern,trend:U>1.645?'Getting worse':U<-1.645?'Improving':'Steady',U:+U.toFixed(2),action});
+  });
+  const cnt=p=>out.filter(o=>o.pattern===p).length,worse=out.filter(o=>o.trend==='Getting worse').length;
+  $('wbKpis').innerHTML=kpi('Machines Analyzed',fmt(out.length),'blue','','','8+ breakdowns in the period')+kpi('Random',fmt(cnt('Random')),'muted','','','no age pattern')+kpi('Wear-out',fmt(cnt('Wear-out')),'red','','','time-based PM can work')+kpi('Early Failures',fmt(cnt('Early failures')),'amber','','','repairs not holding')+kpi('Getting Worse',fmt(worse),worse?'red':'green','','','breakdowns coming closer together');
+  const srt=[...out].sort((a,b)=>b.beta-a.beta),col=o=>o.pattern==='Wear-out'?'#d81f2a':o.pattern==='Early failures'?'#b8893b':cv('--muted');
+  $('wbWrap').style.height=Math.max(220,srt.length*17+60)+'px';
+  const refLine={id:'refLine',afterDatasetsDraw(c){const x=c.scales.x;if(!x)return;const px=x.getPixelForValue(1),ctx=c.ctx;ctx.save();ctx.strokeStyle=cv('--ink');ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(px,c.chartArea.top);ctx.lineTo(px,c.chartArea.bottom);ctx.stroke();ctx.restore()}};
+  chart('cWeibull',{data:{labels:srt.map(o=>o.eq),datasets:[
+    {type:'bar',label:'90% range',data:srt.map(o=>[o.lo,o.hi]),backgroundColor:srt.map(o=>col(o)+'66'),borderRadius:3,barThickness:6,order:2},
+    {type:'scatter',label:'β',data:srt.map(o=>({x:o.beta,y:o.eq})),backgroundColor:srt.map(col),pointRadius:4,order:1}]},
+    options:{...CO(),indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const o=srt[c.dataIndex];return `β ${o.beta} (${o.lo}–${o.hi}) · η ${o.eta} d · ${o.pattern} · ${o.trend}`}}}},scales:{x:{min:Math.min(0.4,...srt.map(o=>o.lo)),max:Math.max(1.6,...srt.map(o=>o.hi)),title:{display:true,text:'β  ← fails young · wears out →',color:cv('--muted')},ticks:{color:cv('--muted')},grid:{color:cv('--line')}},y:{type:'category',ticks:{color:cv('--ink'),font:{size:11},autoSkip:false},grid:{display:false}}}},plugins:[refLine]});
+  /* breakdown interval vs PM interval for the machines getting worse (or the most-broken ones when none are) */
+  const gw=out.filter(o=>o.trend==='Getting worse').sort((a,b)=>b.n-a.n),show=gw.length?gw:[...out].sort((a,b)=>b.n-a.n).slice(0,15);
+  $('wbPmSub').textContent=gw.length?`the ${gw.length} machines getting worse · most breakdowns first`:'no machines getting worse — top 15 by breakdowns';
+  $('wbPmWrap').style.height=Math.max(200,show.length*34+80)+'px';
+  const valLbl={id:'valLbl',afterDatasetsDraw(ch){const g=ch.ctx;g.save();g.font='11px '+cv('--body');g.fillStyle=cv('--muted');g.textBaseline='middle';ch.data.datasets.forEach((ds,i)=>ch.getDatasetMeta(i).data.forEach((b,j)=>{const v=ds.data[j];g.fillText(v==null?'no PM found':(+v).toFixed(v<10&&v%1?1:0)+' d',b.x+5,b.y)}));g.restore()}};
+  chart('cWbPm',{type:'bar',data:{labels:show.map(o=>o.eq),datasets:[
+    {label:'Breaks down about every (η)',data:show.map(o=>o.eta),backgroundColor:'#d81f2a',borderRadius:3,barThickness:10},
+    {label:'Gets PM about every',data:show.map(o=>o.pm),backgroundColor:cv('--muted'),borderRadius:3,barThickness:10}]},
+    options:{...CO(),indexAxis:'y',maintainAspectRatio:false,layout:{padding:{right:60}},plugins:{legend:{position:'top',align:'start',labels:{color:cv('--muted'),boxWidth:10,font:{size:11}}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw==null?'no PM found':c.raw+' days'}`}}},
+      scales:{x:{beginAtZero:true,title:{display:true,text:'days',color:cv('--muted')},ticks:{color:cv('--muted'),callback:v=>v+' d'},grid:{color:cv('--line')}},y:{ticks:{color:cv('--ink'),font:{size:12},autoSkip:false},grid:{display:false}}}},plugins:[valLbl]});
+  if(!sortable.state.tWeibull)sortable.state.tWeibull={k:'n',asc:false};
+  sortable('tWeibull',out,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'Breakdowns',k:'n'},{h:'β',k:'beta',fmt:(v,r)=>`<b class="${r.pattern==='Wear-out'?'red':r.pattern==='Early failures'?'amber':''}">${v}</b>`},{h:'90% range',k:'lo',fmt:(v,r)=>`${r.lo}–${r.hi}`},{h:'η days',k:'eta'},{h:'B10 days',k:'b10'},{h:'PM every (days)',k:'pm',fmt:v=>v==null?'—':v},{h:'Pattern',k:'pattern',fmt:v=>`<span class="pill ${v==='Wear-out'?'p-red':v==='Early failures'?'p-amber':'p-gray'}">${v}</span>`},{h:'Trend',k:'trend',fmt:v=>`<span class="${v==='Getting worse'?'red':v==='Improving'?'green':''}">${v}</span>`},{h:'What to do',k:'action'}]);
+}
+
+/* ---------- PM time standards ---------- */
+const roundEst=m=>{const s=m<60?5:15;return Math.max(s,Math.round(m/s)*s)};
+function renderPmStd(){
+  const rows=anRows().filter(r=>r.type==='Preventative'&&!suspectLab(r));
+  const span=rows.length?Math.max(daysBetween(rows.reduce((m,r)=>r.done<m?r.done:m,'9999'),rows.reduce((m,r)=>r.done>m?r.done:m,'')),1):1;
+  const g={};rows.forEach(r=>{const k=r.title+'\u0001'+r.eq;const o=g[k]||(g[k]={title:r.title,eq:r.eq,rows:[]});o.rows.push(r)});
+  const per=[],thin=[];let timed=0,withLab=0;
+  Object.values(g).forEach(o=>{o.rows.sort((a,b)=>a.done<b.done?-1:1);const cur=o.rows[o.rows.length-1].est;
+    const lab=o.rows.filter(r=>r.lab>0),meas=lab.filter(r=>r.lab!==r.est).map(r=>r.lab);withLab+=lab.length;timed+=meas.length;
+    const base={title:o.title,eq:o.eq,n:o.rows.length,meas:meas.length,cur,def:lab.length?Math.round(lab.filter(r=>r.lab===r.est).length/lab.length*100):0};
+    if(meas.length<4){thin.push({...base,rows:o.rows});return}
+    const act=median(meas),sug=roundEst(act),diff=sug-cur,lo=quant(meas,.25),hi=quant(meas,.75),spread=act?(hi-lo)/act:9;
+    const change=cur<=0||(Math.abs(act-cur)>0.25*cur&&Math.abs(diff)>=10);if(!change)return;
+    per.push({...base,act,sug,diff,lo,hi,conf:meas.length>=8&&spread<=1?'High':(meas.length>=8||spread<=1)?'Medium':'Low',err:+(Math.abs(diff)*o.rows.length/span*365/60).toFixed(1)});
+  });
+  /* pool PM types across equipment for PMs too thin to judge alone */
+  const types={};thin.forEach(t=>{const o=types[t.title]||(types[t.title]={title:t.title,eqs:{},rows:[]});o.eqs[t.eq]=t.cur;o.rows.push(...t.rows)});
+  const typ=[];Object.values(types).forEach(o=>{const ests=Object.values(o.eqs);const meas=o.rows.filter(r=>r.lab>0&&r.lab!==r.est).map(r=>r.lab);if(ests.length<2||meas.length<8)return;
+    const cnt={};ests.forEach(e=>cnt[e]=(cnt[e]||0)+1);const cur=+Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0];const act=median(meas),sug=roundEst(act),diff=sug-cur;
+    if(!(cur>0&&Math.abs(act-cur)>0.25*cur&&Math.abs(diff)>=10))return;const lo=quant(meas,.25),hi=quant(meas,.75),spread=act?(hi-lo)/act:9;
+    typ.push({title:o.title,neq:ests.length,eqs:Object.keys(o.eqs).sort().join(', '),cur,sug,diff,lo,hi,meas:meas.length,n:o.rows.length,conf:meas.length>=24&&spread<=1?'High':spread<=1.5?'Medium':'Low',err:+(Math.abs(diff)*o.rows.length/span*365/60).toFixed(1)})});
+  const errAll=per.reduce((s,x)=>s+x.err,0)+typ.reduce((s,x)=>s+x.err,0),timedP=pct(timed,withLab);
+  $('pmsKpis').innerHTML=kpi('PMs Checked',fmt(Object.keys(g).length),'blue','','',`${fmt(rows.length)} PM completions`)+kpi('Estimates to Change',fmt(per.length),per.length?'amber':'green','','',`${per.filter(x=>x.diff>0).length} too short · ${per.filter(x=>x.diff<0).length} too long`)+kpi('PM Types to Change',fmt(typ.length),typ.length?'amber':'green','','','across all their equipment')+kpi('Estimate Error',fmt(Math.round(errAll))+' h','red','','','scheduled hours off per year')+kpi('Real Time Entered',timedP+'%',grade(timedP,80,50),'Target ≥ 80%',tg[grade(timedP,80,50)],'labor ≠ the estimate default');
+  const dcell=v=>`<b class="${v>0?'red':'blue'}">${v>0?'+':'−'}${hm(Math.abs(v))}</b>`,ccell=v=>`<span class="pill ${v==='High'?'p-green':v==='Medium'?'p-blue':'p-gray'}">${v}</span>`;
+  if(!sortable.state.tPmStd)sortable.state.tPmStd={k:'err',asc:false};
+  sortable('tPmStd',per,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'PM',k:'title'},{h:'Now',k:'cur',fmt:v=>v>0?hm(v):'<span class="amber">none</span>'},{h:'Change to',k:'sug',fmt:v=>`<b>${hm(v)}</b>`},{h:'Change',k:'diff',fmt:dcell},{h:'Typical actual',k:'lo',fmt:(v,r)=>`${hm(r.lo)} – ${hm(r.hi)}`},{h:'Timed / total',k:'meas',fmt:(v,r)=>`${v} / ${r.n}`},{h:'Default accepted',k:'def',fmt:v=>v+'%'},{h:'Confidence',k:'conf',fmt:ccell},{h:'Hrs/yr off',k:'err'}]);
+  if(!sortable.state.tPmType)sortable.state.tPmType={k:'err',asc:false};
+  sortable('tPmType',typ,[{h:'PM',k:'title',cls:'ttl'},{h:'Machines',k:'neq',fmt:(v,r)=>`<span title="${r.eqs.replace(/"/g,'&quot;')}">${v}</span>`},{h:'Now (most)',k:'cur',fmt:hm},{h:'Change to',k:'sug',fmt:v=>`<b>${hm(v)}</b>`},{h:'Change',k:'diff',fmt:dcell},{h:'Typical actual',k:'lo',fmt:(v,r)=>`${hm(r.lo)} – ${hm(r.hi)}`},{h:'Timed / total',k:'meas',fmt:(v,r)=>`${v} / ${r.n}`},{h:'Confidence',k:'conf',fmt:ccell},{h:'Hrs/yr off',k:'err'}]);
+}
+/* ---------- PM effectiveness ---------- */
+/* For each breakdown that falls between two PMs on the same machine, where in that PM cycle did it happen (0 = right after
+   the PM, 1 = just before the next)? If the PM doesn't matter, a third of breakdowns land in the first third of the cycle.
+   Clearly fewer = the PM is holding breakdowns off; clearly more = something about the PM is causing them. */
+function renderPmEff(){
+  const rows=anRows().filter(r=>machineEq(r.eq)),ts=r=>new Date(r.dt||r.done+'T12:00').getTime();
+  const by={};rows.forEach(r=>{if(r.type!=='Preventative'&&r.type!=='Breakdown')return;const o=by[r.eq]||(by[r.eq]={pm:[],bd:[],pmLab:0,bdLab:0,causes:{}});
+    if(r.type==='Preventative'){o.pm.push(ts(r));if(!suspectLab(r))o.pmLab+=r.lab}else{o.bd.push(ts(r));if(!suspectLab(r))o.bdLab+=r.lab;const c=causeOf(r);o.causes[c]=(o.causes[c]||0)+1}});
+  const span=rows.length?Math.max(daysBetween(rows.reduce((m,r)=>r.done<m?r.done:m,'9999'),rows.reduce((m,r)=>r.done>m?r.done:m,'')),1):1;
+  const out=[];
+  Object.entries(by).forEach(([eq,o])=>{
+    const pm=[...new Set(o.pm.map(t=>Math.floor(t/36e5)))].map(h=>h*36e5).sort((a,b)=>a-b);if(pm.length<3)return;
+    const pos=[];o.bd.forEach(t=>{let i=pm.findIndex(p=>p>t);if(i<=0)return;const a=pm[i-1],b=pm[i];if(b-a<2*864e5)return;pos.push((t-a)/(b-a))});
+    if(pos.length<8)return;
+    const n=pos.length,early=pos.filter(p=>p<1/3).length,share=early/n,z=(share-1/3)/Math.sqrt((2/9)/n);
+    const gaps=[];for(let i=1;i<pm.length;i++)gaps.push((pm[i]-pm[i-1])/864e5);
+    const top=Object.entries(o.causes).filter(([c])=>c!=='Not specified').sort((a,b)=>b[1]-a[1])[0];
+    const verdict=z<-1.645?'Working':z>1.645?'Breakdowns after PM':'No effect';
+    const action=verdict==='Working'?'Keep it. Breakdowns build up late in the cycle — don\'t stretch the interval; consider shortening it'
+      :verdict==='Breakdowns after PM'?'Check how the PM leaves the machine: reassembly, adjustments, settings. Add a run check after PM'
+      :'PM doesn\'t change when it breaks: rewrite the task list around'+(top?' '+top[0]:' the top causes')+', or stretch the interval and use the time elsewhere';
+    out.push({eq,pms:pm.length,every:+median(gaps).toFixed(1),n,share:+(share*100).toFixed(0),z:+z.toFixed(2),verdict,action,
+      pmH:+(o.pmLab/60/span*365).toFixed(0),bdH:+(o.bdLab/60/span*365).toFixed(0),cause:top?top[0]:'Not specified'});
+  });
+  const c=v=>out.filter(o=>o.verdict===v).length,noEffH=out.filter(o=>o.verdict==='No effect').reduce((s,o)=>s+o.pmH,0);
+  $('peKpis').innerHTML=kpi('Machines Checked',fmt(out.length),'blue','','','8+ breakdowns between PMs')+kpi('PM Working',fmt(c('Working')),'green','','','fewer breakdowns right after PM')+kpi('No Effect',fmt(c('No effect')),'amber','','','breakdowns spread evenly through the cycle')+kpi('Breakdowns After PM',fmt(c('Breakdowns after PM')),c('Breakdowns after PM')?'red':'green','','','more breakdowns right after PM')+kpi('PM Hours, No-Effect Machines',fmt(noEffH)+' h/yr','purple','','','time to retarget or recover');
+  const srt=[...out].sort((a,b)=>a.share-b.share),col=o=>o.verdict==='Working'?'#1d7a4a':o.verdict==='Breakdowns after PM'?'#d81f2a':cv('--muted');
+  $('peWrap').style.height=Math.max(220,srt.length*17+70)+'px';
+  const ref={id:'peRef',afterDatasetsDraw(ch){const x=ch.scales.x;if(!x)return;const px=x.getPixelForValue(33.3),g=ch.ctx;g.save();g.strokeStyle=cv('--ink');g.setLineDash([4,3]);g.beginPath();g.moveTo(px,ch.chartArea.top);g.lineTo(px,ch.chartArea.bottom);g.stroke();g.restore()}};
+  chart('cPmEff',{type:'bar',data:{labels:srt.map(o=>o.eq),datasets:[{label:'% of breakdowns in the first third after PM',data:srt.map(o=>o.share),backgroundColor:srt.map(col),borderRadius:3,barThickness:9}]},
+    options:{...CO(),indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>{const o=srt[x.dataIndex];return `${o.share}% right after PM (expected 33%) · ${o.n} breakdowns · ${o.verdict}`}}}},
+      scales:{x:{min:0,max:100,title:{display:true,text:'% of breakdowns in the first third of the PM cycle · dashed = 33% (no effect)',color:cv('--muted')},ticks:{color:cv('--muted'),callback:v=>v+'%'},grid:{color:cv('--line')}},y:{ticks:{color:cv('--ink'),font:{size:11},autoSkip:false},grid:{display:false}}}},plugins:[ref]});
+  if(!sortable.state.tPmEff)sortable.state.tPmEff={k:'pmH',asc:false};
+  sortable('tPmEff',out,[{h:'Equipment',k:'eq',cls:'ttl'},{h:'Verdict',k:'verdict',fmt:v=>`<span class="pill ${v==='Working'?'p-green':v==='No effect'?'p-amber':'p-red'}">${v}</span>`},{h:'Right after PM',k:'share',fmt:v=>`<b class="${v<20?'green':v>50?'red':''}">${v}%</b> <span style="color:var(--muted)">vs 33%</span>`},{h:'Breakdowns',k:'n'},{h:'PMs done',k:'pms'},{h:'PM every (days)',k:'every'},{h:'PM hrs/yr',k:'pmH'},{h:'Breakdown hrs/yr',k:'bdH'},{h:'Top cause',k:'cause'},{h:'What to do',k:'action'}]);
+}
+
+/* ===== Planning queue (Correctives tab): rank the open backlog and say what's blocking each job ===== */
+/* Crew hours available per week: A/B/C/D 12 techs on 12 h 2-2-3 (42 h/wk) + 6 day-shift x 40 h + 1 second-shift x 40 h. */
+const CREW_HOURS=12*42+6*40+1*40;
+const PQ_STAGE={ReadyToSchedule:'Ready to schedule',Approved:'Ready to schedule',Assigned:'Ready to schedule',Scheduled:'Scheduled',InPlanning:'Needs planning',WaitingOnParts:'Waiting on parts',InProcess:'In progress'};
+const PQ_SAFETY=/safety|guard|e-?stop|interlock|light curtain|leak|fire|shock|exposed|trip hazard|pinch point/i;
+const PQ_ESCALATE=60;
+let PQ_FILTER='';
+function renderPlanQueue(cr){
+  const t=today();
+  /* breakdowns per machine in the 90 days before the latest completed WO, and the typical corrective length */
+  const all=completedRows(),last=all.reduce((m,r)=>r.done>m?r.done:m,''),since=last?new Date(new Date(last)-90*86400000).toISOString().slice(0,10):'';
+  const bd90={};all.forEach(r=>{if(r.type==='Breakdown'&&r.done>=since&&machineEq(r.eq))bd90[r.eq]=(bd90[r.eq]||0)+1});
+  const typical=median(all.filter(r=>r.type==='Corrective'&&r.done>=since&&r.lab>0&&!suspectLab(r)).map(r=>r.lab))||60;
+  const q=cr.map(r=>{
+    const age=r.age??0,od=+r.od||0,n=bd90[r.eq]||0,safety=PQ_SAFETY.test(r.title||'');
+    const pts=({Critical:40,High:25,Normal:10,Low:0})[r.pri]||0;
+    const score=Math.round(pts+(safety?25:0)+Math.min(od,60)/2+Math.min(age,180)/6+Math.min(n,20));
+    const why=[];if(r.pri==='Critical'||r.pri==='High')why.push(r.pri+' priority');if(safety)why.push('safety or leak wording');if(od>0)why.push(od+' days overdue');if(n>=5)why.push(n+' breakdowns on this machine in 90 days');if(age>60)why.push('requested '+age+' days ago');
+    const miss=[];if(!r.est)miss.push('estimate');if(!realEq(r.eq))miss.push('equipment');
+    let step;switch(r.status){
+      case 'InPlanning':step=miss.length?'Plan it: add '+miss.join(', ')+', check parts':'Plan it: confirm parts and tools, then mark Ready';break;
+      case 'WaitingOnParts':step=(age>PQ_ESCALATE?'Escalate with purchasing':'Chase parts ETA')+` (${age} days)`;break;
+      case 'Approved':step='Mark Ready, then schedule'+(r.est?'':' (add estimate first)');break;
+      case 'ReadyToSchedule':case 'Assigned':step='Put on next week\'s schedule'+(r.est?'':' (add estimate first)');break;
+      case 'Scheduled':step=r.sched&&r.sched<t?`Missed its date (${r.sched.slice(5)}) — reschedule`:`On schedule ${r.sched?r.sched.slice(5):''}`;break;
+      case 'InProcess':step=age>14?'Check it isn\'t stalled':'In progress';break;
+      default:step='Review status'}
+    return {...r,stage:PQ_STAGE[r.status]||r.status,score,why:why.join('; '),step,urgent:/Escalate|Missed/.test(step),hrsQ:(r.est||typical)/60,estd:!!r.est};
+  }).sort((a,b)=>b.score-a.score||(b.age??0)-(a.age??0));
+  q.forEach((r,i)=>r.rank=i+1);
+  const ready=q.filter(r=>r.stage==='Ready to schedule'),readyH=ready.reduce((s,r)=>s+r.hrsQ,0),wks=readyH/CREW_HOURS;
+  const noEst=q.filter(r=>!r.est).length,esc=q.filter(r=>r.stage==='Waiting on parts'&&(r.age??0)>PQ_ESCALATE).length;
+  $('crKpis').insertAdjacentHTML('beforeend',kpi('Ready Backlog',wks<0.1?'&lt; 0.1 wk':wks.toFixed(1)+' wk',wks>=2&&wks<=4?'green':'red','Target 2–4 weeks',wks>=2&&wks<=4?'t-ok':'t-bad',`${readyH.toFixed(0)} h ready ÷ ${CREW_HOURS} crew h/week`));
+  $('pqSub').textContent=`${noEst} need an estimate · ${esc} parts waits over ${PQ_ESCALATE} days · jobs without an estimate count as ${(typical/60).toFixed(1)} h`;
+  const stages=['Needs planning','Waiting on parts','Ready to schedule','Scheduled','In progress'];
+  $('pqSeg').innerHTML=['',...stages].map(s=>{const n=s?q.filter(r=>r.stage===s).length:q.length;return `<button type="button" data-s="${s}" class="${PQ_FILTER===s?'on':''}">${s||'All'} <span style="opacity:.7">${n}</span></button>`}).join('');
+  $('pqSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{PQ_FILTER=b.dataset.s;renderPlanQueue(cr)});
+  let run=0;const rows=q.filter(r=>!PQ_FILTER||r.stage===PQ_FILTER).map(r=>({...r,run:+(run+=r.hrsQ).toFixed(1)}));
+  if(!sortable.state.tPlanQ)sortable.state.tPlanQ={k:'rank',asc:true};
+  const cols=[{h:'#',k:'rank',fmt:v=>`<b>${v}</b>`},{h:'W/O',k:'wo',fmt:v=>`<a href="#" target="_blank" style="color:#93c5fd;text-decoration:none">${v}</a>`},{h:'Equipment',k:'eq'},{h:'Title',k:'title',cls:'ttl'},{h:'Priority',k:'pri',fmt:pill},{h:'Stage',k:'stage'},{h:'Next step',k:'step',fmt:(v,r)=>`<b class="${r.urgent?'red':'blue'}">${v}</b>`},{h:'Why it ranks here',k:'why',fmt:v=>`<span style="color:var(--muted)">${v||'—'}</span>`},{h:'Age',k:'age',fmt:v=>v==null?'—':`${v}d`},{h:'Hours',k:'hrsQ',fmt:(v,r)=>v.toFixed(1)+(r.estd?'':' <span style="color:var(--muted)">typ.</span>')}];
+  if(PQ_FILTER==='Ready to schedule')cols.push({h:'Running total',k:'run',fmt:v=>v+' h'});
+  sortable('tPlanQ',rows,cols,r=>r.urgent?'od':'');
+}
+const PANE_RENDER={overview:renderOverview,trends:renderTrends,observations:renderOverview,breakdowns:renderBreakdowns,reliability:renderReliability,analytics:renderAnalytics,correctives:renderCorrectives,schedule:renderSchedule,labor:renderLabor,plants:renderPlants};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pane').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('p-'+b.dataset.t).classList.add('active');const f=PANE_RENDER[b.dataset.t];if(f)requestAnimationFrame(()=>f())});
+$('moFrom').innerHTML=MO.map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('');$('moTo').innerHTML=$('moFrom').innerHTML;$('moFrom').value='01';$('moTo').value='12';
+$('moFrom').onchange=$('moTo').onchange=$('yearSel').onchange=$('deptSel').onchange=$('wcSel').onchange=$('typeSel').onchange=()=>{renderOverview();renderTrends();renderBreakdowns();renderReliability();renderLabor();renderAnalytics()};
+$('csvBtn').onclick=exportCompletedCSV;
+$('scWeek').onchange=()=>{renderSchedule();renderOverview()};
+$('rlLine').onchange=renderReliability;
+const dz=$('drop');dz.ondragover=e=>{e.preventDefault();dz.classList.add('over')};dz.ondragleave=()=>dz.classList.remove('over');dz.ondrop=e=>{e.preventDefault();dz.classList.remove('over');if(e.dataTransfer.files.length)handleFiles(e.dataTransfer.files)};
+$('fileIn').onchange=e=>{if(e.target.files.length)handleFiles(e.target.files)};
+document.body.addEventListener('dragover',e=>e.preventDefault());document.body.addEventListener('drop',e=>{if(e.target.closest('#drop'))return;e.preventDefault();if(e.dataTransfer.files.length){document.querySelector('[data-t=import]').click();handleFiles(e.dataTransfer.files)}});
+load().then(renderAll);
+</script>
+</body>
+</html>
