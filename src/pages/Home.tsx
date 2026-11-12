@@ -19,7 +19,6 @@ export function Home() {
               <img className="avatar" src="/assets/chad.jpg" alt={site.name} width={72} height={72} />
               <div className="who-text"><b>{site.name}</b><span>{site.title}</span></div>
             </div>
-            <span className="pill"><span className="dot" />Open to reliability &amp; maintenance leadership roles</span>
             <h1>I keep plants <em>running.</em></h1>
             <p className="intro">
               I'm a maintenance planner, Navy veteran, and builder of practical tools. I turn reactive maintenance into

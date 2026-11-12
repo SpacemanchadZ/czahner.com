@@ -1,5 +1,4 @@
 import type { IconName } from '../components/Icon';
-import { codeUrl } from './site';
 
 export type ProjectStatus = 'live' | 'demo' | 'proto' | 'build' | 'plan';
 
@@ -40,19 +39,6 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    title: 'Job Plan Builder',
-    blurb:
-      'Describe the job, attach drawings, and get a structured job plan with LOTO, parts, and cycle checks. A built-in plan check flags missing steps before you export a Word document.',
-    teaser: 'Describe the job, add drawings, and export a step-by-step job plan to Word.',
-    icon: 'clipboard',
-    status: 'demo',
-    tags: ['React', 'TypeScript', 'Word export'],
-    href: '/lab/job-plan-builder/',
-    code: codeUrl('src/tools/job-plan'),
-    tint: 3,
-    featured: true,
-  },
-  {
     title: 'Maintlytics',
     blurb:
       'A maintenance KPI and planning app I built for Mac, iPhone, iPad, and Apple Watch. It turns CMMS work order data into a weekly schedule, a planning board, and reliability numbers a team can act on.',
@@ -73,35 +59,5 @@ export const projects: Project[] = [
     tags: ['HTML/JS', 'Allen-Bradley', 'Training'],
     href: '/lab/compactlogix/',
     tint: 2,
-  },
-  {
-    title: 'CMMS AI Agent',
-    blurb: 'An agent that imports CMMS work order exports and uses an LLM with tool calling to answer planning questions and flag data problems.',
-    icon: 'chip',
-    status: 'proto',
-    tags: ['React', 'Node.js', 'PostgreSQL', 'Claude'],
-    tint: 3,
-  },
-  {
-    title: 'Offline Maintenance Assistant',
-    blurb: 'A local AI with no internet connection. Load drawings, SOPs, and manuals, then ask about procedures, part numbers, and images — documents stay private.',
-    icon: 'docSearch',
-    status: 'build',
-    tags: ['Local LLM', 'NVIDIA GPU', 'Doc search'],
-  },
-  {
-    title: 'Planner Toolkit',
-    blurb: 'One hub for daily planning: job staging kits, parts requests, storeroom and PM quality audits, a job plan builder, spares criticality, and RCA. Adapted from the free Planner HQ tools.',
-    icon: 'wrench',
-    status: 'build',
-    tags: ['Planning', 'RCA', 'HTML/JS'],
-    tint: 2,
-  },
-  {
-    title: 'Drawing Search',
-    blurb: 'Find any mechanical drawing by drawing number, equipment tag, part number, or text inside the drawing — from a phone on the shop floor.',
-    icon: 'search',
-    status: 'plan',
-    tags: ['Search', 'OCR', 'Mobile'],
   },
 ];
