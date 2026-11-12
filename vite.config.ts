@@ -7,6 +7,7 @@ const pages = {
   home: 'index.html',
   resume: 'resume/index.html',
   lab: 'lab/index.html',
+  maintlytics: 'lab/maintlytics/index.html',
   jobPlanBuilder: 'lab/job-plan-builder/index.html',
   notFound: '404.html',
 };
