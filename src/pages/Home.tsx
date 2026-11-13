@@ -126,8 +126,17 @@ export function Home() {
             </div>
             <a className="btn btn-line" href="/lab/">All projects →</a>
           </div>
-          <div className="grid-3">
-            {projects.filter((p) => p.featured).map((p) => <ProjectCard project={p} compact key={p.title} />)}
+          <a className="feature" href="/lab/maintlytics/">
+            <div className="feature-text">
+              <span className="eyebrow">Featured · Live</span>
+              <h3>Maintlytics</h3>
+              <p>A maintenance KPI and planning app I designed and built for Mac, iPhone, iPad, and Apple Watch. Every number opens the work orders behind it.</p>
+              <span className="go">See the app and a 40-second demo →</span>
+            </div>
+            <img src="/assets/maintlytics/overview.jpg" alt="Maintlytics overview screen on the demo plant" loading="lazy" />
+          </a>
+          <div className="grid-2" style={{ marginTop: 20 }}>
+            {projects.filter((p) => p.title !== 'Maintlytics').map((p) => <ProjectCard project={p} compact key={p.title} />)}
           </div>
         </div>
       </section>
