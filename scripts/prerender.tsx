@@ -8,7 +8,6 @@ import { resolve } from 'node:path';
 import type { ReactElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { Home } from '../src/pages/Home';
-import { Resume } from '../src/pages/Resume';
 import { Lab } from '../src/pages/Lab';
 import { Maintlytics } from '../src/pages/Maintlytics';
 import { NotFound } from '../src/pages/NotFound';
@@ -16,7 +15,6 @@ import { NotFound } from '../src/pages/NotFound';
 const MARKER = '<!--prerender-->';
 const pages: [string, ReactElement][] = [
   ['index.html', <Home />],
-  ['resume/index.html', <Resume />],
   ['lab/index.html', <Lab />],
   ['lab/maintlytics/index.html', <Maintlytics />],
   ['404.html', <NotFound />],

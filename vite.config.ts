@@ -5,7 +5,6 @@ import { resolve } from 'node:path';
 // Multi-page build: every HTML entry below becomes its own page on GitHub Pages.
 const pages = {
   home: 'index.html',
-  resume: 'resume/index.html',
   lab: 'lab/index.html',
   maintlytics: 'lab/maintlytics/index.html',
   jobPlanBuilder: 'lab/job-plan-builder/index.html',

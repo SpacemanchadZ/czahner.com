@@ -25,8 +25,7 @@ export function Home() {
               planned work, and I build the systems that make it stick.
             </p>
             <div className="actions">
-              <a className="btn btn-amber" href="/resume/"><Icon name="file" />View resume</a>
-              <a className="btn btn-ghost" href="/lab/">See what I'm building →</a>
+              <a className="btn btn-amber" href="/lab/">See what I'm building →</a>
             </div>
             <div className="creds">
               <span>RMIC · University of Tennessee</span>

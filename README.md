@@ -10,7 +10,6 @@ Live at **[czahner.com](https://czahner.com)**.
 | Path | What it is |
 |---|---|
 | [`/`](https://czahner.com) | Home — results, background, featured projects |
-| [`/resume/`](https://czahner.com/resume/) | Resume with print-to-PDF styling |
 | [`/lab/`](https://czahner.com/lab/) | Project index |
 | [`/lab/job-plan-builder/`](https://czahner.com/lab/job-plan-builder/) | **Job Plan Builder** — drafts a maintenance job plan from a plain-English description, checks it against a job plan standard, exports to Word |
 
@@ -30,7 +29,7 @@ All demos run entirely in the browser. Nothing is uploaded anywhere; sample data
 src/
   components/        shared layout, nav, icons, tool frame
   content/           site copy as typed data (career, projects, home)
-  pages/             Home, Resume, Lab, 404
+  pages/             Home, Lab, 404
   entries/           one entry per HTML page
   tools/
     job-plan/        Job Plan Builder
