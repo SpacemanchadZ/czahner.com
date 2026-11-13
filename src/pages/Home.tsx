@@ -131,7 +131,7 @@ export function Home() {
               <span className="eyebrow">Featured · Live</span>
               <h3>Maintlytics</h3>
               <p>A maintenance KPI and planning app I designed and built for Mac, iPhone, iPad, and Apple Watch. Every number opens the work orders behind it.</p>
-              <span className="go">See the app and a 40-second demo →</span>
+              <span className="go">See the app →</span>
             </div>
             <img src="/assets/maintlytics/overview.jpg" alt="Maintlytics overview screen on the demo plant" loading="lazy" />
           </a>

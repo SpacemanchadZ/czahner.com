@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layout } from '../components/Layout';
 
 const facts: [string, string][] = [
@@ -75,6 +75,13 @@ const phones: [string, string][] = [
 
 export function Maintlytics() {
   const [zoom, setZoom] = useState<{ src: string; alt: string } | null>(null);
+  const video = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    v.muted = true; // browsers only allow autoplay without sound
+    v.play().catch(() => {});
+  }, []);
   useEffect(() => {
     if (!zoom) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoom(null); };
@@ -101,10 +108,9 @@ export function Maintlytics() {
       <section className="section">
         <div className="wrap">
           <div className="demo-video">
-            <video controls playsInline preload="metadata" poster="/assets/maintlytics/demo-poster.jpg">
+            <video ref={video} controls autoPlay muted loop playsInline preload="auto" poster="/assets/maintlytics/demo-poster.jpg">
               <source src="/assets/maintlytics/demo.mp4" type="video/mp4" />
             </video>
-            <p className="note" style={{ marginTop: 12 }}>A 40-second tour of the browser view, on the demo plant. Has music.</p>
           </div>
           <div className="why">
             <span className="eyebrow">Why I built it</span>
@@ -175,7 +181,6 @@ export function Maintlytics() {
             </div>
           </div>
           <p className="note">
-            Screenshots show a made-up demo plant — no real plant names, people, or numbers. Built in Swift and SwiftUI.
             More at <a href="https://maintlytics.com" target="_blank" rel="noopener">maintlytics.com</a>.
           </p>
         </div>
